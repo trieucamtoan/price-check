@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+    backend:
+        build:
+          context: ./backend
+          dockerfile: Dockerfile
+        hostname: django
+        ports:
+            - 8000:8000
+        volumes:
+            - ./backend:/code/backend
+            - ./backend/static:/static:rw
+        environment:
+            DJANGO_MODE: production
+        depends_on:
+            - db
+        networks: 
+            - nginx_network
+    
+    db:
+        image: "postgres:latest"
+        environment:
+            POSTGRES_USER: testuser
+            POSTGRES_PASSWORD: 123
+            POSTGRES_DB: testdb
+        networks: 
+            - nginx_network
+            
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend/:/code/frontend
+        ports: 
+            - 3000:3000
+        networks: 
+            - nginx_network
+        depends_on: 
+            - backend
+    
+volumes:
+  static:
+    
+networks:  # <-- and here
+  nginx_network:
+    driver: "bridge"
