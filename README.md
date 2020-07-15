@@ -1,4 +1,5 @@
-# Run in local
+# Running locally
+
 ## Prerequisite
 - python3
 - pip
@@ -24,11 +25,13 @@ Please only look at the postgresql section
 - cd to /backend
 - Open `settings.py` and change the setting for the database (the steps are there)
 - Run command `python3 manage.py runserver` to start backend server
+
 ## Running frontend
 - cd to /frontend
 - Run command: `npm install` to install all dependencies
 - Run command: `npm start` to start frontend server
-# Run in production mode
+
+# Running in production mode
 - cd to the project folder
 - Run command: `docker-compose build && docker-compose up`
 - Navigate to http://localhost:3000 to see the frontend
