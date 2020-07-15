@@ -6,6 +6,7 @@
 - node
 - postgresql
 ## Setting up postgres db
+http://zetcode.com/springboot/postgresql/
 Go to this link to setup the postgresql with the following parameters
 - user: testuser
 - Shall the new role be a superuser? (y/n) n
