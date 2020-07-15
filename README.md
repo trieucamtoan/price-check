@@ -9,13 +9,16 @@
 http://zetcode.com/springboot/postgresql/
 
 Go to this link to setup the postgresql with the following parameters
+
+Please only look at the postgresql section
+
 - user: testuser
 - Shall the new role be a superuser? (y/n) n
 - Shall the new role be allowed to create databases? (y/n) y
 - Shall the new role be allowed to create more new roles? (y/n) n
 - Password: 123  
 - db: testdb
-Please only look at the postgresql section
+
 ## Running backend
 - In project folder, run command: `pipenv install` and `pipenv shell`
 - cd to /backend
