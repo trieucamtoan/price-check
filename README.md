@@ -21,15 +21,15 @@ Please only look at the postgresql section
 - db: testdb
 
 ## Running backend
-- Open up a terminal
-- In project folder, run command: `pipenv install` and `pipenv shell`
+- Open up a terminal in the project folder
+- Run command: `pipenv install` and `pipenv shell`
     - for mac users :  if you havent installed brew first run `pip3 install pipenv` then `brew install pipenv` 
 - cd to /backend/backend
 - Open `settings.py` and change the setting for the database (the steps are there)
 - Run command `python3 manage.py runserver` to start backend server
 
 ## Running frontend
-- Open up another terminal
+- Open up another terminal in the project folder
 - cd to /frontend
 - Run command: `npm install` to install all dependencies
 - Run command: `npm start` to start frontend server
