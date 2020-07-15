@@ -22,7 +22,7 @@ Please only look at the postgresql section
 
 ## Running backend
 - In project folder, run command: `pipenv install` and `pipenv shell`
-    - for mac users :  if you havent installed brew first run pip3 install pipenv then brew install pipenv 
+    - for mac users :  if you havent installed brew first run `pip3 install pipenv` then `brew install pipenv` 
 - cd to /backend
 - Open `settings.py` and change the setting for the database (the steps are there)
 - Run command `python3 manage.py runserver` to start backend server
