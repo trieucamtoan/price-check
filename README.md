@@ -38,3 +38,4 @@ Please only look at the postgresql section
 - cd to the project folder
 - Run command: `docker-compose build && docker-compose up`
 - Navigate to http://localhost:3000 to see the frontend
+- When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
