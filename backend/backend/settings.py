@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Django REST framework 
+    # Django REST framework
     'rest_framework',
     # CORS
     'corsheaders',
     # apps created by python manage.py startapp
+    'articles',
     'api'
+
 ]
 
 MIDDLEWARE = [
@@ -100,8 +102,8 @@ DATABASES = {
         'NAME': 'testdb',
         'USER': 'testuser',
         'PASSWORD': '123',
-        # 'HOST': 'localhost', #use this line if running project locally
-        'HOST': 'db', #use this line if using docker-compose
+        'HOST': 'localhost', #use this line if running project locally
+        #'HOST': 'db', #use this line if using docker-compose
         'PORT': '5432',
     }
 }
@@ -145,3 +147,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+    [
+        'rest_framework.pagination.PageNumberPagination'
+    ]
+
+}
