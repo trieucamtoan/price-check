@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Article (models.Model):
+class API (models.Model):
     first_name = models.CharField(max_length=120,null=True)
     last_name = models.CharField(max_length=120,null=True)
     userID = models.CharField(max_length=120,null=True)

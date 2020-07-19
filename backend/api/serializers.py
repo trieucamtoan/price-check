@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from api.models import Article
+from api.models import API
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class APISerializer(serializers.ModelSerializer):
     class Meta:
-        model = Article
+        model = API
         fields= ('first_name','last_name','userID')

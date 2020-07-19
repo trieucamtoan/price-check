@@ -1,15 +1,14 @@
 from django.shortcuts import render
-
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from rest_framework.response import Response
 
 # Import Model
 # from contact_manager.models import Contact # sample model
 # Import Serializer
 # from contact_manager.serializers import ContactSerializer # sample serializer
 from rest_framework.decorators import api_view
-
 from rest_framework.generics import (
 ListAPIView ,
  RetrieveAPIView,
@@ -19,35 +18,43 @@ ListAPIView ,
 
  )
 
-from api.models import Article
-from .serializers import ArticleSerializer
+from api.models import API
+from .serializers import APISerializer
+from rest_framework.permissions import AllowAny, IsAdminUser,IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 @api_view(['GET'])
+# @permission_classes((IsAuthenticated, ))
+
+
 def hello(request):
     if request.method == 'GET':
         return JsonResponse('hello', safe=False)
 
-
-class ArticleListView(ListAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-
-
-class ArticleDetailView(RetrieveAPIView):
-    queryset=Article.objects.all()
-    serializer_class = ArticleSerializer
-
-class ArticleCreateView(CreateAPIView):
-    queryset=Article.objects.all()
-    serializer_class = ArticleSerializer
+class APIListView(ListAPIView):
+    queryset = API.objects.all()
+    serializer_class = APISerializer
+    authentication_classes=(TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    pagination_class = PageNumberPagination
 
 
+class APIDetailView(RetrieveAPIView):
+    queryset=API.objects.all()
+    serializer_class = APISerializer
 
-class ArticleUpdateView(UpdateAPIView):
-    queryset=Article.objects.all()
-    serializer_class = ArticleSerializer
+class APICreateView(CreateAPIView):
+    queryset=API.objects.all()
+    serializer_class = APISerializer
 
-class ArticleDeleteView(DestroyAPIView):
-    queryset=Article.objects.all()
-    serializer_class = ArticleSerializer
+
+
+class APIUpdateView(UpdateAPIView):
+    queryset=API.objects.all()
+    serializer_class = APISerializer
+
+class APIDeleteView(DestroyAPIView):
+    queryset=API.objects.all()
+    serializer_class = APISerializer
