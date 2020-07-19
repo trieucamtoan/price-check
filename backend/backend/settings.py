@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # CORS
     'corsheaders',
+
     # apps created by python manage.py startapp
-    'articles',
     'api'
 
 ]
