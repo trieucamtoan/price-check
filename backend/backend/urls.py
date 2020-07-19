@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from account.views import registration_view
+from api.views import registration_view
 # TokenObtainPairView : one of the access token one is refresh token
 #
 

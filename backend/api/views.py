@@ -17,7 +17,7 @@ ListAPIView ,
  UpdateAPIView
 
  )
-
+from .serializers import RegistrationSerializer
 from api.models import User
 from .serializers import APISerializer
 from rest_framework.permissions import AllowAny, IsAdminUser,IsAuthenticated
@@ -58,3 +58,16 @@ class UserUpdateView(UpdateAPIView):
 class UserDeleteView(DestroyAPIView):
     queryset=User.objects.all()
     serializer_class = APISerializer
+
+def registration_view(request):
+    if request.method == 'POST':
+        Serializer =  RegisterationSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            account = serializer.save()
+            data['response'] = "successfully registered a new user."
+            data['email'] = account.email
+            data['username'] = account .username
+        else:
+            data = serializer.errors
+        return Response(data)
