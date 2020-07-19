@@ -3,10 +3,12 @@ import {Switch, Route} from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
 import Hello from "./components/hello";
+import Product from "./components/product/ProductCategory";
 
 const Routes = () => (
   <Switch>
     <Route exact path={["/", "/hello"]} component={Hello} />
+    <Route path= '/Product' component={Product}/>
     <Route path= '/login' component={Login}/>
     <Route path= '/register' component={Register}/>
   </Switch>

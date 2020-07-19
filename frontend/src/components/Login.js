@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import RequestServer from '../requests/RequestServer';
 
-class Login extends Component {
+export default class Login extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -67,7 +67,7 @@ class Login extends Component {
 render() {
     return (
       <div className = "page-container">
-        <h2 style={{textAlign: 'center'}}>Login Form</h2>
+        <h2 className = "title">Login Form</h2>
         <MuiThemeProvider>
             <div className = 'login-form' align = "center">
             <TextField
@@ -98,4 +98,3 @@ render() {
 const style = {
  margin: 15,
 };
-export default Login;

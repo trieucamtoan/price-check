@@ -46,3 +46,9 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Run command: `docker-compose build && docker-compose up`
 - Navigate to http://localhost:3000 to see the frontend
 - When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
+
+
+React installation guide:
+Please make sure to install these libraries before using:
+`npm install @material-ui/core`
+`npm install react-bootstrap bootstrap`

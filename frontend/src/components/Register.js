@@ -21,7 +21,7 @@ const styles = {
     }
 };
 
-class Register extends Component {
+export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -115,7 +115,7 @@ class Register extends Component {
         return (
             <div className = "page-container">
                 <MuiThemeProvider>
-                    <h2 style={{textAlign: 'center'}}>Register Form</h2>
+                    <h2 className = "title">Register Form</h2>
                     <div className = 'login-form' align = "center">
                         <form id="register-form">   
                         
@@ -165,5 +165,3 @@ class Register extends Component {
         );
     }
 }
-
-export default Register;
