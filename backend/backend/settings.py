@@ -49,7 +49,8 @@ INSTALLED_APPS = [
 
     # apps created by python manage.py startapp
     #projects app
-    'api'
+    'api',
+    'account'
 
 ]
 
