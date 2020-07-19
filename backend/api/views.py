@@ -18,12 +18,12 @@ ListAPIView ,
 
  )
 
-from api.models import API
+from api.models import User
 from .serializers import APISerializer
 from rest_framework.permissions import AllowAny, IsAdminUser,IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
-
+from rest_framework.views import APIView
 # Create your views here.
 @api_view(['GET'])
 # @permission_classes((IsAuthenticated, ))
@@ -33,28 +33,28 @@ def hello(request):
     if request.method == 'GET':
         return JsonResponse('hello', safe=False)
 
-class APIListView(ListAPIView):
-    queryset = API.objects.all()
+class UserListView(ListAPIView):
+    queryset = User.objects.all()
     serializer_class = APISerializer
     authentication_classes=(TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     pagination_class = PageNumberPagination
 
 
-class APIDetailView(RetrieveAPIView):
-    queryset=API.objects.all()
+class UserDetailView(RetrieveAPIView):
+    queryset=User.objects.all()
     serializer_class = APISerializer
 
-class APICreateView(CreateAPIView):
-    queryset=API.objects.all()
+class UserCreateView(CreateAPIView):
+    queryset=User.objects.all()
     serializer_class = APISerializer
 
 
 
-class APIUpdateView(UpdateAPIView):
-    queryset=API.objects.all()
+class UserUpdateView(UpdateAPIView):
+    queryset=User.objects.all()
     serializer_class = APISerializer
 
-class APIDeleteView(DestroyAPIView):
-    queryset=API.objects.all()
+class UserDeleteView(DestroyAPIView):
+    queryset=User.objects.all()
     serializer_class = APISerializer
