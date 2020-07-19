@@ -67,6 +67,7 @@ CORS_ORIGIN_WHITELIST
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'http://localhost:8080'
 )
 
 ROOT_URLCONF = 'backend.urls'
@@ -100,8 +101,8 @@ DATABASES = {
         'NAME': 'testdb',
         'USER': 'testuser',
         'PASSWORD': '123',
-        # 'HOST': 'localhost', #use this line if running project locally
-        'HOST': 'db', #use this line if using docker-compose
+        'HOST': 'localhost', #use this line if running project locally
+        #'HOST': 'db', #use this line if using docker-compose
         'PORT': '5432',
     }
 }

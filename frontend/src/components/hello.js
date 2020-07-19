@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import HelloService from "../services/testService";
-import { Link } from "react-router-dom";
 
 export default class Hello extends Component {
     constructor(props) {
