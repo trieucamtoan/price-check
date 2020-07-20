@@ -6,5 +6,5 @@ from .views import (
 app_name = "api"
 
 urlpatterns = [
-    path('account/register', registration_view, name='register')
+    path('register', registration_view, name='register')
 ]
