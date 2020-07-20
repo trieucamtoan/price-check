@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from api.views import (
+# from api.views import (
     # UserListView,
     # UserDetailView,
     # UserCreateView,
     # UserDeleteView,
     # UserUpdateView,
-    registration_view
-)
+    # registration_view
+# )
 
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
@@ -35,9 +35,9 @@ from api.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('register', registration_view, name='register')
+    path('', include('rest_auth.urls')),
+    path('registration/', include('rest_auth.registration.urls')),
+    # path('register', registration_view, name='register')
     # path('list',UserListView.as_view(), name="list"),
 
     # path('api-auth/', include('rest_framework.urls')),
