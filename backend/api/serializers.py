@@ -1,15 +1,5 @@
 from rest_framework import serializers
-from api.models import User
-from rest_framework import serializers
-from api.models import User
 from api.models import Account
-
-
-class APISerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields= ('first_name','last_name','userID')
-
 
 class RegistrationSerializer(serializers.ModelSerializer):
 

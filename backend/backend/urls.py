@@ -15,30 +15,32 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-#from api import views
 
-from api.views import UserListView,UserDetailView,UserCreateView,UserDeleteView,UserUpdateView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
+from api.views import (
+    # UserListView,
+    # UserDetailView,
+    # UserCreateView,
+    # UserDeleteView,
+    # UserUpdateView,
+    registration_view
 )
-from api.views import registration_view
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+# )
+
 # TokenObtainPairView : one of the access token one is refresh token
 #
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('list',UserListView.as_view(), name="list"),
-    path('create/',UserCreateView.as_view()),
-    path('<pk>',UserDetailView.as_view()),
-    path('<pk>/update/',UserUpdateView.as_view()),
-    path('<pk>/delete/',UserDeleteView.as_view()),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/token/', TokenObtainPairView.as_view()),
-    path('api/token/refresh/', TokenRefreshView.as_view()),
-    path('account/', registration_view, name= "account")
+    # path('list',UserListView.as_view(), name="list"),
 
+    # path('api-auth/', include('rest_framework.urls')),
+    # path('api/token/', TokenObtainPairView.as_view()),
+    # path('api/token/refresh/', TokenRefreshView.as_view()),
 
+    path('api/', include('api.urls', 'account'))
 
 
 ]
