@@ -2,6 +2,7 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
+import Profile from './components/Profile'
 import Hello from "./components/hello";
 import Product from "./components/product/ProductCategory";
 
@@ -11,6 +12,7 @@ const Routes = () => (
     <Route path= '/Product' component={Product}/>
     <Route path= '/login' component={Login}/>
     <Route path= '/register' component={Register}/>
+    <Route path= '/profile' component={Profile}/>
   </Switch>
 )
 
