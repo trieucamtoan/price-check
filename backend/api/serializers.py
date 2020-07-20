@@ -12,7 +12,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 				'password': {'write_only': True},
 		}
 
-
 	def	save(self):
 
 		account = Account(

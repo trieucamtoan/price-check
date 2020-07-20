@@ -18,6 +18,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 
+from rest_framework.authtoken.models import Token
+
 # Create your views here.
 
 @api_view(['POST',])
@@ -30,6 +32,8 @@ def registration_view(request):
             data['response'] = "successfully registered a new user."
             data['email'] = account.email
             data['username'] = account.username
+            token = Token.objects.get(user=account).key
+            data['token'] = token
         else:
             data = serializer.errors
         return Response(data)

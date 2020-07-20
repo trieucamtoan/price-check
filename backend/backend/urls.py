@@ -24,6 +24,7 @@ from api.views import (
     # UserUpdateView,
     registration_view
 )
+
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
