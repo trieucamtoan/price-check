@@ -39,19 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     # Django REST framework
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
     # CORS
     'corsheaders',
-
-
-
     # apps created by python manage.py startapp
     #projects app
     'api'
 
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -163,3 +166,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
+#none” to allow logins with an unverified e-mail address
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD='username'
+ACCOUNT_EMAIL_REQUIRED = True

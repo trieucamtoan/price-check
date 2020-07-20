@@ -35,11 +35,14 @@ from api.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('register', registration_view, name='register')
     # path('list',UserListView.as_view(), name="list"),
 
     # path('api-auth/', include('rest_framework.urls')),
     # path('api/token/', TokenObtainPairView.as_view()),
     # path('api/token/refresh/', TokenRefreshView.as_view()),
-    path('register', registration_view, name='register')
+
 
 ]
