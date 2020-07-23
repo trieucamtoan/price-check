@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import RequestServer from '../requests/RequestServer';
+import RequestServer from '../../requests/RequestServer';
+import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer, toast} from 'react-toastify';
 
 const styles = {
@@ -25,12 +26,12 @@ export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '', password: '', passwordConfirmation: '', error: false , errorMessage: ''
+            username: '', email: '', password1: '', password2: '', error: false , errorMessage: '', response: '', token: ''
         }
     }
 
     checkPasswordMatch() {
-        if (this.state.password.trim() === "" || this.state.password !== this.state.passwordConfirmation) {
+        if (this.state.password1.trim() === "" || this.state.password1 !== this.state.password2) {
             this.setState({
                 error: true,
                 errorMsg: "Passwords do not match"
@@ -43,10 +44,10 @@ export default class Register extends Component {
 
     clearFields() {
         this.setState({
-            
             username: '',
-            password: '',
-            passwordConfirmation: '',
+            email: '',
+            password1: '',
+            password2: '',
             error: false,
             errorMsg: '',
         }, () => {
@@ -55,7 +56,7 @@ export default class Register extends Component {
     }
 
     isFieldEmpty() {
-        if (this.state.username === "" || this.state.password === "" || this.state.passwordConfirmation === "") {
+        if (this.state.username === "" || this.state.password1 === "" || this.state.password2 === "") {
             this.setState({
                 error: true,
                 errorMsg: "Field cannot be empty"
@@ -67,6 +68,7 @@ export default class Register extends Component {
     }
 
     registerHandler = async(event) => {
+        event.preventDefault()
         console.log("Registering...");
 
         //Check password match
@@ -84,16 +86,20 @@ export default class Register extends Component {
         }
 
         var user = {
+            email: this.state.email,
             username: this.state.username,
-            password: this.state.password,
+            password1: this.state.password1,
+            password2: this.state.password2
         }
 
         var response = await RequestServer.addUser(user)
 
         if (response !== null) {
+            console.log('response: ' + response)
             toast("User Added");
             this.clearFields()
         } else {
+            console.log('response: ' + response)
             this.setState({
                 error: true,
                 errorMsg: 'Unable to register'
@@ -112,11 +118,12 @@ export default class Register extends Component {
     }
 
     render() {
+        toast.configure()
         return (
             <div className = "page-container">
                 <MuiThemeProvider>
-                    <h2 className = "title">Register Form</h2>
                     <div className = 'login-form' align = "center">
+                        <h2 className = "title">Register Form</h2>
                         <form id="register-form">   
                         
                             <TextField
@@ -129,11 +136,20 @@ export default class Register extends Component {
                             <br/>    
 
                             <TextField
+                                hintText="Enter your Email"
+                                inputStyle={styles.black}
+                                floatingLabelText="Email"
+                                onChange={(event,newValue) => this.setState({email: newValue})}
+                                onKeyPress={this.keyPressed}
+                            />
+                            <br/> 
+
+                            <TextField
                                 type="password"
                                 hintText="Enter your Password"
                                 inputStyle={styles.black}
                                 floatingLabelText="Password"
-                                onChange={(event,newValue) => this.setState({password: newValue})}
+                                onChange={(event,newValue) => this.setState({password1: newValue})}
                                 onKeyPress={this.keyPressed}
                             />
                             <br/>  
@@ -142,7 +158,7 @@ export default class Register extends Component {
                                 hintText="Enter your Password Again"
                                 inputStyle={styles.black}
                                 floatingLabelText="Password Confirmation"
-                                onChange={(event,newValue) => this.setState({passwordConfirmation: newValue})}
+                                onChange={(event,newValue) => this.setState({password2: newValue})}
                                 onKeyPress={this.keyPressed}
                             />
 
@@ -151,6 +167,8 @@ export default class Register extends Component {
                             <div className='errorMsg'>
                                 {(this.state.error ? this.showErrorMsg() : '')}
                             </div>
+
+                            <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
 
                             <RaisedButton 
                                 label="submit" 
