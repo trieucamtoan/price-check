@@ -48,7 +48,8 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
 
 
-React installation guide:
-Please make sure to install these libraries before using:
-`npm install @material-ui/core`
-`npm install react-bootstrap bootstrap`
+# React installation guide:
+- Please make sure to install these libraries before using:
+- `npm install @material-ui/core`
+- `npm install react-bootstrap bootstrap`
+- `npm install --save react-toastify`

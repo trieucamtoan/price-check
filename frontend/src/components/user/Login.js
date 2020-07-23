@@ -3,20 +3,21 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import RequestServer from '../requests/RequestServer';
+import RequestServer from '../../requests/RequestServer';
 
 export default class Login extends Component {
     constructor(props){
         super(props);
         this.state={
             username:'',
+            email: '',
             password:''
         }
         this.keyPressed = this.keyPressed.bind(this)
     }
 
     isFieldEmpty() {
-        if (this.state.username === "" || this.state.password === "") {
+        if (this.state.username === "" || this.state.email === "" || this.state.password === "") {
             this.setState({
                 error: true,
                 errorMsg: "Field cannot be empty"
@@ -25,6 +26,14 @@ export default class Login extends Component {
             return true;
         }
         return false;
+    }
+
+    navigate(token) {
+        this.props.history.push(
+            '/dashboard',
+            { token: token }
+        )
+        window.location.reload()
     }
 
     loginHandler = async (e) => {
@@ -36,7 +45,7 @@ export default class Login extends Component {
             return;
         }
 
-        var passback = await RequestServer.login(this.state.username, this.state.password)
+        var passback = await RequestServer.login(this.state.username, this.state.email, this.state.password)
         if (passback === null) {
             this.setState({
                 error: true,
@@ -44,12 +53,15 @@ export default class Login extends Component {
             })
 
         } else {
-            localStorage.setItem("isLoggedIn", "true")
-            localStorage.setItem("userData", JSON.stringify(passback.data))
-            this.setTheState(passback)
+            console.log(passback.data)
+            localStorage.setItem("token", passback.data.key)
+            localStorage.setItem("isLoggedIn", true)
+            var getUsername = await RequestServer.getUsername(passback.data.key)
+            console.log(getUsername.data.username)
+            //this.setTheState(passback)
             // this.testConsoleLog(passback)
-            this.setRole(passback)
-            this.navigate(passback)
+            //this.setRole(passback)
+            this.navigate(passback.data.key)
         }
 
     }
@@ -76,13 +88,21 @@ render() {
                 onChange = {(event,newValue) => this.setState({username:newValue})}
                 />
             <br/>
-                <TextField
-                type="password"
-                hintText="Enter your Password"
-                floatingLabelText="Password"
-                onChange = {(event,newValue) => this.setState({password:newValue})}
+
+            <TextField
+                hintText="Enter your email"
+                floatingLabelText="Email"
+                onChange = {(event,newValue) => this.setState({email:newValue})}
                 />
-                <br/>
+            <br/>
+
+            <TextField
+            type="password"
+            hintText="Enter your Password"
+            floatingLabelText="Password"
+            onChange = {(event,newValue) => this.setState({password:newValue})}
+            />
+            <br/>
 
                 <div className='errorMsg'>
                     {(this.state.error ? this.showErrorMsg() : '')}

@@ -1,24 +1,30 @@
 import { Component } from 'react';
 import axios from 'axios';
 
-export default class RequestServer extends Component {
+class RequestServer extends Component {
     getServerLocation() {
-        return 'http://localhost:8080'
-    }
-
-    async getLocations() {
-        try {
-            var response = await axios.get(this.getServerLocation() + '/location/all')
-            return response
-        } catch (error) {
-            console.log(error)
-            return null
-        }
+        return 'http://localhost:8000'
     }
 
     async addUser(user) {
         try {
-            var response = await axios.post(this.getServerLocation() + '/register', user)
+            console.log(user)
+            var response = await axios.post(this.getServerLocation() + '/registration/', user)
+            return response
+        } catch (err) {
+            console.log("Error: ", err.response.data)
+            return null
+        }
+    }
+
+    async login(username, email, password) {
+        var userObj = {
+            username: username,
+            email: email,
+            password: password
+        }
+        try {
+            var response = await axios.post(this.getServerLocation() + '/login/', userObj)
             return response
         } catch (error) {
             console.log(error)
@@ -26,13 +32,33 @@ export default class RequestServer extends Component {
         }
     }
 
-    async login(username, password) {
-        var userObj = {
-            username: username,
-            password: password
-        }
+    async isRegistered(token) {
         try {
-            var response = await axios.post(this.getServerLocation() + '/login', userObj)
+            var response = await axios.get(this.getServerLocation() + '/user/', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            if (response.data.detail != null){
+                return false
+            }
+            else {
+                return true
+            }
+            
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
+
+    async getUsername(token) {
+        try {
+            var response = await axios.get(this.getServerLocation() + '/user/', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
             return response
         } catch (error) {
             console.log(error)
@@ -40,3 +66,5 @@ export default class RequestServer extends Component {
         }
     }
 }
+
+export default new RequestServer();
