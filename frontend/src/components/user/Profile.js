@@ -3,7 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import RequestServer from '../requests/RequestServer';
+import RequestServer from '../../requests/RequestServer';
 
 export default class Profile extends Component {
     constructor(props){
