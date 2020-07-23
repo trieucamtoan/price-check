@@ -52,3 +52,4 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Please make sure to install these libraries before using:
 - `npm install @material-ui/core`
 - `npm install react-bootstrap bootstrap`
+- `npm install --save react-toastify`
