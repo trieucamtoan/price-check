@@ -5,4 +5,4 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     URL = models.URLField(max_length = 200)
     current_price = models.DecimalField(decimal_places = 2,max_digits = 1000,null = True)
-    lowest_price  = models.DecimalField( decimal_places = 2,max_digits = 1000,null = True)   
+    lowest_price  = models.DecimalField( decimal_places = 2,max_digits = 1000,null = True)
