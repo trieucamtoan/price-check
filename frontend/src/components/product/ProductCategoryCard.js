@@ -4,10 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 
 class ProductCategoryCard extends Component {
-    constructor(props) {
-        super(props);
-        
-    }
+    
     buttonHandler = (e) => {
         const { history } = this.props;
         if (this.props.title === 'GPU'){
@@ -26,7 +23,7 @@ class ProductCategoryCard extends Component {
     }
 
     render() {
-        const { history } = this.props;
+        // const { history } = this.props;
         return (
             <Card style={{ width: '18rem' }}>
             <Card.Img 
