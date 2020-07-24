@@ -11,6 +11,34 @@ import RequestServer from './requests/RequestServer';
 
 export default class App extends Component {
 
+    constructor(props){
+        super(props);
+        this.state={
+            username:''
+        }
+    }
+
+    componentDidMount() {
+        this.getUserDetails();
+    }
+
+    async getUserDetails() {
+        var token = localStorage.getItem('token');
+        console.log("Token: " , token);
+        if (token !== null){
+            var response = await RequestServer.getUsername(token)
+            console.log(response);
+            if (response !== null){
+                this.setState({username: response.data.username});
+            }
+            else {
+                this.setState({username: ""});
+            }
+        }
+        else {
+            this.setState({username: ""});
+        }
+    }
 
   navBasedOnLogin() {
     if (localStorage.getItem('isLoggedIn') === 'true') {
@@ -34,7 +62,10 @@ export default class App extends Component {
             <a href="/" className="navbar-brand">
               PriceCheck
             </a>
-            {this.navBasedOnLogin()}
+            <div className="navbar-nav d-flex w-100">
+              {this.navBasedOnLogin()}
+              <div className="ml-auto nav-link">{this.state.username}</div>
+            </div>
           </nav>
 
           <div className="container mt-3">
