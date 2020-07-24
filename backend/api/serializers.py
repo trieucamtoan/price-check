@@ -32,4 +32,4 @@ from api.models import Product
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model =  Product
-        fields = ['name', 'current_price', 'lowest_price','URL']
+        fields = ['id','name', 'current_price', 'lowest_price','URL']

@@ -4,14 +4,17 @@
 # from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse
 from api.models import Product
 from .serializers import ProductSerializer
+import json
+
 # from rest_framework.generics import (
 # ListAPIView ,
 #  RetrieveAPIView,
@@ -46,14 +49,31 @@ from rest_framework.views import APIView
 #             data = serializer.errors
 #         return Response(data)
 
-@api_view(['GET',])
+@api_view(['GET'])
+def products_list_view(request):
+    if request.method == 'GET':
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+        #return JsonResponse(serializer.data, safe=False)
 
-def detail_product_view(request,slug):
-  try:
-      product_post = Product.objects.get(slug=slug)
-  except Product.DoesNotExist:
-      return Response(status=status.HTTP_404_NOT_FOUND)
+    elif request.method == 'POST':
+    # data = JSONParser().parse(request)
+        serializer = ProductSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-  if request.method == 'GET':
-      serializer = ProductSerializer(product_post)
-      return Response(serializer.data)
+
+    #     return JsonResponse(serializer.data, status=201)
+    # return JsonResponse(serializer.errors, status=400)
+
+
+def detail_product_view(request,pk):
+    try:
+        obj= Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return HttpResponse(status=404)
+    serializer = ProductSerializer(obj)
+    return Response(serializer.data)
