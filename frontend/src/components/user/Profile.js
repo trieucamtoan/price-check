@@ -10,49 +10,74 @@ export default class Profile extends Component {
         super(props);
         this.state={
             username:'',
-            password:''
+            password1:'',
+            password2:'',
+            cur_password:'',
+            cur_username:'',
+            cur_email:''
         }
         this.keyPressed = this.keyPressed.bind(this)
     }
 
-    isFieldEmpty() {
-        if (this.state.username === "" || this.state.password === "") {
+//    isFieldEmpty() {
+//        if (this.state.username === "" || this.state.cur_password === "") {
+//            this.setState({
+//                error: true,
+//                errorMsg: "Field cannot be empty"
+//            }, () => {
+//            })
+//            return true;
+//        }
+//        return false;
+//    }
+
+    updatePassword =  async (e) => {
+        e.preventDefault()
+        //Check empty field
+
+        this.setState({
+            error: false,
+            errorMsg: ""
+        })
+
+
+        if (this.state.password1 === "" || this.state.password2 === "" || this.state.cur_password === "") {
             this.setState({
                 error: true,
                 errorMsg: "Field cannot be empty"
-            }, () => {
             })
-            return true;
-        }
-        return false;
-    }
-
-    updatePassword = async (e) => {
-        e.preventDefault()
-        //Check empty field
-        var fieldEmpty = this.isFieldEmpty()
-
-        if (fieldEmpty) {
             return;
         }
 
-        /* to do */
+        if (this.state.password1 !== this.state.password2){
+            this.setState({
+                error: true,
+                errorMsg: "Passwords do not match"
+            })
+            return;
+        }
 
-//        var passback = await RequestServer.login(this.state.username, this.state.password)
-//        if (passback === null) {
-//            this.setState({
-//                error: true,
-//                errorMsg: 'Invalid Login'
-//            })
-//
-//        } else {
-//            localStorage.setItem("isLoggedIn", "true")
-//            localStorage.setItem("userData", JSON.stringify(passback.data))
-//            this.setTheState(passback)
-//            // this.testConsoleLog(passback)
-//            this.setRole(passback)
-//            this.navigate(passback)
-//       }
+        var token = localStorage.getItem('token');
+        var response = await RequestServer.updatePassword(token, this.state.password1, this.state.cur_password)
+        if (response === null) {
+            this.setState({
+                error: true,
+                errorMsg: 'Error updating password'
+            })
+
+        } else {
+            console.log(response);
+            if (response !== null){
+                this.setState({errorMsg: response.data.detail});
+            }
+            else {
+                this.setState({errorMsg: 'Error updating password'})
+            }
+            this.setState({
+                error: true,
+            })
+        }
+
 
     }
 
@@ -66,7 +91,19 @@ export default class Profile extends Component {
         }
             /* to do */
 
-        
+
+    }
+
+    updateEmail = async (e) => {
+        e.preventDefault()
+        //Check empty field
+        var fieldEmpty = this.isFieldEmpty()
+
+        if (fieldEmpty) {
+            return;
+        }
+            /* to do */
+
 
     }
 
@@ -80,48 +117,92 @@ export default class Profile extends Component {
         }
     }
 
-render() {
-    return (
-      <div className = "page-container">
-        <h2 className = "title">{"XXX's Profile Page"}</h2>
-        <MuiThemeProvider>
-            <div className = 'login-form' align = "center">
-            <TextField
-                hintText="Enter your Username"
-                floatingLabelText="Username"
-                onChange = {(event,newValue) => this.setState({username:newValue})}
-                />
-                <br/>
-                <RaisedButton label="Update Username" primary={true} style={style} onClick={(event) => this.updateUsername(event)}/>
+    componentDidMount() {
+        this.getUserDetails();
+    }
 
-                <br/>
-                <br/>
-                <TextField
-                type="password"
-                hintText="Enter your New Password"
-                floatingLabelText="New Password"
-                onChange = {(event,newValue) => this.setState({password:newValue})}
-                />
-                <br/>
-                <TextField
-                type="password"
-                hintText="Enter your New Password"
-                floatingLabelText="Confirm New Password"
-                onChange = {(event,newValue) => this.setState({password:newValue})}
-                />
-                <br/>
+    async getUserDetails() {
+        var token = localStorage.getItem('token');
+        console.log("Token: " , token);
+        if (token !== null){
+            var response = await RequestServer.getUsername(token)
+            console.log(response);
+            if (response !== null){
+                this.setState({cur_username: response.data.username});
+                this.setState({cur_email: response.data.email});
+            }
+            else {
+                this.setState({title: 'Unauthorized Access'})
+            }
+        }
+        else {
+            this.setState({title: 'Unauthorized Access'})
+        }
+    }
 
-                <div className='errorMsg'>
-                    {(this.state.error ? this.showErrorMsg() : '')}
+    render() {
+        return (
+            <div className = "page-container">
+            <h2 className = "title">{this.state.cur_username}&apos;s Profile Page</h2>
+            <MuiThemeProvider>
+                <div className = 'Update-form' align = "center">
+                    <div style={{backgroundColor: "#e6f5f5"}}>
+                        <TextField
+                        floatingLabelText="New Username"
+                        onChange = {(event,newValue) => this.setState({username:newValue})}
+                        />
+                        <br/>
+                        <RaisedButton label="Update Username" primary={true} style={style} onClick={(event) => this.updateUsername(event)}/>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <div style={{backgroundColor: "#e6f5f5"}}>
+                        <TextField
+                        floatingLabelText="email"
+                        value={this.state.cur_email}
+                        InputProps={{
+                        readOnly: true,
+                        }}
+                        />
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <div style={{backgroundColor: "#e6f5f5"}}>
+                        <TextField
+                        type="password"
+                        floatingLabelText="Current Password"
+                        onChange = {(event,newValue) => this.setState({cur_password: newValue})}
+                        />
+                        <br/>
+                        <TextField
+                        type="password"
+                        floatingLabelText="New Password"
+                        onChange = {(event,newValue) => this.setState({password1: newValue})}
+                        />
+                        <br/>
+                        <TextField
+                        type="password"
+                        floatingLabelText="Confirm New Password"
+                        onChange = {(event,newValue) => this.setState({password2: newValue})}
+                        />
+                        <br/>
+                        <RaisedButton label="Update Password" primary={true} style={style} onClick={(event) => this.updatePassword(event)}/>
+                    </div>
+                    <br/>
+                    <div className='errorMsg'>
+                        {(this.state.error ? this.showErrorMsg() : '')}
+                    </div>
+
+
                 </div>
-                
-                <RaisedButton label="Update Password" primary={true} style={style} onClick={(event) => this.updatePassword(event)}/>
+            </MuiThemeProvider>
             </div>
-        </MuiThemeProvider>
-      </div>
-    );
-  }
+        );
+    }
 }
 const style = {
- margin: 15,
+    margin: 15,
 };
+
