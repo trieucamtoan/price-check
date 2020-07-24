@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import ProductCard from './ProductCard';
+import ProductCategoryCard from './ProductCategoryCard';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
@@ -24,19 +24,14 @@ export default class ProductCategory extends Component {
         return (
             <div>
                 <Container>
-                    <h2 className = "title">Product Category</h2>
-                    <br/>
                 <Row style = {{
                     display: 'flex'
                 }}>
-                    <Col md="auto"><ProductCard title = {cpu_title} image = {cpu_image} text = {cpu_text}/></Col>
-                    <Col md="auto"><ProductCard title = {gpu_title} image = {gpu_image} text = {gpu_text}/></Col>
-                    <Col md="auto"><ProductCard title = {ram_title} image = {ram_image} text = {ram_text}/></Col>
+                    <Col md="auto"><ProductCategoryCard title = {cpu_title} image = {cpu_image} text = {cpu_text}/></Col>
+                    <Col md="auto"><ProductCategoryCard title = {gpu_title} image = {gpu_image} text = {gpu_text}/></Col>
+                    <Col md="auto"><ProductCategoryCard title = {ram_title} image = {ram_image} text = {ram_text}/></Col>
                 </Row>
                 </Container>
-                
-                
-                
             </div>
         )
     }

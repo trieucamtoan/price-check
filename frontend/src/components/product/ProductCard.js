@@ -2,25 +2,56 @@ import React, {Component} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
+//horizontal card used for displaying individual product
+
+const styles = {
+    'card': {
+        
+    },
+    'button': {
+        paddingLeft : '20px'
+    },
+    'image': {
+        width: '300px',
+        height: 'auto',
+        objectFit: 'contain',
+    },
+    'input': {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        width: '100%',
+        color: 'white'
+    },
+    'black': {
+        color: 'black'
+    }
+};
+
 export default class ProductCard extends Component {
     render() {
         return (
-            <Card style={{ width: '18rem' }}>
-            <Card.Img 
-                variant="top" 
-                src= {this.props.image} 
-                style = {{
-                    width: 250,
-                    height: 250,
-                    objectFit: 'cover',
-                }}
-            />
+            <Card styles = {styles.card}>
+            <Card.Header as="h5">
+                {this.props.product_name}
+                
+                <Button 
+                    variant="primary"
+                    styles={styles.button}
+                    className="float-right"
+                    >Check Stock
+                </Button>
+                <p className="float-right">Lowest Price: <span>{this.props.product_price}</span></p>
+            </Card.Header>
             <Card.Body>
-                <Card.Title>{this.props.title}</Card.Title>
+                <Card.Img 
+                    variant="top" 
+                    src= {this.props.product_image}
+                    style = {styles.image} />
                 <Card.Text>
-                {this.props.text}
+                    {this.props.product_description}
                 </Card.Text>
-                <Button variant="primary">Check Price</Button>
+                
             </Card.Body>
             </Card>
         );
