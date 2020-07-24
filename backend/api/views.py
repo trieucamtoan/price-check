@@ -49,7 +49,7 @@ from rest_framework.views import APIView
 #             data = serializer.errors
 #         return Response(data)
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def products_list_view(request):
     if request.method == 'GET':
         products = Product.objects.all()
@@ -59,7 +59,7 @@ def products_list_view(request):
 
     elif request.method == 'POST':
     # data = JSONParser().parse(request)
-        serializer = ProductSerializer(data=data)
+        serializer = ProductSerializer(data=request.     data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -69,11 +69,14 @@ def products_list_view(request):
     #     return JsonResponse(serializer.data, status=201)
     # return JsonResponse(serializer.errors, status=400)
 
-
+@api_view(['GET'])
 def detail_product_view(request,pk):
     try:
         obj= Product.objects.get(pk=pk)
     except Product.DoesNotExist:
-        return HttpResponse(status=404)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = ProductSerializer(obj)
     return Response(serializer.data)
+    #     return HttpResponse(status=404)
+    # serializer = ProductSerializer(obj)
+    # return Response(serializer.data)
