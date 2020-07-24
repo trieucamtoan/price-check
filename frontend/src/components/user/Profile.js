@@ -36,6 +36,7 @@ export default class Profile extends Component {
         //Check empty field
 
         this.setState({
+            errorUsername: false,
             error: false,
             errorMsg: ""
         })
@@ -83,29 +84,48 @@ export default class Profile extends Component {
 
     updateUsername = async (e) => {
         e.preventDefault()
-        //Check empty field
-        var fieldEmpty = this.isFieldEmpty()
 
-        if (fieldEmpty) {
+        this.setState({
+            errorUsername: false,
+            error: false,
+            errorMsg: ""
+        })
+
+
+        if (this.state.username === "") {
+            this.setState({
+                errorUsername: true,
+                errorMsg: "Field cannot be empty"
+            })
             return;
         }
-            /* to do */
 
+        var token = localStorage.getItem('token');
+        var response = await RequestServer.updateUsername(token, this.state.username)
+        if (response === null) {
+            this.setState({
+                errorUsername: true,
+                errorMsg: 'Error updating username'
+            })
+
+        } else {
+            console.log(response);
+            if (response !== null){
+                this.setState({errorMsg: 'Username updated to: '+response.data.username});
+                this.getUserDetails()
+            }
+            else {
+                this.setState({errorMsg: 'Error updating password'})
+            }
+            this.setState({
+                errorUsername: true,
+            })
+        }
 
     }
 
-    updateEmail = async (e) => {
-        e.preventDefault()
-        //Check empty field
-        var fieldEmpty = this.isFieldEmpty()
-
-        if (fieldEmpty) {
-            return;
-        }
-            /* to do */
-
-
-    }
+//    updateEmail = async (e) => {
+//    }
 
     showErrorMsg() {
         return <p>{this.state.errorMsg}</p>
@@ -153,6 +173,10 @@ export default class Profile extends Component {
                         />
                         <br/>
                         <RaisedButton label="Update Username" primary={true} style={style} onClick={(event) => this.updateUsername(event)}/>
+                    </div>
+                    <br/>
+                    <div className='errorMsg'>
+                        {(this.state.errorUsername ? this.showErrorMsg() : '')}
                     </div>
 
                     <br/>

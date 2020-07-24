@@ -87,17 +87,22 @@ class RequestServer extends Component {
         }
     }
 
-    async updateUsername(token) {
+    async updateUsername(token, username) {
+
+        var userObj = {
+            username: username
+        }
+
         try {
-            var response = await axios.get(this.getServerLocation() + '/user/', {
-                headers: {
-                    'Authorization' : `Token ${token}`
-                }
-            })
-            return response
+           var response = await axios.patch(this.getServerLocation() + '/user/', userObj, {
+               headers: {
+                   'Authorization' : `Token ${token}`
+               }
+           })
+           return response
         } catch (error) {
-            console.log(error)
-            return null
+           console.log(error)
+           return null
         }
     }
 }
