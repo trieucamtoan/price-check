@@ -5,7 +5,6 @@ import TextField from 'material-ui/TextField';
 import RequestServer from '../../requests/RequestServer';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer, toast} from 'react-toastify';
-import renderHTML from 'react-render-html';
 
 const styles = {
     'button': {
@@ -133,14 +132,7 @@ export default class Register extends Component {
     }
 
     showErrorMsg() {
-        var errMsg = this.state.errorMsg;
-        return <p>{renderHTML(errMsg)}</p>
-    }
-
-    keyPressed(event) {
-        if(event.key === "Enter"){
-            this.registerHandler(event)
-        }
+        return <p>{this.state.errorMsg}</p>
     }
 
     render() {
@@ -157,7 +149,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Username"
                                 onChange={(event,newValue) => this.setState({username: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/>    
 
@@ -166,7 +157,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Email"
                                 onChange={(event,newValue) => this.setState({email: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/> 
 
@@ -176,7 +166,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Password"
                                 onChange={(event,newValue) => this.setState({password1: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/>  
                             <TextField
@@ -185,7 +174,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Password Confirmation"
                                 onChange={(event,newValue) => this.setState({password2: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
 
                             <br/>
