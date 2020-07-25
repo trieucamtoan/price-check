@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import RequestServer from '../../requests/RequestServer';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer, toast} from 'react-toastify';
+import renderHTML from 'react-render-html';
 
 const styles = {
     'button': {
@@ -67,6 +68,40 @@ export default class Register extends Component {
         return false;
     }
 
+    registerResponseHandler(response) {
+        if (response !== null) {
+            var registeredSuccess = false;
+            var errorMessage = [];
+            for (const [key, value] of Object.entries(response)) {
+                // console.log(`${key}: ${value}`);
+                if (key === 'key'){
+                    toast("User Added");
+                    registeredSuccess = true;
+                    this.clearFields();
+                    return true;
+                }
+                else {
+                    errorMessage += value;
+                }
+            } 
+
+            if (!registeredSuccess){
+                const message = errorMessage.split(/[',','.']+/).join('\n');
+                this.setState({
+                    error: true,
+                    errorMsg: message
+                })
+            }
+
+        } else {
+            console.log('response: ' + response)
+            this.setState({
+                error: true,
+                errorMsg: 'Unable to register'
+            })
+        }
+    }
+
     registerHandler = async(event) => {
         event.preventDefault()
         console.log("Registering...");
@@ -94,21 +129,12 @@ export default class Register extends Component {
 
         var response = await RequestServer.addUser(user)
 
-        if (response !== null) {
-            console.log('response: ' + response)
-            toast("User Added");
-            this.clearFields()
-        } else {
-            console.log('response: ' + response)
-            this.setState({
-                error: true,
-                errorMsg: 'Unable to register'
-            })
-        }
+        this.registerResponseHandler(response);
     }
 
     showErrorMsg() {
-        return <p>{this.state.errorMsg}</p>
+        var errMsg = this.state.errorMsg;
+        return <p>{renderHTML(errMsg)}</p>
     }
 
     keyPressed(event) {

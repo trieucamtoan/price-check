@@ -12,7 +12,7 @@ export default class GpuPage extends Component {
         //GIGABYTE Radeon RX 5700 XT
         const rx5700_title = 'GIGABYTE Radeon RX 5700 XT';
         const rx5700_image = "https://c1.neweggimages.com/ProductImage/14-932-208-V10.jpg";
-        const rx5700_text = "Powered by AMD Radeon™ RX 5700 XT, Integrated with 8GB GDDR6 256-bit memory interface, WINDFORCE 3X Cooling System with alternate spinning fans, RGB Fusion 2.0 – synchronize with other AORUS devices, Metal Back Plate, PCI-Express 4.0 Support";
+        const rx5700_text = "Powered by AMD Radeon™ RX 5700 XT, Integrated with 8GB GDDR6 256-bit memory interface,\n WINDFORCE 3X Cooling System with alternate spinning fans, RGB Fusion 2.0 – synchronize with other AORUS devices, Metal Back Plate, PCI-Express 4.0 Support";
         const rx5700_price = "599 CAD"
 
         //Nvidia RTX 2080

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 
 class ProductCategoryCard extends Component {
-    
+
     buttonHandler = (e) => {
         const { history } = this.props;
         if (this.props.title === 'GPU'){
@@ -37,7 +37,9 @@ class ProductCategoryCard extends Component {
             />
             <Card.Body>
                 <Card.Title>{this.props.title}</Card.Title>
-                <Card.Text>
+                <Card.Text style = {{
+                    whiteSpace: 'pre-wrap'
+                }}>
                 {this.props.text}
                 </Card.Text>
                 <Button variant="primary" onClick={(event) => this.buttonHandler(event)}>Check Price</Button>
