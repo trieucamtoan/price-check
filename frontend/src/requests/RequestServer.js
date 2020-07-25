@@ -69,6 +69,46 @@ class RequestServer extends Component {
             return null
         }
     }
+
+    async updatePassword(token, newPassword, oldPassword) {    //**** Backend does not verify current password? ****//
+
+        var userObj = {
+            new_password1: newPassword,
+            new_password2: newPassword,
+            old_password: oldPassword
+        }
+
+        try {
+            var response = await axios.post(this.getServerLocation() + '/password/change/', userObj, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
+
+    async updateUsername(token, username) {
+
+        var userObj = {
+            username: username
+        }
+
+        try {
+           var response = await axios.patch(this.getServerLocation() + '/user/', userObj, {
+               headers: {
+                   'Authorization' : `Token ${token}`
+               }
+           })
+           return response
+        } catch (error) {
+           console.log(error)
+           return null
+        }
+    }
 }
 
 export default new RequestServer();
