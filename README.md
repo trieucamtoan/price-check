@@ -52,7 +52,7 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Navigate to http://localhost:3000 to see the frontend
 - When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
 
-#Project Checkpoint
+# Project Checkpoint
 Completed Features:
 - User can login, logout, register using the web UI. 
 - User can update information such as username, password.
