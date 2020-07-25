@@ -1,4 +1,6 @@
 import React from 'react';
+import Profile from './components/user/Profile'
+import Wishlist from './components/user/Wishlist'
 import {Switch, Route, Redirect} from 'react-router-dom';
 import Register from './components/user/Register';
 import Login from './components/user/Login';
@@ -15,6 +17,8 @@ const Routes = () => (
     <Route path= '/register' component={Register}/>
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>
+    <PrivateRoute path= '/profile' component={Profile}/>
+    <PrivateRoute path= '/wishlist' component={Wishlist}/>
     <PrivateRoute path= '/logout' component={Logout}/>
   </Switch>
 )
