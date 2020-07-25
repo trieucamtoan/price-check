@@ -1,6 +1,5 @@
 from rest_framework import serializers
-# from api.models import Account
-from api.models import Product
+from .models import Product, ProductLinkPrice
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -28,8 +27,25 @@ from api.models import Product
 # 		return account
 #
 
+class ProductLinkPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductLinkPrice
+        fields = ('product_url', 'product_price',)
 
 class ProductSerializer(serializers.ModelSerializer):
+    product_link_price = ProductLinkPriceSerializer(many=True)
     class Meta:
-        model =  Product
-        fields = ['id','name','current_price','description']
+        model = Product
+        fields = ['id', 'product_name', 'product_description', 'product_link_price']
+        #First, create product instance, then choice instance
+        #Each dictionary of the list has keys called 'url' and 'price'
+        #Each ProductLinkPrice needs to be associated with the Product 
+        #   ->use the loop to add the Product to each dictionary
+    def create(self, validated_data):
+        product_link_price_validated = validated_data.pop('product_link_price')
+        product = Product.objects.create(**validated_data)
+        product_link_price_serializer = self.fields['product_link_price']
+        for a_product_link_price in product_link_price_validated:
+            a_product_link_price['product'] = product
+        product_link_price_set = product_link_price_serializer.create(product_link_price_validated)
+        return product 

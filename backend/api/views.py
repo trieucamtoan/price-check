@@ -59,9 +59,10 @@ def products_list_view(request):
 
     elif request.method == 'POST':
     # data = JSONParser().parse(request)
-        serializer = ProductSerializer(data=request.     data)
+        serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            product = serializer.save()
+            serializer = ProductSerializer(product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,14 +70,17 @@ def products_list_view(request):
     #     return JsonResponse(serializer.data, status=201)
     # return JsonResponse(serializer.errors, status=400)
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 def detail_product_view(request,pk):
     try:
         obj= Product.objects.get(pk=pk)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = ProductSerializer(obj)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     #     return HttpResponse(status=404)
     # serializer = ProductSerializer(obj)
     # return Response(serializer.data)
