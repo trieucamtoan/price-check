@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+
+# from api.views import detail_product_view
+from api.views import ( products_list_view , detail_product_view)
+
 # from api.views import (
     # UserListView,
     # UserDetailView,
@@ -37,6 +42,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
+    path('products/<int:pk>',detail_product_view , name= "detail-product"),
+    path('products/',products_list_view,name= "product"),
     # path('register', registration_view, name='register')
     # path('list',UserListView.as_view(), name="list"),
 
