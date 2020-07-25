@@ -10,10 +10,14 @@ class RequestServer extends Component {
         try {
             console.log(user)
             var response = await axios.post(this.getServerLocation() + '/registration/', user)
-            return response
+            return response.data //Changed to response.data
         } catch (err) {
-            console.log("Error: ", err.response.data)
-            return null
+            console.log("Error: ", err.response.data);
+            // const error = err.response.data;
+            // for (const [key, value] of Object.entries(error)) {
+            //     console.log(`${key}: ${value}`);
+            // }   
+            return err.response.data
         }
     }
 

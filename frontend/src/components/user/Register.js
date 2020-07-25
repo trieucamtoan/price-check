@@ -67,6 +67,40 @@ export default class Register extends Component {
         return false;
     }
 
+    registerResponseHandler(response) {
+        if (response !== null) {
+            var registeredSuccess = false;
+            var errorMessage = [];
+            for (const [key, value] of Object.entries(response)) {
+                // console.log(`${key}: ${value}`);
+                if (key === 'key'){
+                    toast("User Added");
+                    registeredSuccess = true;
+                    this.clearFields();
+                    return true;
+                }
+                else {
+                    errorMessage += value;
+                }
+            } 
+
+            if (!registeredSuccess){
+                const message = errorMessage.split(/[',','.']+/).join('\n');
+                this.setState({
+                    error: true,
+                    errorMsg: message
+                })
+            }
+
+        } else {
+            console.log('response: ' + response)
+            this.setState({
+                error: true,
+                errorMsg: 'Unable to register'
+            })
+        }
+    }
+
     registerHandler = async(event) => {
         event.preventDefault()
         console.log("Registering...");
@@ -94,27 +128,11 @@ export default class Register extends Component {
 
         var response = await RequestServer.addUser(user)
 
-        if (response !== null) {
-            console.log('response: ' + response)
-            toast("User Added");
-            this.clearFields()
-        } else {
-            console.log('response: ' + response)
-            this.setState({
-                error: true,
-                errorMsg: 'Unable to register'
-            })
-        }
+        this.registerResponseHandler(response);
     }
 
     showErrorMsg() {
         return <p>{this.state.errorMsg}</p>
-    }
-
-    keyPressed(event) {
-        if(event.key === "Enter"){
-            this.registerHandler(event)
-        }
     }
 
     render() {
@@ -131,7 +149,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Username"
                                 onChange={(event,newValue) => this.setState({username: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/>    
 
@@ -140,7 +157,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Email"
                                 onChange={(event,newValue) => this.setState({email: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/> 
 
@@ -150,7 +166,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Password"
                                 onChange={(event,newValue) => this.setState({password1: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
                             <br/>  
                             <TextField
@@ -159,7 +174,6 @@ export default class Register extends Component {
                                 inputStyle={styles.black}
                                 floatingLabelText="Password Confirmation"
                                 onChange={(event,newValue) => this.setState({password2: newValue})}
-                                onKeyPress={this.keyPressed}
                             />
 
                             <br/>
