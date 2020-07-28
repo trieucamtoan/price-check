@@ -73,7 +73,7 @@ def products_list_view(request):
 @api_view(['GET', 'DELETE'])
 def detail_product_view(request,pk):
     try:
-        obj= Product.objects.get(pk=pk)
+        product= Product.objects.get(pk=pk)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':

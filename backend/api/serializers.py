@@ -44,8 +44,25 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         product_link_price_validated = validated_data.pop('product_link_price')
         product = Product.objects.create(**validated_data)
-        product_link_price_serializer = self.fields['product_link_price']
         for a_product_link_price in product_link_price_validated:
-            a_product_link_price['product'] = product
-        product_link_price_set = product_link_price_serializer.create(product_link_price_validated)
-        return product 
+            ProductLinkPrice.objects.create(product=product, **a_product_link_price)
+        return product
+
+    def update(self, instance, validated_data):
+
+        product_link_price_validated = validated_data.pop('product_link_price')
+        product_link_prices = (instance.product_link_price).all() 
+        product_link_prices = list(product_link_prices)
+        
+        #Saving model
+        instance.product_name = validated_data.get('product_name', instance.product_name)
+        instance.product_description = validated_data.get('product_description', instance.product_description)
+        instance.save()
+
+        #Saving nested model
+        for product_link_price in product_link_price_validated:
+            a_product_link_price = product_link_prices.pop(0)
+            a_product_link_price.product_url = product_link_price.get('product_url', a_product_link_price.product_url)
+            a_product_link_price.product_price = product_link_price.get('product_price', a_product_link_price.product_price)
+            a_product_link_price.save()
+        return instance
