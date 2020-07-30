@@ -15,5 +15,8 @@ class ProductLinkPrice(models.Model):
         return self.product_url + ' ' + str(self.product_price)
 
 class Comment(models.Model):
-    username = models.CharField(max_length=150, blank=True),
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments', null=True, blank=True)
+    username = models.CharField(max_length=150, blank=True)
     text = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return 'Comment {} by {}'.format(self.text, self.username)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductLinkPrice
+from .models import Product, ProductLinkPrice, Comment
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -40,11 +40,17 @@ class ProductLinkPriceSerializer(serializers.ModelSerializer):
                 raise ValidationError('A product_url with this name already exists.')
         return value
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'username', 'text')
+
 class ProductSerializer(serializers.ModelSerializer):
     product_link_price = ProductLinkPriceSerializer(many=True)
+    comments = CommentSerializer(required=False, many=True)
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'product_description', 'product_link_price']
+        fields = ['id', 'product_name', 'product_description', 'product_link_price', 'comments']
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
         #Each ProductLinkPrice needs to be associated with the Product 
