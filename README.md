@@ -34,6 +34,16 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Open `settings.py` and change the setting for the database (the steps are there)
 - Run command `python3 manage.py runserver` to start backend server
 
+## Running web scraping API
+- On another terminal, run `sudo docker run -p 8050:8050 scrapinghub/splash` to start splash server for web scraping
+- Open a separate terminal, run `scrapy crawl pricespider` to update product price on the db
+- Use Postman to make a GET request to localhost:8000/products to see the price updated
+
+## NOTE: 
+- Web scraping only run when execute `scrapy crawl pricespider` command
+- Need to configure Django to run it as periodic task 
+- Only works with neweggs.ca site at the moment 
+
 # React installation guide (local-development):
 - Please make sure to install these libraries before using:
 - `npm install @material-ui/core`
