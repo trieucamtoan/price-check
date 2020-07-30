@@ -70,7 +70,7 @@ def products_list_view(request):
     #     return JsonResponse(serializer.data, status=201)
     # return JsonResponse(serializer.errors, status=400)
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,pk):
     try:
         product= Product.objects.get(pk=pk)
@@ -81,6 +81,14 @@ def detail_product_view(request,pk):
     elif request.method == 'DELETE':
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PUT':
+        serializer = ProductSerializer(instance=product, data=request.data, partial=True, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            saved_product = serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
     #     return HttpResponse(status=404)
     # serializer = ProductSerializer(obj)
     # return Response(serializer.data)
