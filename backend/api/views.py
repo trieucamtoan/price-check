@@ -8,14 +8,11 @@ from rest_framework import status
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse,JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
-from django.http import HttpResponse
-from api.models import Product
-from .serializers import ProductSerializer
+from api.models import Product, Comment
+from .serializers import ProductSerializer, CommentSerializer
 import json
 
-from rest_framework.generics import CreateAPIView
+# from rest_framework.generics import (
 # ListAPIView ,
 #  RetrieveAPIView,
 #  CreateAPIView,
@@ -59,38 +56,19 @@ def products_list_view(request):
 
     elif request.method == 'POST':
     # data = JSONParser().parse(request)
-        serializer = ProductSerializer(data=request.data)
+        serializer = ProductSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             product = serializer.save()
-            serializer = ProductSerializer(product)
+            serializer = ProductSerializer(product, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-    #     return JsonResponse(serializer.data, status=201)
-    # return JsonResponse(serializer.errors, status=400)
-
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,pk):
     try:
-        obj= Product.objects.get(pk=pk)
+        product= Product.objects.get(pk=pk)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    serializer = ProductSerializer(obj)
-    return Response(serializer.data)
-=======
-    if request.method == 'GET':
-        return Response(serializer.data)
-    elif request.method == 'DELETE':
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
->>>>>>> 539a8c015162f4ec8d78b2b41473f70c716a1f47
-    #     return HttpResponse(status=404)
-    # serializer = ProductSerializer(obj)
-    # return Response(serializer.data)
-=======
     if request.method == 'GET':
         return Response(serializer.data)
     elif request.method == 'DELETE':
@@ -135,14 +113,20 @@ def product_comment_detail_view(request, product_id, comment_id):
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#  @api_view(['GET', 'POST'])
-# def add_to_wishlist(CreateAPIView):
-#     queryset = Wishlist.objects.all()
-#     serializer_class=WishlistSerializer
+@api_view(['GET','POST'])
+def add_to_wishlist(request,product_id):
+    item = get_object_or_404(Product, pk=product_id)
+    if request.method == 'GET':
+        wishlist_item = Wishlist.objects.all()
+        serializer = WishlistSerializer(wishlist_item,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = WishlistSerializer(data=request.data, context={'product_id': product_id})
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# def add_to_wishlist(request,product_id):
-#     item = get_object_or_404(Toy, product_id)
-#     wishlist_item = get_or_create(Wishlist, user=request.user)
-#     wishlist_item.wishlist.add(item)
-#     return Response(data)
->>>>>>> Stashed changes
+
+    # wishlist_item = get_or_create(Wishlist, user=request.user)
+    # wishlist_item.wishlist.add(item)
+    # return Response(data)
