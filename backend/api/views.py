@@ -113,18 +113,30 @@ def product_comment_detail_view(request, product_id, comment_id):
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET','POST'])
-def add_to_wishlist(request,product_id):
+@api_view(['GET','DELETE'])
+def add_detail_wishlist(request,product_id):
     item = get_object_or_404(Product, pk=product_id)
     if request.method == 'GET':
-        wishlist_item = Wishlist.objects.all()
+        wishlist_item = Wishlist.objects.filter(product=product)
         serializer = WishlistSerializer(wishlist_item,many=True)
         return Response(serializer.data)
-    elif request.method == 'POST':
+    elif request.method == 'DELETE':
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST','DELETE'])
+def add_to_wishlist(request,product_id):
+    item = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
         serializer = WishlistSerializer(data=request.data, context={'product_id': product_id})
         if serializer.is_valid(raise_exception=True):
+            saved_wishlist=serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
     # wishlist_item = get_or_create(Wishlist, user=request.user)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductLinkPrice, Comment
+from .models import Product, ProductLinkPrice, Comment,Wishlist
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -92,4 +92,4 @@ class ProductSerializer(serializers.ModelSerializer):
 class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wishlist
-        fields =(product_id,username)
+        fields =['product_id','username']
