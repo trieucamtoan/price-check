@@ -162,17 +162,19 @@ export default class Profile extends Component {
 
     render() {
         return (
-            <div className = "page-container">
+            <div className = "page-container" align = "center">
+            <br/>
             <h2 className = "title">{this.state.cur_username}&apos;s Profile Page</h2>
+            <br/>
             <MuiThemeProvider>
-                <div className = 'Update-form' align = "center">
-                    <div style={{backgroundColor: "#e6f5f5"}}>
+                <div className = 'Update-form' align = "center" style={{maxWidth: '500px'}}>
+                    <div style={style.border}>
                         <TextField
                         floatingLabelText="New Username"
                         onChange = {(event,newValue) => this.setState({username:newValue})}
                         />
                         <br/>
-                        <RaisedButton label="Update Username" primary={true} style={style} onClick={(event) => this.updateUsername(event)}/>
+                        <RaisedButton label="Update Username" primary={true} style={style.button} onClick={(event) => this.updateUsername(event)}/>
                     </div>
                     <br/>
                     <div className='errorMsg'>
@@ -180,8 +182,7 @@ export default class Profile extends Component {
                     </div>
 
                     <br/>
-                    <br/>
-                    <div style={{backgroundColor: "#e6f5f5"}}>
+                    <div style={style.border}>
                         <TextField
                         floatingLabelText="email"
                         value={this.state.cur_email}
@@ -193,7 +194,7 @@ export default class Profile extends Component {
 
                     <br/>
                     <br/>
-                    <div style={{backgroundColor: "#e6f5f5"}}>
+                    <div style={style.border}>
                         <TextField
                         type="password"
                         floatingLabelText="Current Password"
@@ -212,7 +213,7 @@ export default class Profile extends Component {
                         onChange = {(event,newValue) => this.setState({password2: newValue})}
                         />
                         <br/>
-                        <RaisedButton label="Update Password" primary={true} style={style} onClick={(event) => this.updatePassword(event)}/>
+                        <RaisedButton label="Update Password" primary={true} style={style.button} onClick={(event) => this.updatePassword(event)}/>
                     </div>
                     <br/>
                     <div className='errorMsg'>
@@ -227,6 +228,14 @@ export default class Profile extends Component {
     }
 }
 const style = {
-    margin: 15,
+    'button': {
+        margin: 15,
+    },
+    'border': {
+       border: '1px solid black',
+       boxShadow: '0px 0px 5px black',
+       borderRadius: '10px'
+    }
+
 };
 
