@@ -20,8 +20,11 @@ class PricespiderSpider(scrapy.Spider):
         item['url'] = response.url
         price_dollar = response.css('#landingpage-price').css('.price-current').xpath('.//strong/text()').extract()[0]
         price_cent = response.css('#landingpage-price').css('.price-current').xpath('.//sup/text()').extract()[0]
-        item['price'] = price_dollar+price_cent
+        
+        price_dollar = re.sub('[^0-9]', '', price_dollar)
+        price_cent = re.sub('[^0-9]', '', price_cent)
 
+        item['price'] = float(price_dollar+'.'+price_cent)
         yield item
 
     def get_url_from_db(self):
