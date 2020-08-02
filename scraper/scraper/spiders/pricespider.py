@@ -18,10 +18,15 @@ class PricespiderSpider(scrapy.Spider):
     def newegg_parse(self, response):
         item = ProductItem()
         item['url'] = response.url
-        price_dollar = response.css('#landingpage-price').css('.price-current').xpath('.//strong/text()').extract()[0]
-        price_cent = response.css('#landingpage-price').css('.price-current').xpath('.//sup/text()').extract()[0]
-        item['price'] = price_dollar+price_cent
+        item['price'] = -1
+        if response.status == 200:
+            price_dollar = response.css('#landingpage-price').css('.price-current').xpath('.//strong/text()').extract()
+            price_cent = response.css('#landingpage-price').css('.price-current').xpath('.//sup/text()').extract()
+            if len(price_dollar) > 0 and len(price_cent) > 0:
+                price_dollar = re.sub('[^0-9]', '', price_dollar[0])
+                price_cent = re.sub('[^0-9]', '', price_cent[0])
 
+                item['price'] = float(price_dollar+'.'+price_cent)
         yield item
 
     def get_url_from_db(self):

@@ -41,6 +41,6 @@ class ScraperPipeline:
         # product_link.product_price = item['price']
         # product_link.save()
 
-        self.cur.execute("UPDATE api_productlinkprice SET product_price = {}".format(item["price"]))
+        self.cur.execute("UPDATE api_productlinkprice SET product_price = {} WHERE product_url = \'{}\'".format(item["price"], item['url']))
         self.connection.commit()
         return item
