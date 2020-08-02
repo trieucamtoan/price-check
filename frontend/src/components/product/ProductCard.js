@@ -6,10 +6,10 @@ import Button from 'react-bootstrap/Button';
 
 const styles = {
     'card': {
-        
+        marginBottom: '10px'
     },
     'button': {
-        paddingLeft : '20px'
+        marginLeft: '20px'
     },
     'image': {
         width: '300px',
@@ -31,13 +31,13 @@ const styles = {
 export default class ProductCard extends Component {
     render() {
         return (
-            <Card styles = {styles.card}>
+            <Card style = {styles.card}>
             <Card.Header as="h5">
                 {this.props.product_name}
                 
                 <Button 
                     variant="primary"
-                    styles={styles.button}
+                    style={styles.button}
                     className="float-right"
                     >Check Stock
                 </Button>
