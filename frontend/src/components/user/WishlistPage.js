@@ -31,6 +31,9 @@ export default class WishlistPage extends Component {
 
         return (
             <div>
+                <br/>
+                <h2 class='title'>My Wishlist</h2>
+                <br/>
                 <WishlistCard product_name = {rtx2080ti_title} product_image = {rtx2080ti_image} product_description = {rtx2080ti_text} product_price = {rtx2080ti_price}/>
                 <br/>
                 <WishlistCard product_name = {rx5700_title} product_image = {rx5700_image} product_description = {rx5700_text} product_price = {rx5700_price}/>

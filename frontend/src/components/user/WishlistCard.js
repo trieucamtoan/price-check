@@ -77,7 +77,8 @@ export default class WishlistCard extends Component {
 
 const styles = {
     'card': {
-        marginBottom: '10px'
+        marginTop: '5x',
+        marginBottom: '5px'
     },
     'buttonBlue': {
         marginLeft : '20px'
