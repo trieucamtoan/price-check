@@ -1,14 +1,5 @@
 -i https://pypi.python.org/simple
 asgiref==3.2.10
-<<<<<<< HEAD
-django-cors-headers==3.4.0
-django==3.0.8
-djangorestframework==3.11.0
-psycopg2-binary==2.8.5
-pytz==2020.1
-sqlparse==0.3.1
-uwsgi==2.0.19.1
-=======
 attrs==19.3.0
 Automat==20.2.0
 CacheControl==0.12.6
@@ -74,4 +65,3 @@ uWSGI==2.0.19.1
 w3lib==1.22.0
 webencodings==0.5.1
 zope.interface==5.1.0
->>>>>>> origin/master

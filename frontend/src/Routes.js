@@ -10,14 +10,17 @@ import Dashboard from "./components/user/Dashboard";
 import Logout from "./components/user/Logout";
 import Home from "./components/home/Home";
 import GpuPage from "./components/product/GPU/GpuPage";
+import ProductsPage from "./components/product/AllProducts/ProductsPage";
 const Routes = () => (
   <Switch>
     <Route exact path= '/' component={Home}/>
     {/* <Route exact path={["/", "/hello"]} component={Hello} /> */}
-    <Route path= '/Product' component={Product}/>
-    <Route path= '/login' component={Login}/>
-    <Route path= '/register' component={Register}/>
-    <Route path="/gpu" component={GpuPage}/>
+    <Route exact path= '/product' component={Product}/>
+    <Route exact path= '/login' component={Login}/>
+    <Route exact path= '/register' component={Register}/>
+    <Route exact path="/gpu" component={GpuPage}/>
+    <Route exact path="/product/all" component={ProductsPage}/>
+
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>
     <PrivateRoute path= '/profile' component={Profile}/>

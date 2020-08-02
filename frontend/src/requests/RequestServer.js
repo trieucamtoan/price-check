@@ -109,6 +109,19 @@ class RequestServer extends Component {
            return null
         }
     }
+
+    async getAllProducts(token) {
+        try {
+            var response = await axios.get(this.getServerLocation() + '/products/', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response.data
+        } catch (error) {
+            return null
+        }
+    }
 }
 
 export default new RequestServer();
