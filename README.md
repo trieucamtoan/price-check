@@ -26,7 +26,6 @@ If you are on mac links below would help you to setup your database too
 http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgresql-for-django
 
 
-
 ## Running backend
 - Open up a terminal in the project folder
 - Run command: `pipenv install` and `pipenv shell`
@@ -34,6 +33,22 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - cd to /backend/backend
 - Open `settings.py` and change the setting for the database (the steps are there)
 - Run command `python3 manage.py runserver` to start backend server
+
+## Running web scraping API
+- On another terminal, run `sudo docker run -p 8050:8050 scrapinghub/splash` to start splash server for web scraping
+- Open a separate terminal, run `scrapy crawl pricespider` to update product price on the db
+- Use Postman to make a GET request to localhost:8000/products to see the price updated
+
+## NOTE: 
+- Web scraping only run when execute `scrapy crawl pricespider` command
+- Need to configure Django to run it as periodic task 
+- Only works with neweggs.ca site at the moment 
+
+# React installation guide (local-development):
+- Please make sure to install these libraries before using:
+- `npm install @material-ui/core`
+- `npm install react-bootstrap bootstrap`
+- `npm install --save react-toastify`
 
 ## Running frontend
 - Open up another terminal in the project folder
@@ -47,9 +62,16 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Navigate to http://localhost:3000 to see the frontend
 - When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
 
+# Project Checkpoint
+Completed Features:
+- User can login, logout, register using the web UI. 
+- User can update information such as username, password.
+- User can see privated pages which are visible after login.
+- User can only fetch their own information with provided token from the server.
 
-# React installation guide:
-- Please make sure to install these libraries before using:
-- `npm install @material-ui/core`
-- `npm install react-bootstrap bootstrap`
-- `npm install --save react-toastify`
+WIP: 
+- Search Engine from Product Page
+- Product Model from the backend, Product Page (currently populated with static content)
+- Wishlist feature 
+- Product comment section
+- Email notification

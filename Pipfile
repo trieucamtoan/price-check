@@ -8,11 +8,18 @@ django = "~=3.0.0"
 djangorestframework = "*"
 django-cors-headers = "*"
 psycopg2--binary = "*"
-uwsgi = {version = "*", sys_platform = "!= 'win32'"}
 django-allauth = "*"
 django-rest-auth = "*"
+scrapy = "*"
+scrapyd = "*"
+scrapy-splash = "*"
+python-scrapyd-api = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.8"
+
+[packages.uwsgi]
+version = "*"
+sys_platform = "!= 'win32'"

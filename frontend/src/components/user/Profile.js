@@ -63,7 +63,7 @@ export default class Profile extends Component {
         if (response === null) {
             this.setState({
                 error: true,
-                errorMsg: 'Error updating password'
+                errorMsg: 'Error updating password, password may be too simple'
             })
 
         } else {

@@ -19,7 +19,12 @@ from django.urls import path, include
 
 
 # from api.views import detail_product_view
-from api.views import ( products_list_view , detail_product_view)
+from api.views import ( 
+    products_list_view , 
+    detail_product_view, 
+    product_comment_view,
+    product_comment_detail_view
+)
 
 # from api.views import (
     # UserListView,
@@ -44,6 +49,8 @@ urlpatterns = [
     path('registration/', include('rest_auth.registration.urls')),
     path('products/<int:pk>',detail_product_view , name= "detail-product"),
     path('products/',products_list_view,name= "product"),
+    path('products/<int:product_id>/comments', product_comment_view, name="comment"),
+    path('products/<int:product_id>/comments/<int:comment_id>', product_comment_detail_view, name="comment")
     # path('register', registration_view, name='register')
     # path('list',UserListView.as_view(), name="list"),
 

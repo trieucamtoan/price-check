@@ -113,7 +113,7 @@ DATABASES = {
         'USER': 'testuser',
         'PASSWORD': '123',
         'HOST': 'localhost', #use this line if running project locally
-        #'HOST': 'db', #use this line if using docker-compose
+        # 'HOST': 'db', #use this line if using docker-compose
         'PORT': '5432',
     }
 }
