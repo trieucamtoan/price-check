@@ -1,6 +1,6 @@
 import React from 'react';
 import Profile from './components/user/Profile'
-import Wishlist from './components/user/Wishlist'
+import Wishlist from './components/user/WishlistPage'
 import {Switch, Route, Redirect} from 'react-router-dom';
 import Register from './components/user/Register';
 import Login from './components/user/Login';
