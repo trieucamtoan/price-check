@@ -11,9 +11,10 @@ class Product(models.Model):
 class ProductLinkPrice(models.Model):   
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_link_price', null=True, blank=True)
     product_url = models.URLField(max_length = 200, unique=True)
-    product_price = models.DecimalField(max_digits=1000, decimal_places=2, null=True)
+    product_price_curr = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=-1)
+    product_price_prev = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=-1)
     def __str__(self):
-        return self.product_url + ' ' + str(self.product_price)
+        return self.product_url + '\n Current price: ' + str(self.product_price_curr) + '\n Previous price: ' + str(self.product_price_prev)
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments', null=True, blank=True)

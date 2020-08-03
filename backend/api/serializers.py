@@ -30,7 +30,7 @@ from .models import Product, ProductLinkPrice, Comment
 class ProductLinkPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductLinkPrice
-        fields = ('product_url', 'product_price',)
+        fields = ('product_url', 'product_price_curr', 'product_price_prev',)
         extra_kwargs = {
             'product_url': {'validators': []},
         }
@@ -79,7 +79,7 @@ class ProductSerializer(serializers.ModelSerializer):
             if current_link_prices != []:
                 new_product_link_price = current_link_prices.pop(0)
                 new_product_link_price.product_url = product_link_price.get('product_url', new_product_link_price.product_url)
-                new_product_link_price.product_price = product_link_price.get('product_price', new_product_link_price.product_price)
+                # new_product_link_price.product_price = product_link_price.get('product_price', new_product_link_price.product_price)
                 new_product_link_price.save()
             else:
                 ProductLinkPrice.objects.create(product=instance, **product_link_price)
