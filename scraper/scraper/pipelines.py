@@ -15,8 +15,8 @@ import psycopg2
 class ScraperPipeline:
 
     def open_spider(self, spider):
-        hostname = 'localhost' # local testing
-        # hostname = 'db' # docker
+        # hostname = 'localhost' # local testing
+        hostname = 'db' # docker
         username = 'testuser'
         password = '123' # your password
         database = 'testdb'
@@ -41,6 +41,6 @@ class ScraperPipeline:
         # product_link.product_price = item['price']
         # product_link.save()
 
-        self.cur.execute("UPDATE api_productlinkprice SET product_price = {} WHERE product_url = \'{}\'".format(item["price"], item['url']))
-        self.connection.commit()
+        # self.cur.execute("UPDATE api_productlinkprice SET product_price = {} WHERE product_url = \'{}\'".format(item["price"], item['url']))
+        # self.connection.commit()
         return item

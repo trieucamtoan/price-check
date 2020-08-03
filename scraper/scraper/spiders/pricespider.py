@@ -1,19 +1,42 @@
-import scrapy, psycopg2, re
+import scrapy, psycopg2, re, json
 # Scrapy Items imports
 from scraper.items import ProductItem
 from scrapy_splash import SplashRequest
 
+# Custom execution script for rendering dynamic page on newegg
+lua_script_newegg = """
+    function main(splash, args)
+        assert(splash:go(args.url))
+        while not splash:select('.price-current') do
+            splash:wait(0.1)
+        end
+        return {
+            html = splash:html()
+        }
+    end
+"""
+
 class PricespiderSpider(scrapy.Spider):
     name = 'pricespider'
     allowed_domains = ['newegg.ca','bestbuy.ca']
-    start_urls = []
+    start_urls = ['https://www.newegg.ca/core-i9-9th-gen-intel-core-i9-9900k/p/N82E16819117957?Item=N82E16819117957']
 
     def start_requests(self):
-        self.get_url_from_db()
-        
+        # self.get_url_from_db()
+        # req_url = "http://172.17.0.1:8050/render.json"
+        # headers = {'Content-Type': 'application/json'}
         for url in self.start_urls:
+            # body = json.dumps({
+            # "url": url,
+            # "har": 1,
+            # "html": 0,
+            # })
             if re.search("newegg.ca", url) != None:
-                yield SplashRequest(url=url, callback=self.newegg_parse, args={'wait':3.5})
+                yield SplashRequest(url=url, callback=self.newegg_parse, args={
+                    'lua_source': lua_script_newegg
+                })
+                # yield scrapy.Request(req_url, self.newegg_parse, method='POST',
+                #                  body=body, headers=headers)
 
     def newegg_parse(self, response):
         item = ProductItem()
@@ -30,8 +53,8 @@ class PricespiderSpider(scrapy.Spider):
         yield item
 
     def get_url_from_db(self):
-        hostname = 'localhost' # local testing
-        # hostname = 'db' # docker
+        # hostname = 'localhost' # local testing
+        hostname = 'db' # docker
         username = 'testuser'
         password = '123' # your password
         database = 'testdb'

@@ -13,7 +13,8 @@ django-rest-auth = "*"
 scrapy = "*"
 scrapyd = "*"
 scrapy-splash = "*"
-python-scrapyd-api = "*"
+celery = "*"
+scrapyd-client = "*"
 
 [dev-packages]
 
