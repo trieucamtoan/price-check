@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, ProductLinkPrice, Comment
+from rest_framework.exceptions import ValidationError
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -50,7 +51,7 @@ class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(required=False, many=True)
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'product_description', 'product_link_price', 'comments']
+        fields = ['id', 'product_name', 'product_description', 'product_type', 'product_link_price', 'comments']
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
         #Each ProductLinkPrice needs to be associated with the Product 
@@ -71,6 +72,7 @@ class ProductSerializer(serializers.ModelSerializer):
         #Saving model
         instance.product_name = validated_data.get('product_name', instance.product_name)
         instance.product_description = validated_data.get('product_description', instance.product_description)
+        instance.product_type = validated_data.get('product_type', instance.product_type)
         instance.save()
 
         #Saving new nested model

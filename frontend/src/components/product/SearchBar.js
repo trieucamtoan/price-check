@@ -7,7 +7,7 @@ export default class SearchBar extends Component {
         return(
             <div>
                 <br/>
-                <h2 className = "title">Graphic Cards</h2>
+                <h2 className = "title">{this.props.title}</h2>
                 <br/>
                 <InputGroup className="mb-3">
                     <FormControl

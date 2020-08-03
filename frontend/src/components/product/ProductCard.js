@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-
+import { withRouter } from 'react-router-dom';
 //horizontal card used for displaying individual product
 
-const styles = {
+var styles = {
     'card': {
         marginBottom: '10px'
     },
     'button': {
-        marginLeft: '20px'
+        paddingLeft : '20px',
+        visibility: true
     },
     'image': {
         width: '300px',
@@ -28,28 +29,54 @@ const styles = {
     }
 };
 
-export default class ProductCard extends Component {
+class ProductCard extends Component {
+    buttonHandler = (e) => {
+        const { history } = this.props;
+        //console.log("history", history)
+
+        if (this.props.product.type === 'GPU'){
+            alert("This page will be available soon")
+        }
+    
+        else if (this.props.product.type === 'CPU'){
+            history.push({
+                pathname: '/product/' + this.props.product.id,
+                state: {
+                    product: this.props.product
+                }
+            });
+            window.location.reload()
+        }
+        else if (this.props.product.type === 'RAM'){
+            alert("This page will be available soon")
+        }
+        else {
+            console.log("error navigating");
+        }
+    }
+    
     render() {
         return (
             <Card style = {styles.card}>
             <Card.Header as="h5">
-                {this.props.product_name}
-                
+                {this.props.product.name}
                 <Button 
-                    variant="primary"
+                    id = "check-stock-button"
+                    variant="link"
+                    onClick={(event) => this.buttonHandler(event)}
                     style={styles.button}
                     className="float-right"
                     >Check Stock
                 </Button>
-                <p className="float-right">Lowest Price: <span>{this.props.product_price}</span></p>
+                <p className="float-right">Lowest Price: <span>{this.props.lowest_price}</span></p>
             </Card.Header>
             <Card.Body>
                 <Card.Img 
                     variant="top" 
-                    src= {this.props.product_image}
+                    src= {this.props.product.image}
                     style = {styles.image} />
                 <Card.Text>
-                    {this.props.product_description}
+                    {this.props.product.description}
                 </Card.Text>
                 
             </Card.Body>
@@ -58,3 +85,4 @@ export default class ProductCard extends Component {
     }
     
 }
+export default withRouter(ProductCard);
