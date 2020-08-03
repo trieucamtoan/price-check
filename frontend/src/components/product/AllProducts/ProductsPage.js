@@ -7,8 +7,23 @@ export default class ProductsPage extends Component {
         super(props);
         this.state={
             empty : false,
-            products: [],
+            products: [
+                {
+                    id: '',
+                    name: '',
+                    type: '',
+                    description: '',
+                    prices: [
+                        {
+                            product_url: '',
+                            product_price: 0,
+                        }
+                    ],
+                    comments: []
+                }
+            ],
             errorMsg: '',
+            lowest_price : 0,
         }
     }
 
@@ -17,9 +32,15 @@ export default class ProductsPage extends Component {
             products: [
                 {
                     id: 'Loading',
-                    product_name: 'Loading',
-                    product_description: 'Loading',
-                    product_link_price: 'Loading'
+                    name: 'Loading',
+                    type: '',
+                    description: 'Loading',
+                    prices: [
+                        {
+                            url: '',
+                            price: 0,
+                        }
+                    ]
                 }
             ]
         })
@@ -31,15 +52,17 @@ export default class ProductsPage extends Component {
 
         response.forEach(product => {
             var id = product.id
-            var product_name = product.product_name
-            var product_description = product.product_description
-            var product_link_price = product.product_link_price
+            var name = product.product_name
+            var type = product.product_type
+            var description = product.product_description
+            var prices = product.product_link_price
             
             var product = {
                 id: id,
-                product_name: product_name,
-                product_description: product_description,
-                product_link_price: product_link_price
+                name: name,
+                type: type,
+                description: description,
+                prices: prices
             }
 
             ProductList.push(product)
@@ -49,9 +72,19 @@ export default class ProductsPage extends Component {
 
     populateProductCard() {
         const products = this.state.products.map(function(product, i) {
-            console.log(product.product_name)
+            //Initialize the first price to be the lowest
+            var current_lowest_price = product.prices[0].product_price;
+            //Loop through the product_link_price array to update the current lowest price
+            product.prices.forEach(function(obj){
+                if (parseFloat(obj.product_price) < parseFloat(current_lowest_price)){
+                    current_lowest_price = obj.product_price
+                }
+            })
+            //Update the lowest price
+            var lowest_price = current_lowest_price;
+            //Return JSX element
             return (
-                <ProductCard key = {i} product_name = {product.product_name} product_description = {product.product_description} product_price = {product.product_link_price[0].product_price}/>
+            <ProductCard key = {i} product = {product} lowest_price = {lowest_price}/>
             )}
         )
         return products
@@ -75,18 +108,10 @@ export default class ProductsPage extends Component {
     }
 
     render(){
-        const products = this.state.products.map(function(product) {
-            console.log(product.product_name)
-            return (
-                <ProductCard product_name = {product.product_name} product_description = {product.product_description} product_price = {product.product_link_price[0].product_price}/>
-            )}
-        )
-
         return (
             <div>
                 <SearchBar title = "All Products"/>
                 {this.populateProductCard()}
-                
             </div>
         )
     }

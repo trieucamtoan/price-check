@@ -11,6 +11,8 @@ import Logout from "./components/user/Logout";
 import Home from "./components/home/Home";
 import GpuPage from "./components/product/GPU/GpuPage";
 import ProductsPage from "./components/product/AllProducts/ProductsPage";
+import ProductPage from "./components/product/ProductPage";
+
 const Routes = () => (
   <Switch>
     <Route exact path= '/' component={Home}/>
@@ -20,6 +22,7 @@ const Routes = () => (
     <Route exact path= '/register' component={Register}/>
     <Route exact path="/gpu" component={GpuPage}/>
     <Route exact path="/product/all" component={ProductsPage}/>
+    <Route exact path="/product/:id" component={ProductPage}/>
 
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>

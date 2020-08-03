@@ -70,6 +70,7 @@ def detail_product_view(request,pk):
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
+        serializer = ProductSerializer(instance=product)
         return Response(serializer.data)
     elif request.method == 'DELETE':
         product.delete()
