@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class Product(models.Model):
     product_name       = models.CharField(max_length=120) # max_length = required
@@ -22,7 +23,8 @@ class Comment(models.Model):
         return 'Comment {} by {}'.format(self.text, self.username)
 
 class Wishlist(models.Model):
-    product_id =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlist', null=True, blank=True)
+    # product_id =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlist', null=True, blank=True)
+    product_id = ArrayField(ArrayField(models.CharField(max_length=10,null=True,blank=True)))
     username = models.CharField(max_length=120)
     def __str__(self):
         return self.product_id
