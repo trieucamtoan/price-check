@@ -121,9 +121,11 @@ def add_detail_wishlist(request,username):
     except Wishlist.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
-        item_wishlist = Wishlist.objects.all()
-        serializer = CommentSerializer(item_wishlist, many=True)
+        serializer = WishlistSerializer(items, many=True)
         return Response(serializer.data)
+    elif request.method == 'DELETE':
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
