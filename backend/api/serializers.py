@@ -48,9 +48,12 @@ class CommentSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     product_link_price = ProductLinkPriceSerializer(many=True)
     comments = CommentSerializer(required=False, many=True)
+    product_lowest_price_curr = serializers.ReadOnlyField()
+    product_lowest_price_prev = serializers.ReadOnlyField()
+    
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'product_description', 'product_type', 'product_link_price', 'comments']
+        fields = ['id', 'product_name', 'product_description', 'product_type', 'product_link_price', 'comments', 'product_lowest_price_curr', 'product_lowest_price_prev']
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
         #Each ProductLinkPrice needs to be associated with the Product 
@@ -79,7 +82,8 @@ class ProductSerializer(serializers.ModelSerializer):
             if current_link_prices != []:
                 new_product_link_price = current_link_prices.pop(0)
                 new_product_link_price.product_url = product_link_price.get('product_url', new_product_link_price.product_url)
-                # new_product_link_price.product_price = product_link_price.get('product_price', new_product_link_price.product_price)
+                new_product_link_price.product_price_curr = product_link_price.get('product_price_curr', new_product_link_price.product_price_curr)
+                new_product_link_price.product_price_prev = product_link_price.get('product_price_prev', new_product_link_price.product_price_prev)
                 new_product_link_price.save()
             else:
                 ProductLinkPrice.objects.create(product=instance, **product_link_price)

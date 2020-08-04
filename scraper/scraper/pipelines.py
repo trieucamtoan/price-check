@@ -20,12 +20,16 @@ class ScraperPipeline:
         username = 'testuser'
         password = '123' # your password
         database = 'testdb'
-        self.connection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-        self.cur = self.connection.cursor()
+        try: 
+            self.connection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
+            self.cur = self.connection.cursor()
+        except (Exception, psycopg2.Error) as error :
+            print ("Error while fetching data from PostgreSQL", error)
 
     def close_spider(self, spider):
-        self.cur.close()
-        self.connection.close()
+        if self.connection:
+            self.cur.close()
+            self.connection.close()
 
     def process_item(self, item, spider):
         # try:
@@ -40,7 +44,20 @@ class ScraperPipeline:
         # product_link.product_url = item["url"]
         # product_link.product_price = item['price']
         # product_link.save()
-
-        self.cur.execute("UPDATE api_productlinkprice SET product_price = {} WHERE product_url = \'{}\'".format(item["price"], item['url']))
-        self.connection.commit()
+        if item["price"] != None:
+            try:
+                # Get the old curr price
+                # Update old prev with old curr
+                # Update curr with new price
+                price_SQL = "SELECT product_price_curr FROM api_productlinkprice WHERE product_url = \'{}\'".format(item['url'])
+                self.cur.execute(price_SQL)
+                product_price_curr = self.cur.fetchone()[0]
+                
+                update_price_prev_SQL = "UPDATE api_productlinkprice SET product_price_prev = {} WHERE product_url = \'{}\'".format(product_price_curr, item['url'])
+                self.cur.execute(update_price_prev_SQL)
+                update_price_curr_SQL = "UPDATE api_productlinkprice SET product_price_curr = {} WHERE product_url = \'{}\'".format(item['price'], item['url'])
+                self.cur.execute(update_price_curr_SQL)
+                self.connection.commit()
+            except (Exception, psycopg2.Error) as error :
+                print ("Error while fetching data from PostgreSQL", error)
         return item
