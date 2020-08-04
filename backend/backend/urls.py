@@ -52,10 +52,10 @@ urlpatterns = [
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('products/<int:pk>',detail_product_view , name= "detail-product"),
-    path('products/',products_list_view,name= "product"),
+    path('products',products_list_view,name= "product"),
     path('products/<int:product_id>/comments', product_comment_view, name="comment"),
-    path('products/<int:product_id>/wishlist/<str:username>', wishlist_detail_view, name="detail_wishlist"),
-    path('products/wishlist/<str:username>', wishlist_view, name="wishlist"),
+    path('wishlist/<str:username>', wishlist_detail_view, name="detail_wishlist"),
+    path('wishlist', wishlist_view, name="wishlist"),
 
 
 

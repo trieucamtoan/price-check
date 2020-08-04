@@ -96,7 +96,7 @@ class Wishlist_itemSerializer(serializers.ModelSerializer):
         fields = ['product_id']
 
 class WishlistSerializer(serializers.ModelSerializer):
-    wishlist_items = Wishlist_itemSerializer(many=True)
+    wishlist_items = Wishlist_itemSerializer(required=False, many=True)
     class Meta:
         model = Wishlist
         fields =['wishlist_items','username']
