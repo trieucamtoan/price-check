@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductLinkPrice, Comment,Wishlist
+from .models import Product, ProductLinkPrice, Comment,Wishlist,Wishlist_item
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -89,7 +89,15 @@ class ProductSerializer(serializers.ModelSerializer):
                 ProductLinkPrice.objects.filter(product_url=link_price.product_url).delete()
         return instance
 
+
+class Wishlist_itemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist_item
+        fields = ['product_id']
+
 class WishlistSerializer(serializers.ModelSerializer):
+    wishlist_items = Wishlist_itemSerializer(many=True)
     class Meta:
         model = Wishlist
-        fields =['product_id','username']
+        fields =['wishlist_items','username']
+        depth = 1 #returns the layers in the product

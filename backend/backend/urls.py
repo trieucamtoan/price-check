@@ -24,8 +24,8 @@ from api.views import (
     detail_product_view,
     product_comment_view,
     product_comment_detail_view,
-    add_detail_wishlist,
-    add_to_wishlist
+    wishlist_detail_view,
+    wishlist_view
 
 )
 
@@ -54,8 +54,8 @@ urlpatterns = [
     path('products/<int:pk>',detail_product_view , name= "detail-product"),
     path('products/',products_list_view,name= "product"),
     path('products/<int:product_id>/comments', product_comment_view, name="comment"),
-    path('products/<int:product_id>/wishlist', add_to_wishlist, name="wishlist"),
-    path('products/wishlist/<str:username>/', add_detail_wishlist, name="detail_wishlist"),
+    path('products/<int:product_id>/wishlist/<str:username>', wishlist_detail_view, name="detail_wishlist"),
+    path('products/wishlist/<str:username>', wishlist_view, name="wishlist"),
 
 
 

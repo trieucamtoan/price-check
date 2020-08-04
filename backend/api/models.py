@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 class Product(models.Model):
@@ -23,8 +24,12 @@ class Comment(models.Model):
         return 'Comment {} by {}'.format(self.text, self.username)
 
 class Wishlist(models.Model):
-    # product_id =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlist', null=True, blank=True)
-    product_id = ArrayField(ArrayField(models.CharField(max_length=10,null=True,blank=True)))
-    username = models.CharField(max_length=120)
-    def __str__(self):
-        return self.product_id
+    #ForeignKey in django rest: fetch the Whole objects
+    #product =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    #product_id = ArrayField(models.CharField(max_length=10,null=True,blank=True))
+    username = models.CharField(max_length=150, blank=True,unique=True)
+    # def __str__(self):
+    #     return self.product_id
+class Wishlist_item(models.Model):
+    wishlist =  models.ForeignKey(Wishlist, on_delete=models.CASCADE, related_name='wishlist_items', null=True, blank=True)
+    product_id = models.IntegerField(null=True,blank=True,unique=True)
