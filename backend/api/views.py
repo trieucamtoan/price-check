@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse,JsonResponse
 from api.models import Product, Comment
-from .serializers import ProductSerializer, CommentSerializer
+from .serializers import *
 import json
 
 # from rest_framework.generics import (
@@ -56,13 +56,13 @@ def products_list_view(request):
 
     elif request.method == 'POST':
     # data = JSONParser().parse(request)
-        serializer = ProductSerializer(data=request.data, context={'request': request})
+        serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             product = serializer.save()
-            serializer = ProductSerializer(product, context={'request': request})
+            serializer = ProductSerializer(product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
 @api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,pk):
     try:
@@ -76,9 +76,37 @@ def detail_product_view(request,pk):
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
-        serializer = ProductSerializer(instance=product, data=request.data, partial=True, context={'request': request})
+        serializer = ProductSerializer(instance=product, data=request.data, partial=True)
         if serializer.is_valid():
             saved_product = serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def product_url(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'GET':
+        product_urls = ProductLinkPrice.objects.all()
+        serializer = ProductLinkPriceSerializer(product_urls, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ProductLinkPriceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(product=product)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT', 'DELETE'])
+def product_url_detail(request, product_id, url_id):
+    product = get_object_or_404(Product, pk=product_id)
+    product_url = get_object_or_404(ProductLinkPrice, id=url_id)
+    if request.method == 'DELETE':
+        product_url.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PUT':
+        serializer = ProductLinkPriceSerializer(instance=product_url, data=request.data)
+        if serializer.is_valid():
+            serializer.save(product=product)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
