@@ -60,7 +60,7 @@ def products_list_view(request):
         if serializer.is_valid():
             product = serializer.save()
             serializer = ProductSerializer(product, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE', 'PUT'])
@@ -78,7 +78,8 @@ def detail_product_view(request,pk):
         serializer = ProductSerializer(instance=product, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             saved_product = serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_200_OK) 
+)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','POST'])
@@ -122,7 +123,7 @@ def wishlist_view(request):
             return Response(serializer.data)
         except Wishlist.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
     elif request.method == 'POST':
         serializer = WishlistSerializer(data=request.data)
         if serializer.is_valid():
