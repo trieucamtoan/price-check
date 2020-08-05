@@ -130,7 +130,7 @@ class RequestServer extends Component {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("You're calling from here")
+            console.log("GET PRODUCT REQUEST SERVER")
             return response.data
         } catch (error) {
             return null

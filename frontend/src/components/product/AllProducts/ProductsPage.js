@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import ProductCard from '../ProductCard';
 import SearchBar from '../SearchBar';
 import RequestServer from '../../../requests/RequestServer';
-export default class ProductsPage extends Component {
+import Button from 'react-bootstrap/Button';
+import { withRouter } from 'react-router';
+class ProductsPage extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -107,12 +109,25 @@ export default class ProductsPage extends Component {
         }
     }
 
+    addButtonHandler = (event) => {
+        console.log(this.props.location)
+        this.props.history.push('/product/add');
+        window.location.reload()
+    }
+
     render(){
         return (
             <div>
                 <SearchBar title = "All Products"/>
+                <Button 
+                variant="dark"
+                onClick = {(event) => this.addButtonHandler(event)}
+                >Add New Product
+                </Button>
+                <br/>
                 {this.populateProductCard()}
             </div>
         )
     }
 }
+export default withRouter(ProductsPage)

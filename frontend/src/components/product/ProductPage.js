@@ -5,7 +5,6 @@ import Table from 'react-bootstrap/Table'
 import { withRouter } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import RequestServer from '../../requests/RequestServer';
-import ListGroup from 'react-bootstrap/ListGroup';
 import '../../App.css';
 
 //This Component is used for displaying list of available websites with prices according to a Product
@@ -13,15 +12,20 @@ import '../../App.css';
 export default class ProductPage extends Component {
     constructor(props){
         super(props);
-        const product = this.props.history.location.state.product;
+        //const product = this.props.history.location.state.product;
         this.state={
-            empty : false,
+            empty : true,
             product: {
-                id: product.id,
-                name: product.name,
-                type: product.type,
-                description: product.description,
-                prices: product.prices
+                id: props.match.params.id,
+                name: 'Loading',
+                type: 'Loading',
+                description: 'Loading',
+                prices: [
+                {
+                    product_url : 'Loading',
+                    product_price: 0
+                }
+                ]
             },
             errorMsg: '',
             lowest_price : 0,
@@ -29,23 +33,30 @@ export default class ProductPage extends Component {
     }
 
     componentDidMount() {
-        this.getProduct(this.state.product.id);
-        
+        //Get product info based on ID params
+        const response = this.getProduct(this.state.product.id)
+            .then(result => { return result})
+            .then(result => {
+                this.setState({empty: false})
+                this.populateData(result)
+            }) 
     }
 
-    updateLowestPrice(product) {
+    updateLowestPrice() {
         //Initialize the first price to be the lowest
-        var current_lowest_price = product.prices[0].product_price;
+        console.log("PRODUCT PRICE ARRAY ", this.state.product.prices)
+        var current_lowest_price = this.state.product.prices[0].product_price;
+        
         //Loop through the product_link_price array to update the current lowest price
-        product.prices.forEach(function(obj){
+        this.state.product.prices.forEach(function(obj){
             if (parseFloat(obj.product_price) < parseFloat(current_lowest_price)){
                 current_lowest_price = obj.product_price
             }
         })
+        
         //Update the lowest price
-        var lowest_price = current_lowest_price;
-        console.log(lowest_price)
-        return lowest_price;
+        var lowestPrice = current_lowest_price;
+        this.setState({lowest_price: lowestPrice})
     }
 
     populateData(response) {
@@ -58,18 +69,15 @@ export default class ProductPage extends Component {
                 comments: response.comments,
                 prices: response.product_link_price
             },
-            lowest_price: this.updateLowestPrice(this.state.product)
         });
-        this.populateUI();
+        this.updateLowestPrice();
     }
 
     populateList() {
         //Populate list of websites and prices
-        
         const list = this.state.product.prices.map(function(obj,key) {
             return(
                 <tr key = {key} >
-                    {/* <ListGroup.Item action href = {obj.product_url}>Price : {obj.product_price}, URL: {obj.product_url} </ListGroup.Item> */}
                     <td>{key}</td>
                     <td><a href={obj.product_url}>{obj.product_url}</a></td>
                     <td>{obj.product_price}</td>
@@ -86,6 +94,13 @@ export default class ProductPage extends Component {
             product = {this.state.product} 
             lowest_price = {this.state.lowest_price}/>
         )
+    }
+
+    shouldComponentUpdate() {
+        if (!this.state.empty){
+            return true
+        }
+        return false;
     }
     
 
@@ -123,7 +138,7 @@ export default class ProductPage extends Component {
 
         } else {
             console.log("THE RESPONSE" , response);
-            this.populateData(response);
+            return response
         }
     }
 
