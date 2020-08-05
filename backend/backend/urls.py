@@ -46,7 +46,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
-    path('products/<int:pk>',detail_product_view , name= "product-detail"),
+    path('products/<int:product_id>',detail_product_view , name= "product-detail"),
     path('products/',products_list_view,name= "product"),
     path('products/<int:product_id>/comments', product_comment_view, name="comment"),
     path('products/<int:product_id>/comments/<int:comment_id>', product_comment_detail_view, name="comment-detail"),
