@@ -17,7 +17,6 @@ import AddProduct from "./components/product/AddProduct";
 const Routes = () => (
   <Switch>
     <Route exact path= '/' component={Home}/>
-    {/* <Route exact path={["/", "/hello"]} component={Hello} /> */}
     <Route exact path= '/product' component={Product}/>
     <Route exact path= '/login' component={Login}/>
     <Route exact path= '/register' component={Register}/>

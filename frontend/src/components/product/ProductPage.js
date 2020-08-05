@@ -12,17 +12,16 @@ import '../../App.css';
 export default class ProductPage extends Component {
     constructor(props){
         super(props);
-        //const product = this.props.history.location.state.product;
         this.state={
             empty : true,
             product: {
                 id: props.match.params.id,
-                name: 'Loading',
-                type: 'Loading',
-                description: 'Loading',
+                name: 'N/A',
+                type: 'N/A',
+                description: 'N/A',
                 prices: [
                 {
-                    product_url : 'Loading',
+                    product_url : 'N/A',
                     product_price: 0
                 }
                 ]
@@ -35,16 +34,26 @@ export default class ProductPage extends Component {
     componentDidMount() {
         //Get product info based on ID params
         const response = this.getProduct(this.state.product.id)
-            .then(result => { return result})
+            .then(result => { 
+                if (result === null){
+                    throw "Error getting Product"
+                }
+                return result
+            })
             .then(result => {
                 this.setState({empty: false})
                 this.populateData(result)
-            }) 
+            })
+            .catch((error) => {
+                this.setState({
+                    errorMsg: error,
+                    empty: true
+                })
+            })
     }
 
     updateLowestPrice() {
         //Initialize the first price to be the lowest
-        console.log("PRODUCT PRICE ARRAY ", this.state.product.prices)
         var current_lowest_price = this.state.product.prices[0].product_price;
         
         //Loop through the product_link_price array to update the current lowest price
@@ -129,17 +138,11 @@ export default class ProductPage extends Component {
     async getProduct(id) {
         var token = localStorage.getItem('token');
         var response = await RequestServer.getProduct(token, id)
-        if (response === null) {
-            this.setState({
-                empty: true,
-                errorMsg: 'Error getting product'
-            })
-            console.log("RESPONSE IS NULL");
+        return response
+    }
 
-        } else {
-            console.log("THE RESPONSE" , response);
-            return response
-        }
+    showErrorMsg() {
+        return <p>{this.state.errorMsg}</p>
     }
 
     render(){
