@@ -21,10 +21,12 @@ const Routes = () => (
     <Route exact path= '/login' component={Login}/>
     <Route exact path= '/register' component={Register}/>
     <Route exact path="/gpu" component={GpuPage}/>
-    <Route exact path="/product/all" component={ProductsPage}/>
-    <Route exact path="/product/:id" component={ProductPage}/>
-    <Route exact path="/product/add" component={AddProduct}/>
-
+    
+    {/* Product Pages */}
+    <Route path="/product/all" component={ProductsPage}/>
+    <Route path="/product/new" component={AddProduct}/>
+    <Route path="/product/:id" component={ProductPage}/>
+    
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>
     <PrivateRoute path= '/profile' component={Profile}/>

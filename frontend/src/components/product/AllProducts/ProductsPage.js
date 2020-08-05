@@ -111,7 +111,7 @@ class ProductsPage extends Component {
 
     addButtonHandler = (event) => {
         console.log(this.props.location)
-        this.props.history.push('/product/add');
+        this.props.history.push('/product/new');
         window.location.reload()
     }
 

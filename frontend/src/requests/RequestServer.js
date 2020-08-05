@@ -136,6 +136,22 @@ class RequestServer extends Component {
             return null
         }
     }
+
+    async addProduct(token, obj) {
+        try {
+            console.log(obj)
+            var response = await axios.post(this.getServerLocation() + '/products/', obj, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("POST PRODUCTs REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
 }
 
 export default new RequestServer();
