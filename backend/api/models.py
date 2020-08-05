@@ -1,9 +1,15 @@
+import uuid
 from django.db import models
+
+def scramble_uploaded_filename(instance, filename):
+    extension = filename.split(".")[-1]
+    return "{}.{}".format(uuid.uuid4(), extension)
 
 class Product(models.Model):
     product_name       = models.CharField(max_length=120) # max_length = required
     product_description = models.TextField(blank=True, null=True)
     product_type = models.CharField(max_length=120, blank=True, null=True)
+    product_image = models.ImageField(null=True, blank=True, upload_to=scramble_uploaded_filename)
 
     @property
     def product_lowest_price_curr(self):
