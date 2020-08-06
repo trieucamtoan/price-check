@@ -15,7 +15,7 @@ services:
             DJANGO_MODE: production
         depends_on:
             - db
-            # - rabbitmq
+            - rabbitmq
         networks: 
             - nginx_network
     
@@ -28,87 +28,87 @@ services:
         networks: 
             - nginx_network
             
-    # frontend:
-    #     build:
-    #         context: ./frontend
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ./frontend/:/code/frontend
-    #     ports: 
-    #         - 3000:3000
-    #     networks: 
-    #         - nginx_network
-    #     depends_on: 
-    #         - backend
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend/:/code/frontend
+        ports: 
+            - 3000:3000
+        networks: 
+            - nginx_network
+        depends_on: 
+            - backend
     
-    # rabbitmq:
-    #     image: "rabbitmq"
-    #     hostname: rabbitmq
-    #     networks: 
-    #         - nginx_network
-    #     ports: 
-    #         - 5672:5672
+    rabbitmq:
+        image: "rabbitmq"
+        hostname: rabbitmq
+        networks: 
+            - nginx_network
+        ports: 
+            - 5672:5672
     
-    # celery:
-    #     build:
-    #         context: ./backend
-    #         dockerfile: Dockerfile-Celery
-    #     command: celery -A backend worker -l info
-    #     volumes:
-    #         - ./backend:/code/backend
-    #     depends_on:
-    #         - db
-    #         - rabbitmq
-    #         - backend
-    #         - scrapy
-    #     networks: 
-    #         - nginx_network
+    celery:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile-Celery
+        command: celery -A backend worker -l info
+        volumes:
+            - ./backend:/code/backend
+        depends_on:
+            - db
+            - rabbitmq
+            # - backend
+            - scrapy
+        networks: 
+            - nginx_network
 
-    # celery-beat:
-    #     build:
-    #         context: ./backend
-    #         dockerfile: Dockerfile-Celery
-    #     command: celery -A backend beat -l info
-    #     volumes:
-    #         - ./backend:/code/backend
-    #     depends_on:
-    #         - db
-    #         - rabbitmq
-    #         - backend
-    #         - scrapy
-    #     networks: 
-    #         - nginx_network
+    celery-beat:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile-Celery-beat
+        command: celery -A backend beat -l info
+        volumes:
+            - ./backend:/code/backend
+        depends_on:
+            - db
+            - rabbitmq
+            # - backend
+            - scrapy
+            - celery
+        networks: 
+            - nginx_network
 
-    # splash:
-    #     image: "scrapinghub/splash"
-    #     ports: 
-    #         - 8050:8050
-    #         - 5023:5023
-    #         - 8051:8051
-    #     expose: 
-    #         - "8050"
-    #         - "5023"
-    #         - "8051"
-    #     networks: 
-    #         - nginx_network
-    #     restart: always
+    splash:
+        image: "scrapinghub/splash"
+        ports: 
+            - 8050:8050
+            - 5023:5023
+            - 8051:8051
+        expose: 
+            - "8050"
+            - "5023"
+            - "8051"
+        networks: 
+            - nginx_network
+        restart: always
     
-    # scrapy:
-    #     build:
-    #         context: ./scraper
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ./scraper:/code/scraper
-    #     hostname: "scrapy"
-    #     command: bash -c "set -m; scrapyd && cd scraper && scrapyd-deploy && fg scrapyd"
-    #     ports: 
-    #         - 6800:6800
-    #     depends_on:
-    #         - db
-    #         - rabbitmq
-    #         - splash
-    #     networks: 
-    #         - nginx_network
+    scrapy:
+        build:
+            context: ./scraper
+            dockerfile: Dockerfile
+        volumes:
+            - ./scraper:/code/scraper
+        hostname: "scrapy"
+        ports: 
+            - 6800:6800
+        depends_on:
+            - db
+            - rabbitmq
+            - splash
+        networks: 
+            - nginx_network
 
     
 volumes:

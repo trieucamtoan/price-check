@@ -16,5 +16,5 @@ EXPOSE 6800
 # install dependencies
 RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
-# RUN python test.py
-# RUN ip a | grep docker0 > ip_config.txt
+
+CMD set -m; scrapyd && cd scraper && scrapyd-deploy && fg scrapyd

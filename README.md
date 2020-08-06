@@ -56,6 +56,15 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - Run command: `npm install` to install all dependencies
 - Run command: `npm start` to start frontend server
 
+# Production/local mode backend checklist
+Need to modify these file accordingly (uncomment and comment the correct line)before running production mode and vice versa
+- In /scraper/scraper/settings.py, change SPLASH_URL
+- In /scraper/scraper/piplines.py, change hostname
+- In /scraper/scraper/pricespider.py, change hostname
+- In /backend/backend/settings.py, change CELERY_BROKER_URL and CELERY_RESULT_BACKEND
+- In /backend/backend/settings.py, change HOST
+- In /backend/api/tasks.py, change response
+
 # Running in production mode
 - cd to the project folder
 - Run command: `docker-compose build && docker-compose up`

@@ -53,11 +53,11 @@
         },
         "celery": {
             "hashes": [
-                "sha256:a92e1d56e650781fb747032a3997d16236d037c8199eacd5217d1a72893bca45",
-                "sha256:d220b13a8ed57c78149acf82c006785356071844afe0b27012a4991d44026f9f"
+                "sha256:2502d833428bcf191931e60180dff4e6c6a1771cde6b02dfb0fc10067be8960b",
+                "sha256:2aa72296f6de318cac3db6c7f535d9039acb32cbcf0ed9634a9fac2e9f6c41d0"
             ],
             "index": "pypi",
-            "version": "==4.4.7"
+            "version": "==5.0.0a2"
         },
         "certifi": {
             "hashes": [
@@ -146,10 +146,10 @@
         },
         "defusedxml": {
             "hashes": [
-                "sha256:6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93",
-                "sha256:f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"
+                "sha256:8ede8ba04cf5bf7999e1492fa77df545db83717f52c5eab625f97228ebd539bf",
+                "sha256:aa621655d72cdd30f57073893b96cd0c3831a85b08b8e4954531bdac47e3e8c8"
             ],
-            "version": "==0.6.0"
+            "version": "==0.7.0rc1"
         },
         "django": {
             "hashes": [
@@ -233,10 +233,10 @@
         },
         "kombu": {
             "hashes": [
-                "sha256:be48cdffb54a2194d93ad6533d73f69408486483d189fe9f5990ee24255b0e0a",
-                "sha256:ca1b45faac8c0b18493d02a8571792f3c40291cf2bcf1f55afed3d8f3aa7ba74"
+                "sha256:60a4e6feeab5a6cabb0dccdad49e9a7df0e8435f1bab1914fd7d1a1c46538373",
+                "sha256:7c949fe33573a971f06c8836ca025390088f3747533b78438f9a57344a142b59"
             ],
-            "version": "==4.6.11"
+            "version": "==5.0.0"
         },
         "lxml": {
             "hashes": [
@@ -272,6 +272,7 @@
                 "sha256:ecc930ae559ea8a43377e8b60ca6f8d61ac532fc57efb915d899de4a67928efd",
                 "sha256:f161af26f596131b63b236372e4ce40f3167c1b5b5d459b29d2514bd8c9dc9ee"
             ],
+            "markers": "platform_python_implementation == 'CPython'",
             "version": "==4.5.2"
         },
         "oauthlib": {
@@ -496,11 +497,11 @@
         },
         "scrapyd-client": {
             "hashes": [
-                "sha256:caa0f5369c2e1efa7b79c309afb9819b2518870c5f4f2caf84d3e474cd6a9890",
-                "sha256:e547475c5c8dbd811e2cc4141a0e7b4ba47600e9980c59df4f831bb60b94e4cb"
+                "sha256:9f4fcb8474e21703d7f1dd518d9c73740901e55c07a5311801b891f821931f2f",
+                "sha256:c5d742f2f6a551e1ba00b5423197fc1a7c2a09d64871b2c80707cb463d0df605"
             ],
             "index": "pypi",
-            "version": "==1.1.0"
+            "version": "==1.2.0a1"
         },
         "service-identity": {
             "hashes": [

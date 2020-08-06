@@ -27,8 +27,9 @@ class ScraperPipeline:
             print ("Error while fetching data from PostgreSQL", error)
 
     def close_spider(self, spider):
-        self.cur.close()
-        self.connection.close()
+        if self.connection:
+            self.cur.close()
+            self.connection.close()
 
     def process_item(self, item, spider):
         # try:
