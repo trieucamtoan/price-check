@@ -131,7 +131,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'update_price': {
         'task': 'api.tasks.update_price',
-        'schedule': crontab()
+        'schedule': crontab(minute="*/15", hour="*/1")
     }
 }
 
