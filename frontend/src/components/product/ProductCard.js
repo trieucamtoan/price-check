@@ -34,11 +34,11 @@ class ProductCard extends Component {
         const { history } = this.props;
         //console.log("history", history)
 
-        if (this.props.product.type === 'GPU'){
+        if (this.props.product.product_type === 'GPU'){
             alert("This page will be available soon")
         }
     
-        else if (this.props.product.type === 'CPU'){
+        else if (this.props.product.product_type === 'CPU'){
             history.push({
                 pathname: '/product/' + this.props.product.id,
                 state: {
@@ -47,10 +47,37 @@ class ProductCard extends Component {
             });
             window.location.reload()
         }
-        else if (this.props.product.type === 'RAM'){
+        else if (this.props.product.product_type === 'RAM'){
             alert("This page will be available soon")
         }
         else {
+            console.log(this.props)
+            console.log("error navigating");
+        }
+    }
+
+    updateHandler = (e) => {
+        const { history } = this.props;
+        //console.log("history", history)
+
+        if (this.props.product.product_type === 'GPU'){
+            alert("This page will be available soon")
+        }
+    
+        else if (this.props.product.product_type === 'CPU'){
+            history.push({
+                pathname: '/product/' + this.props.product.id + '/update',
+                state: {
+                    product: this.props.product
+                }
+            });
+            window.location.reload()
+        }
+        else if (this.props.product.product_type === 'RAM'){
+            alert("This page will be available soon")
+        }
+        else {
+            console.log(this.props)
             console.log("error navigating");
         }
     }
@@ -59,7 +86,7 @@ class ProductCard extends Component {
         return (
             <Card styles = {styles.card}>
             <Card.Header as="h5">
-                {this.props.product.name}
+                {this.props.product.product_name}
                 <Button 
                     id = "check-stock-button"
                     variant="link"
@@ -68,17 +95,23 @@ class ProductCard extends Component {
                     className="float-right"
                     >Check Stock
                 </Button>
-                <p className="float-right">Lowest Price: <span>{this.props.lowest_price}</span></p>
+                <p className="float-right">Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
             </Card.Header>
             <Card.Body>
                 <Card.Img 
                     variant="top" 
-                    src= {this.props.product.image}
+                    src= {this.props.product.product_image}
                     style = {styles.image} />
                 <Card.Text>
-                    {this.props.product.description}
+                    {this.props.product.product_description}
                 </Card.Text>
-                
+                <Button
+                    variant="link"
+                    onClick={(event) => this.updateHandler(event)}
+                    className = "float-right"
+                >
+                    Update Product
+                </Button>
             </Card.Body>
             </Card>
         );

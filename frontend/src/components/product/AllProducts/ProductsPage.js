@@ -4,92 +4,58 @@ import SearchBar from '../SearchBar';
 import RequestServer from '../../../requests/RequestServer';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router';
+import * as ProductModel from '../ProductModel';
+import update from 'react-addons-update'; // ES6
+
 class ProductsPage extends Component {
     constructor(props){
         super(props);
-        this.state={
+        this.state= { 
             empty : false,
-            products: [
-                {
-                    id: '',
-                    name: '',
-                    type: '',
-                    description: '',
-                    prices: [
-                        {
-                            product_url: '',
-                            product_price: 0,
-                        }
-                    ],
-                    comments: []
-                }
-            ],
-            errorMsg: '',
-            lowest_price : 0,
+            products: [],
+            errorMsg: ''
         }
     }
 
     componentDidMount() {
-        this.setState({
-            products: [
-                {
-                    id: 'Loading',
-                    name: 'Loading',
-                    type: '',
-                    description: 'Loading',
-                    prices: [
-                        {
-                            url: '',
-                            price: 0,
-                        }
-                    ]
-                }
-            ]
-        })
         this.getAllProducts();
     }
 
     populateData(response) {
-        var ProductList = []
 
-        response.forEach(product => {
-            var id = product.id
-            var name = product.product_name
-            var type = product.product_type
-            var description = product.product_description
-            var prices = product.product_link_price
-            
-            var product = {
-                id: id,
-                name: name,
-                type: type,
-                description: description,
-                prices: prices
-            }
+        var ProductList = response;
+        // response.forEach(product => {
+        //     ProductList.push(product)
+        // });
+        console.log(this.state.products)
+        console.log("ProductList", ProductList);
+        this.setState({
+            // products: update(this.state.products.product_link_price, {0: {product_url: {$set: ProductList}}})
+            products: ProductList
+        })
 
-            ProductList.push(product)
-        });
-        this.setState({products: ProductList});
+        console.log(this.state.products)
     }
 
-    populateProductCard() {
-        const products = this.state.products.map(function(product, i) {
-            //Initialize the first price to be the lowest
-            var current_lowest_price = product.prices[0].product_price;
-            //Loop through the product_link_price array to update the current lowest price
-            product.prices.forEach(function(obj){
-                if (parseFloat(obj.product_price) < parseFloat(current_lowest_price)){
-                    current_lowest_price = obj.product_price
-                }
-            })
-            //Update the lowest price
-            var lowest_price = current_lowest_price;
-            //Return JSX element
+    populateManyProductCards() {
+        if (this.state.products.length === 0){
             return (
-            <ProductCard key = {i} product = {product} lowest_price = {lowest_price}/>
-            )}
+                <h2 className = "title">No Product Found</h2>
+            )
+        }
+        else {
+        const productCards = this.state.products.map(function(product, i) {
+            //Check if the product has price URL available yet
+            if (product.product_link_price.length === 0){
+                return (<ProductCard key = {i} product = {product} lowest_price = "0"/>)
+            }
+            //Return JSX element
+            var lowestPrice = ProductModel.updateLowestPrice(product.product_link_price)
+            return (<ProductCard key = {i} product = {product} lowest_price = {lowestPrice}/>)
+            }
         )
-        return products
+            return productCards
+        }
     }
 
     getAllProducts = async(e) =>{
@@ -102,6 +68,7 @@ class ProductsPage extends Component {
                 errorMsg: 'Error getting product'
             })
             console.log("RESPONSE IS NULL");
+            return null
 
         } else {
             console.log("THE RESPONSE" , response);
@@ -125,7 +92,7 @@ class ProductsPage extends Component {
                 >Add New Product
                 </Button>
                 <br/>
-                {this.populateProductCard()}
+                {this.populateManyProductCards()}
             </div>
         )
     }

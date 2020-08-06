@@ -7,14 +7,14 @@ class ProductCategoryCard extends Component {
 
     buttonHandler = (e) => {
         const { history } = this.props;
-        if (this.props.product.title === 'GPU'){
+        if (this.props.product.product_type === 'GPU'){
             history.push('/gpu');
             window.location.reload()
         }
-        else if (this.props.product.title === 'CPU'){
+        else if (this.props.product.product_type === 'CPU'){
             alert("This page will be available soon")
         }
-        else if (this.props.product.title === 'RAM'){
+        else if (this.props.product.product_type === 'RAM'){
             alert("This page will be available soon")
         }
         else {
@@ -24,12 +24,12 @@ class ProductCategoryCard extends Component {
 
     render() {
         //const { history } = this.props;
-        console.log(this.props.product)
+        console.log("PCC this.props.product", this.props.product)
         return (
             <Card style={{ width: '18rem' }}>
             <Card.Img 
                 variant="top" 
-                src= {this.props.product.image} 
+                src= {this.props.product.product_image} 
                 style = {{
                     width: 250,
                     height: 250,
@@ -37,11 +37,11 @@ class ProductCategoryCard extends Component {
                 }}
             />
             <Card.Body>
-                <Card.Title>{this.props.product.title}</Card.Title>
+                <Card.Title>{this.props.product.product_type}</Card.Title>
                 <Card.Text style = {{
                     whiteSpace: 'pre-wrap'
                 }}>
-                {this.props.product.text}
+                {this.props.product.product_description}
                 </Card.Text>
                 <Button variant="primary" onClick={(event) => this.buttonHandler(event)}>Check Price</Button>
             </Card.Body>

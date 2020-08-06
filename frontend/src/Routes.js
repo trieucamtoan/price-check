@@ -13,6 +13,7 @@ import GpuPage from "./components/product/GPU/GpuPage";
 import ProductsPage from "./components/product/AllProducts/ProductsPage";
 import ProductPage from "./components/product/ProductPage";
 import AddProduct from "./components/product/AddProduct";
+import UpdateProduct from "./components/product/UpdateProduct";
 
 const Routes = () => (
   <Switch>
@@ -25,7 +26,9 @@ const Routes = () => (
     {/* Product Pages */}
     <Route path="/product/all" component={ProductsPage}/>
     <Route path="/product/new" component={AddProduct}/>
+    <Route path="/product/:id/update" component = {UpdateProduct}/>
     <Route path="/product/:id" component={ProductPage}/>
+    
     
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>

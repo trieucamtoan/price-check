@@ -8,6 +8,7 @@ import {ToastContainer, toast} from 'react-toastify';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import * as ProductModel from './ProductModel';
 
 const styles = {
     'button': {
@@ -44,37 +45,28 @@ class AddProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: '',
-            product_name: '',
-            product_type: '',
-            product_description: '',
-            product_link_price: [
-                {
-                product_url: '',
-                product_price: "0"
-            }],
-            currentType : 'CPU',
+            product : ProductModel.product,
+            currentType : '',
             error: false , 
             errorMessage: '', 
-            
         }
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.addHandler = this.addHandler.bind(this)
     }
 
     handleTypeChange = (event) => {
-        this.setState({
-            currentType: event.target.value,
-            product_type: event.target.value
-        })
+        this.setState(prevState => ({
+            product:{
+                ...prevState.product,
+                product_type: event.target.value
+            },
+            currentType: event.target.value
+        }))
     }
 
     clearFields() {
         this.setState({
-            username: '',
-            email: '',
-            password1: '',
-            password2: '',
+            product : ProductModel.product,
             error: false,
             errorMsg: '',
         }, () => {
@@ -88,7 +80,7 @@ class AddProduct extends Component {
             var errorMessage = [];
             for (const [key, value] of Object.entries(response)) {
                 console.log(`${key}: ${value}`);
-                if (value === this.state.product_name){
+                if (value === this.state.product.product_name){
                     toast("Product Added");
                     addSuccess = true;
                     this.clearFields();
@@ -118,11 +110,9 @@ class AddProduct extends Component {
     }
 
     isFieldEmpty() {
-        if (
-            this.state.id === '' || 
-            this.state.product_name === '' || 
-            this.state.product_description === '' || 
-            this.state.product_type === '') {
+        if (this.state.product.product_name === '' || 
+            this.state.product.product_description === '' || 
+            this.state.product.product_type === '') {
             this.setState({
                 error: true,
                 errorMsg: "Field cannot be empty"
@@ -145,20 +135,9 @@ class AddProduct extends Component {
         }
         var token = localStorage.getItem('token');
 
-        var product = {
-            id: this.state.id,
-            product_name: this.state.product_name,
-            product_type: this.state.product_type,
-            product_description: this.state.product_description,
-            product_link_price: [
-                {
-                    product_price: "0",
-                    product_url: this.state.product_link_price_url
-                }
-            ]
-        }
+        var product = this.state.product
         console.log('product', product)
-        var response = await RequestServer.addProduct(token,product)
+        var response = await RequestServer.addProduct(token,this.state.product)
         this.addResponseHandler(response);
     }
 
@@ -173,20 +152,17 @@ class AddProduct extends Component {
                 <MuiThemeProvider>
                     <div className = 'add-form' align = "center">
                         <h2 className = "title">Add New Product</h2>
-                        <form id="add-form">   
-                        <TextField
-                                hintText="Product ID"
-                                inputStyle={styles.black}
-                                floatingLabelText="Product ID"
-                                onChange={(event,newValue) => this.setState({id: newValue})}
-                            />
-                            <br/>    
-
+                        <form id="add-form">     
                             <TextField
                                 hintText="Product Name"
                                 inputStyle={styles.black}
                                 floatingLabelText="Product Name"
-                                onChange={(event,newValue) => this.setState({product_name: newValue})}
+                                onChange={(event,newValue) => this.setState(prevState => ({
+                                    product: {
+                                        ...prevState.product,
+                                        product_name: newValue
+                                    }
+                                }))}
                             />
                             <br/>    
 
@@ -194,7 +170,12 @@ class AddProduct extends Component {
                                 hintText="Product Description"
                                 inputStyle={styles.black}
                                 floatingLabelText="Product Description"
-                                onChange={(event,newValue) => this.setState({product_description: newValue})}
+                                onChange={(event,newValue) => this.setState(prevState => ({
+                                    product: {
+                                        ...prevState.product,
+                                        product_description: newValue
+                                    }
+                                }))}
                             />
                             <br/> 
 
@@ -213,16 +194,6 @@ class AddProduct extends Component {
                                         }
                                 </Select>
                             </InputLabel>
-                
-
-                            <TextField
-                                hintText="Product Link (Optional)"
-                                inputStyle={styles.black}
-                                floatingLabelText="Product Link"
-    
-                                onChange={(event,newValue) => this.setState({product_link_price_url : newValue})}
-                            />
-                            <br/> 
 
                             <div className='errorMsg'>
                                 {(this.state.error ? this.showErrorMsg() : '')}

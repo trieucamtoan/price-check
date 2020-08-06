@@ -31,7 +31,7 @@ class RequestServer extends Component {
             var response = await axios.post(this.getServerLocation() + '/login/', userObj)
             return response
         } catch (error) {
-            console.log(error)
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -51,7 +51,7 @@ class RequestServer extends Component {
             }
             
         } catch (error) {
-            console.log(error)
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -65,7 +65,7 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log(error)
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -86,7 +86,7 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log(error)
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -105,7 +105,7 @@ class RequestServer extends Component {
            })
            return response
         } catch (error) {
-           console.log(error)
+            console.log("Error: ", error.response.data);
            return null
         }
     }
@@ -119,6 +119,7 @@ class RequestServer extends Component {
             })
             return response.data
         } catch (error) {
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -133,6 +134,7 @@ class RequestServer extends Component {
             console.log("GET PRODUCT REQUEST SERVER")
             return response.data
         } catch (error) {
+            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -145,7 +147,36 @@ class RequestServer extends Component {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("POST PRODUCTs REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async updateProduct(token, id, obj) {
+        try {
+            console.log("OBJ : ",obj)
+            var response = await axios.put(this.getServerLocation() + '/products/' + id , obj, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async updateProductURL(token, id, url){
+        console.log("URL: ", url)
+        try {
+            var response = await axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
             return response.data
         } catch (error) {
             console.log("Error: ", error.response.data);
