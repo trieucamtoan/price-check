@@ -36,8 +36,17 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 
 ## Running web scraping API
 - On another terminal, run `sudo docker run -p 8050:8050 scrapinghub/splash` to start splash server for web scraping
-- Open a separate terminal, run `scrapy crawl pricespider` to update product price on the db
-- Use Postman to make a GET request to localhost:8000/products to see the price updated
+- Open a separate terminal, cd to scraper, and run `scrapyd` to run the web crawler
+- On another terminal, cd to scraper, run `scrapyd-deploy` to update the crawler to the latest version
+- Execute `curl http://localhost:6800/schedule.json -d project=scraper -d spider=pricespider` to webscrape and update db
+- Go to http://localhost:6800/ and click on Jobs to see the scraper tasks
+- Once all tasks are finished, run `psql -U testuser -d testdb` to go into the db, and run `Select * from api_productlinkprice` to check the price updated
+
+## Running periodic task to update db automatically
+- Get the web scraping API working first (see step 1->3 above)
+- On another terminal, cd to backend, run `celery -A backend worker -l info`
+- On another terminal, cd to backend, run `celery -A backend beat -l info`
+- Now, every 30 minutes, Vancouver time, the scraper will automatically update the db
 
 ## NOTE: 
 - Web scraping only run when execute `scrapy crawl pricespider` command
@@ -56,6 +65,16 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - cd to /frontend
 - Run command: `npm install` to install all dependencies
 - Run command: `npm start` to start frontend server
+
+# Production/local mode backend checklist
+Need to modify these file accordingly (uncomment and comment the correct line)before running production mode and vice versa
+- In /scraper/scraper/settings.py, change SPLASH_URL
+- In /scraper/scraper/piplines.py, change hostname
+- In /scraper/scraper/pricespider.py, change hostname
+- In /backend/backend/settings.py, change CELERY_BROKER_URL and CELERY_RESULT_BACKEND
+- In /backend/backend/settings.py, change HOST
+- In /backend/api/tasks.py, change response
+- In /backend/api/utils.py, change response
 
 # Running in production mode
 - cd to the project folder

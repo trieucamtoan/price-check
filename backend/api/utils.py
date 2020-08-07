@@ -1,6 +1,16 @@
+import requests, time
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
+
+def check_update_price():
+    response = requests.get('http://localhost:6800/daemonstatus.json')
+    # response = requests.get('http://scrapy:6800/daemonstatus.json')
+    result = eval(response.text)
+    while result.get('pending') != 0 or result.get('running') != 0:
+        time.sleep(0.1)
+        response = requests.get('http://localhost:6800/daemonstatus.json')
+        result = eval(response.text)
 
 user_check_field = ["username", "password", "password1", "password2", "email"]
 

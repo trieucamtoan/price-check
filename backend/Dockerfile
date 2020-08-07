@@ -28,4 +28,5 @@ EXPOSE 8000
 CMD ./wait.sh db 5432 \
   && python ./manage.py collectstatic --noinput \
   && python ./manage.py migrate \
+  && python ./manage.py loaddata data.json\
   && /usr/local/bin/uwsgi --ini ./uwsgi.ini 

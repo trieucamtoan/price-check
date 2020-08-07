@@ -1,4 +1,4 @@
-import scrapy, psycopg2, re
+import scrapy, psycopg2, re, json
 # Scrapy Items imports
 from scraper.items import ProductItem
 from scrapy_splash import SplashRequest
@@ -6,16 +6,24 @@ from decimal import *
 
 class PricespiderSpider(scrapy.Spider):
     name = 'pricespider'
-    allowed_domains = ['newegg.ca','bestbuy.ca']
+    allowed_domains = ['newegg','bestbuy']
     start_urls = []
 
+    def __init__(self, provided_url=None, *args, **kwargs):
+        super(PricespiderSpider, self).__init__(*args, **kwargs) # <- important
+        if provided_url != None:
+            self.start_urls.append(provided_url)
+
     def start_requests(self):
-        self.get_url_from_db()
-        
+        if len(self.start_urls) < 0:
+            self.get_url_from_db()
         for url in self.start_urls:
             if re.search("newegg", url) != None:
-                yield SplashRequest(url=url, callback=self.newegg_parse, args={'wait':3.5})
-
+                # newegg.lua is a custom execution script for rendering dynamic page on newegg
+                yield SplashRequest(url=url, callback=self.newegg_parse, args={
+                    'lua_source': 'newegg.lua'
+                })
+            
     def newegg_parse(self, response):
         item = ProductItem()
         item['url'] = response.url

@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import RequestServer from '../../requests/RequestServer';
+import { withRouter } from 'react-router';
 
-export default class DeleteProductModal extends Component {
+class DeleteProductModal extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -50,6 +51,7 @@ export default class DeleteProductModal extends Component {
             show: false
           })
           alert("Product Deleted Successfully")
+          this.props.history.push('/product/all');
           window.location.reload()
         }
         else {
@@ -118,4 +120,6 @@ export default class DeleteProductModal extends Component {
         )
     } 
   }
+
+export default withRouter(DeleteProductModal);
   
