@@ -3,7 +3,7 @@
 # from rest_framework.parsers import JSONParser
 # from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework import status
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
@@ -12,6 +12,9 @@ from api.models import Product, Comment
 from .serializers import *
 import json
 from api.utils import *
+from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # from rest_framework.generics import (
 # ListAPIView ,
@@ -36,7 +39,7 @@ from rest_framework.views import APIView
 #     if request.method == 'POST':
 #         serializer =  RegistrationSerializer(data=request.data)
 #         data = {}
-#         if serializer.is_valid():
+#         if serializer.is_valid(raise_exception=True):
 #             account = serializer.save()
 #             data['response'] = "successfully registered a new user."
 #             data['email'] = account.email
@@ -55,18 +58,18 @@ def products_list_view(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             product = serializer.save()
-            serializer = ProductSerializer(product)
+            serializer = ProductSerializer(product, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+        
         
 @api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,product_id):
     try:
         product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         serializer = ProductSerializer(instance=product)
@@ -76,17 +79,17 @@ def detail_product_view(request,product_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
         serializer = ProductSerializer(instance=product, data=request.data, partial=True)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             saved_product = serializer.save()
-            return Response(serializer.data)
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
 
 @api_view(['GET', 'POST'])
 def product_url(request, product_id):
     try:
         product= Product.objects.get(pk=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         product_urls = ProductLinkPrice.objects.all()
@@ -94,23 +97,21 @@ def product_url(request, product_id):
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = ProductLinkPriceSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(product=product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['PUT', 'DELETE'])
 def product_url_detail(request, product_id, url_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     try:
         product_url= ProductLinkPrice.objects.get(id=url_id)
     except ProductLinkPrice.DoesNotExist:
-        error = {'message':'Url not found'}
+        error = {'messages':'Url not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'DELETE':
@@ -118,17 +119,19 @@ def product_url_detail(request, product_id, url_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
         serializer = ProductLinkPriceSerializer(instance=product_url, data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(product=product)
-            return Response(serializer.data)
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
 
 @api_view(['GET','POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def product_comment_view(request, product_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         comments = Comment.objects.filter(product=product)
@@ -136,30 +139,121 @@ def product_comment_view(request, product_id):
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = CommentSerializer(data=request.data, context={'product_id': product_id})
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(product=product)
-            return Response(serializer.data)
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
 
 @api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def product_comment_detail_view(request, product_id, comment_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     try:
         comment = get_object_or_404(Comment, pk=comment_id, product=product)
     except Comment.DoesNotExist:
-        error = {'message':'Comment not found'}
+        error = {'messages':'Comment not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'PUT':
         serializer = CommentSerializer(instance=comment, data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             saved_product = serializer.save()
-            return Response(serializer.data)
-        return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
     elif request.method == 'DELETE':
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def wishlist_view(request):
+    # try:
+    #     user = User.objects.get(username=username)
+    # except:
+    #     error = {'messages': 'User not found'}
+    #     return Response(error, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        try:
+            item = Wishlist.objects.get(username=request.user.username)
+            serializer = WishlistSerializer(item)
+            return Response(serializer.data)
+        except Wishlist.DoesNotExist:
+            error = {'messages':'Wishlist does not exist or have not been created'}
+        return Response(error, status=status.HTTP_404_NOT_FOUND)
+        
+
+    # elif request.method == 'DELETE':
+    #     item.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # item = get_object_or_404(Product, pk=product_id)
+    # if request.method == 'GET':
+    #     wishlist_item = Wishlist.objects.filter(product=product)
+    #     serializer = WishlistSerializer(wishlist_item,many=True)//Many is indicating you are returing multiples
+    #     return Response(serializer.data)
+    # elif request.method == 'DELETE':
+    #     item.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST','DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def wishlist_detail_view(request, product_id):
+    try:
+        item = Wishlist.objects.get(username=request.user.username)
+    except Wishlist.DoesNotExist:
+        error = {'messages':'Wishlist does not exist or have not been created'}
+        return Response(error, status=status.HTTP_404_NOT_FOUND)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        error = {'messages':'Product not found'}
+        return Response(error, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'POST':
+        #serializer doing the adding to the wishList
+        if product_id in item.product_id_list:
+            error = {'messages':'Item already added to wishlist'}
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        product_id_list = []
+        if item.product_id_list:
+            product_id_list = item.product_id_list 
+        product_id_list.append(product_id)
+        data = {'product_id_list': product_id_list}
+        
+        serializer = WishlistSerializer(instance=item, data=data)
+        print(serializer)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        # wishlist_item = get_object_or_404(Wishlist_item, product_id=request.data.get('product_id'))
+        # wishlist_item.delete()
+        if item.product_id_list is None or len(item.product_id_list) == 0:
+            error = {'messages':'No item in wishlist'}
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        if product_id not in item.product_id_list:
+            error = {'messages':'Item is not in wishlist'}
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        product_id_list = []
+        product_id_list = item.product_id_list 
+        product_id_list = list(filter(lambda a: a != product_id, product_id_list))
+        data = {'product_id_list': product_id_list}
+        serializer = WishlistSerializer(instance=item, data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+    # wishlist_item = get_or_create(Wishlist, user=request.user)
+    # wishlist_item.wishlist.add(item)
+    # return Response(data)

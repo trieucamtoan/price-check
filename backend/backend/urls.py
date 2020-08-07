@@ -46,12 +46,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
-    path('products/<int:product_id>',detail_product_view , name= "product-detail"),
     path('products/',products_list_view,name= "product"),
+    path('products/<int:product_id>',detail_product_view , name= "product-detail"),
     path('products/<int:product_id>/comments', product_comment_view, name="comment"),
     path('products/<int:product_id>/comments/<int:comment_id>', product_comment_detail_view, name="comment-detail"),
     path('products/<int:product_id>/url', product_url, name="product_url"),
-    path('products/<int:product_id>/url/<int:url_id>', product_url_detail, name="product_url_detail")
+    path('products/<int:product_id>/url/<int:url_id>', product_url_detail, name="product_url_detail"),
+    path('wishlist/', wishlist_view, name="wishlist"),
+    path('wishlist/<int:product_id>', wishlist_detail_view, name="detail_wishlist"),
+    
+
+
     # path('register', registration_view, name='register')
     # path('list',UserListView.as_view(), name="list"),
 
