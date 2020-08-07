@@ -64,7 +64,6 @@ def products_list_view(request):
             serializer = ProductSerializer(product, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        
 @api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,product_id):
     try:
