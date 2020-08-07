@@ -44,6 +44,7 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 
 ## Running periodic task to update db automatically
 - Get the web scraping API working first (see step 1->3 above)
+- On a terminal, run `docker run -d -p 5672:5672 rabbitmq`
 - On another terminal, cd to backend, run `celery -A backend worker -l info`
 - On another terminal, cd to backend, run `celery -A backend beat -l info`
 - Now, every 30 minutes, Vancouver time, the scraper will automatically update the db

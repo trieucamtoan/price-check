@@ -51,9 +51,9 @@ class ScraperPipeline:
                 price_SQL = "SELECT product_price_curr FROM api_productlinkprice WHERE product_url = \'{}\'".format(item['url'])
                 self.cur.execute(price_SQL)
                 product_price_curr = self.cur.fetchone()[0]
-                
-                update_price_prev_SQL = "UPDATE api_productlinkprice SET product_price_prev = {} WHERE product_url = \'{}\'".format(product_price_curr, item['url'])
-                self.cur.execute(update_price_prev_SQL)
+                if product_price_curr is not None:
+                    update_price_prev_SQL = "UPDATE api_productlinkprice SET product_price_prev = {} WHERE product_url = \'{}\'".format(product_price_curr, item['url'])
+                    self.cur.execute(update_price_prev_SQL)
                 update_price_curr_SQL = "UPDATE api_productlinkprice SET product_price_curr = {} WHERE product_url = \'{}\'".format(item['price'], item['url'])
                 self.cur.execute(update_price_curr_SQL)
                 self.connection.commit()
