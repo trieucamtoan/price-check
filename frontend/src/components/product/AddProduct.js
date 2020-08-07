@@ -69,42 +69,35 @@ class AddProduct extends Component {
             product : ProductModel.product,
             error: false,
             errorMsg: '',
+            currentType: ''
         }, () => {
             document.getElementById("add-form").reset()
         })
     }
 
     addResponseHandler(response) {
-        if (response !== null) {
-            var addSuccess = false;
-            var errorMessage = [];
+        if (response.status === 201) {
+            // var errorMessage = [];
+            // for (const [key, value] of Object.entries(response)) {
+                // console.log(`${key}: ${value}`);
+            toast("Product Added: ");
+            this.clearFields();
+        } 
+        else {
+            alert("Bad Request")
+            var errorArray = [];
             for (const [key, value] of Object.entries(response)) {
-                console.log(`${key}: ${value}`);
-                if (value === this.state.product.product_name){
-                    toast("Product Added");
-                    addSuccess = true;
-                    this.clearFields();
-                    return true;
-                }
-                else {
-                    errorMessage += value;
-                }
-            } 
-
-            if (!addSuccess){
-                // const message = errorMessage.split(/[',','.']+/).join('\n');
-                // this.setState({
-                //     error: true,
-                //     errorMsg: message
-                // })
-                console.log(response)
+                console.log(value)
+                errorMessage = value;
             }
+            var errorMessage = ""
+            errorArray.forEach((error) => {
+                errorMessage += error
+            })
 
-        } else {
-            console.log('response: ' + response)
             this.setState({
                 error: true,
-                errorMsg: 'Unable to add new Product'
+                errorMsg: errorMessage
             })
         }
     }
@@ -177,6 +170,19 @@ class AddProduct extends Component {
                                     }
                                 }))}
                             />
+                            <br/> 
+
+                            {/* <TextField
+                                hintText="Product Image URL"
+                                inputStyle={styles.black}
+                                floatingLabelText="Product Image URL"
+                                onChange={(event,newValue) => this.setState(prevState => ({
+                                    product: {
+                                        ...prevState.product,
+                                        product_image: newValue
+                                    }
+                                }))}
+                            /> */}
                             <br/> 
 
                             <br/>

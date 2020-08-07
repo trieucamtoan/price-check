@@ -24,6 +24,7 @@ import { withRouter } from 'react-router';
 export const product = {
     product_name: '',
     product_type: '',
+    product_image: null,
     product_description: '',
     product_image: null
 }

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
+import DeleteProductModal from './DeleteProductModal';
+import AddToWishListModal from './AddToWishListModal';
 //horizontal card used for displaying individual product
 
 var styles = {
@@ -33,53 +35,25 @@ class ProductCard extends Component {
     buttonHandler = (e) => {
         const { history } = this.props;
         //console.log("history", history)
-
-        if (this.props.product.product_type === 'GPU'){
-            alert("This page will be available soon")
-        }
-    
-        else if (this.props.product.product_type === 'CPU'){
-            history.push({
-                pathname: '/product/' + this.props.product.id,
-                state: {
-                    product: this.props.product
-                }
-            });
-            window.location.reload()
-        }
-        else if (this.props.product.product_type === 'RAM'){
-            alert("This page will be available soon")
-        }
-        else {
-            console.log(this.props)
-            console.log("error navigating");
-        }
+        history.push({
+            pathname: '/product/' + this.props.product.id,
+            state: {
+                product: this.props.product
+            }
+        });
+        window.location.reload()
     }
 
     updateHandler = (e) => {
         const { history } = this.props;
         //console.log("history", history)
-
-        if (this.props.product.product_type === 'GPU'){
-            alert("This page will be available soon")
-        }
-    
-        else if (this.props.product.product_type === 'CPU'){
-            history.push({
-                pathname: '/product/' + this.props.product.id + '/update',
-                state: {
-                    product: this.props.product
-                }
-            });
-            window.location.reload()
-        }
-        else if (this.props.product.product_type === 'RAM'){
-            alert("This page will be available soon")
-        }
-        else {
-            console.log(this.props)
-            console.log("error navigating");
-        }
+        history.push({
+            pathname: '/product/' + this.props.product.id + '/update',
+            state: {
+                product: this.props.product
+            }
+        });
+        window.location.reload()
     }
     
     render() {
@@ -106,12 +80,14 @@ class ProductCard extends Component {
                     {this.props.product.product_description}
                 </Card.Text>
                 <Button
-                    variant="link"
+                    variant="outline-primary"
                     onClick={(event) => this.updateHandler(event)}
                     className = "float-right"
                 >
                     Update Product
                 </Button>
+                <DeleteProductModal id = {this.props.product.id}/>
+                <AddToWishListModal id = {this.props.product.id}/>
             </Card.Body>
             </Card>
         );

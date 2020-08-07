@@ -5,7 +5,6 @@ import RequestServer from '../../../requests/RequestServer';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router';
 import * as ProductModel from '../ProductModel';
-import update from 'react-addons-update'; // ES6
 
 class ProductsPage extends Component {
     constructor(props){
@@ -13,7 +12,8 @@ class ProductsPage extends Component {
         this.state= { 
             empty : false,
             products: [],
-            errorMsg: ''
+            errorMsg: '',
+            deleteModal : null
         }
     }
 
@@ -35,6 +35,10 @@ class ProductsPage extends Component {
         })
 
         console.log(this.state.products)
+    }
+
+    populateModal(){
+        // var deleteModal = <StaticModal id={patient.id}/>
     }
 
     populateManyProductCards() {

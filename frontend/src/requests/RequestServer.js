@@ -141,16 +141,15 @@ class RequestServer extends Component {
 
     async addProduct(token, obj) {
         try {
-            console.log(obj)
             var response = await axios.post(this.getServerLocation() + '/products/', obj, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }
             })
-            return response.data
+            return response
         } catch (error) {
             console.log("Error: ", error.response.data);
-            return null
+            return error.response.data
         }
     }
 
@@ -162,10 +161,25 @@ class RequestServer extends Component {
                     'Authorization' : `Token ${token}`
                 }
             })
-            return response.data
+            return response
         } catch (error) {
             console.log("Error: ", error.response.data);
-            return null
+            return response
+        }
+    }
+
+    async deleteProduct(token, id) {
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/products/' + id, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("RESPONSE:", response , ".")
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
         }
     }
 
@@ -180,7 +194,21 @@ class RequestServer extends Component {
             return response.data
         } catch (error) {
             console.log("Error: ", error.response.data);
-            return null
+            return error.response.data
+        }
+    }
+
+    async getProductURL(token, id){
+        try {
+            var response = await axios.get(this.getServerLocation() + '/products/' + id + '/url', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
         }
     }
 }
