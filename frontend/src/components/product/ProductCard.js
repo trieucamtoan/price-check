@@ -8,7 +8,7 @@ import AddToWishListModal from './AddToWishListModal';
 
 var styles = {
     'card': {
-        
+        marginBottom: '10px'
     },
     'button': {
         paddingLeft : '20px',
@@ -58,14 +58,14 @@ class ProductCard extends Component {
     
     render() {
         return (
-            <Card styles = {styles.card}>
+            <Card style = {styles.card}>
             <Card.Header as="h5">
                 {this.props.product.product_name}
                 <Button 
                     id = "check-stock-button"
                     variant="link"
                     onClick={(event) => this.buttonHandler(event)}
-                    styles={styles.button}
+                    style={styles.button}
                     className="float-right"
                     >Check Stock
                 </Button>
