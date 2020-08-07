@@ -102,7 +102,7 @@ def product_url(request, product_id):
 @api_view(['PUT', 'DELETE'])
 def product_url_detail(request, product_id, url_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
@@ -125,7 +125,7 @@ def product_url_detail(request, product_id, url_id):
 @api_view(['GET','POST'])
 def product_comment_view(request, product_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
@@ -143,7 +143,7 @@ def product_comment_view(request, product_id):
 @api_view(['PUT', 'DELETE'])
 def product_comment_detail_view(request, product_id, comment_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
