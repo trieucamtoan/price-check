@@ -4,41 +4,26 @@ from scraper.items import ProductItem
 from scrapy_splash import SplashRequest
 from decimal import *
 
-# Custom execution script for rendering dynamic page on newegg
-lua_script_newegg = """
-    function main(splash, args)
-        assert(splash:go(args.url))
-        while not splash:select('.price-current') do
-            splash:wait(0.1)
-        end
-        return {
-            html = splash:html()
-        }
-    end
-"""
-
 class PricespiderSpider(scrapy.Spider):
     name = 'pricespider'
-    allowed_domains = ['newegg.ca','bestbuy.ca']
-    start_urls = ['https://www.newegg.ca/core-i9-9th-gen-intel-core-i9-9900k/p/N82E16819117957?Item=N82E16819117957']
+    allowed_domains = ['newegg','bestbuy']
+    start_urls = []
+
+    def __init__(self, provided_url=None, *args, **kwargs):
+        super(PricespiderSpider, self).__init__(*args, **kwargs) # <- important
+        if provided_url != None:
+            self.start_urls.append(provided_url)
 
     def start_requests(self):
-        # self.get_url_from_db()
-        # req_url = "http://172.17.0.1:8050/render.json"
-        # headers = {'Content-Type': 'application/json'}
+        if len(self.start_urls) < 0:
+            self.get_url_from_db()
         for url in self.start_urls:
-            # body = json.dumps({
-            # "url": url,
-            # "har": 1,
-            # "html": 0,
-            # })
-            if re.search("newegg.ca", url) != None:
+            if re.search("newegg", url) != None:
+                # newegg.lua is a custom execution script for rendering dynamic page on newegg
                 yield SplashRequest(url=url, callback=self.newegg_parse, args={
-                    'lua_source': lua_script_newegg
+                    'lua_source': 'newegg.lua'
                 })
-                # yield scrapy.Request(req_url, self.newegg_parse, method='POST',
-                #                  body=body, headers=headers)
-
+            
     def newegg_parse(self, response):
         item = ProductItem()
         item['url'] = response.url
@@ -54,8 +39,8 @@ class PricespiderSpider(scrapy.Spider):
         yield item
 
     def get_url_from_db(self):
-        # hostname = 'localhost' # local testing
-        hostname = 'db' # docker
+        hostname = 'localhost' # local testing
+        # hostname = 'db' # docker
         username = 'testuser'
         password = '123' # your password
         database = 'testdb'

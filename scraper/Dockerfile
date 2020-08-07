@@ -17,4 +17,4 @@ EXPOSE 6800
 RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
 
-CMD set -m; scrapyd && cd scraper && scrapyd-deploy && fg scrapyd
+CMD set -m; scrapyd && scrapyd-deploy && fg scrapyd

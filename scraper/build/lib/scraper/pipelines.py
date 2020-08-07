@@ -15,8 +15,8 @@ import psycopg2
 class ScraperPipeline:
 
     def open_spider(self, spider):
-        # hostname = 'localhost' # local testing
-        hostname = 'db' # docker
+        hostname = 'localhost' # local testing
+        # hostname = 'db' # docker
         username = 'testuser'
         password = '123' # your password
         database = 'testdb'
@@ -27,9 +27,8 @@ class ScraperPipeline:
             print ("Error while fetching data from PostgreSQL", error)
 
     def close_spider(self, spider):
-        if self.connection:
-            self.cur.close()
-            self.connection.close()
+        self.cur.close()
+        self.connection.close()
 
     def process_item(self, item, spider):
         # try:
