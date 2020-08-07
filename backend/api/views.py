@@ -57,7 +57,7 @@ def products_list_view(request):
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             product = serializer.save()
-            serializer = ProductSerializer(product)
+            serializer = ProductSerializer(product, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
         
@@ -162,3 +162,56 @@ def product_comment_detail_view(request, product_id, comment_id):
     elif request.method == 'DELETE':
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET','POST'])
+def wishlist_view(request):
+    if request.method == 'GET':
+        try:
+            item = Wishlist.objects.get(username=request.data.get('username'))
+            serializer = WishlistSerializer(item)
+            return Response(serializer.data)
+        except Wishlist.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    elif request.method == 'POST':
+        serializer = WishlistSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    # elif request.method == 'DELETE':
+    #     item.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # item = get_object_or_404(Product, pk=product_id)
+    # if request.method == 'GET':
+    #     wishlist_item = Wishlist.objects.filter(product=product)
+    #     serializer = WishlistSerializer(wishlist_item,many=True)//Many is indicating you are returing multiples
+    #     return Response(serializer.data)
+    # elif request.method == 'DELETE':
+    #     item.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST','DELETE'])
+def wishlist_detail_view(request,username):
+    wishlist = get_object_or_404(Wishlist, username=username)
+    if request.method == 'POST':
+        #serializer doing the adding to the wishList
+        serializer = Wishlist_itemSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(wishlist=wishlist)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        wishlist_item = get_object_or_404(Wishlist_item, product_id=request.data.get('product_id'))
+        wishlist_item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    # wishlist_item = get_or_create(Wishlist, user=request.user)
+    # wishlist_item.wishlist.add(item)
+    # return Response(data)

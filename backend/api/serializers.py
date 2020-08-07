@@ -1,6 +1,10 @@
 from rest_framework import serializers
+<<<<<<< HEAD
 from .models import Product, ProductLinkPrice, Comment
 from rest_framework.validators import UniqueValidator
+=======
+from .models import Product, ProductLinkPrice, Comment,Wishlist,Wishlist_item
+>>>>>>> negar
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -63,7 +67,7 @@ class ProductSerializer(serializers.ModelSerializer):
         }
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
-        #Each ProductLinkPrice needs to be associated with the Product 
+        #Each ProductLinkPrice needs to be associated with the Product
         #   ->use the loop to add the Product to each dictionary
     # def create(self, validated_data):
     #     product_link_price_validated = validated_data.pop('product_link_price')
@@ -101,3 +105,15 @@ class ProductSerializer(serializers.ModelSerializer):
     #         for link_price in current_link_prices:
     #             ProductLinkPrice.objects.filter(product_url=link_price.product_url).delete()
     #     return instance
+
+class Wishlist_itemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist_item
+        fields = ['product_id']
+
+class WishlistSerializer(serializers.ModelSerializer):
+    wishlist_items = Wishlist_itemSerializer(required=False, many=True)
+    class Meta:
+        model = Wishlist
+        fields =['wishlist_items','username']
+        depth = 1 #returns the layers in the product

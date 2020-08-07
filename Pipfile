@@ -8,6 +8,7 @@ django = "~=3.0.0"
 djangorestframework = "*"
 django-cors-headers = "*"
 psycopg2--binary = "*"
+<<<<<<< HEAD
 django-allauth = "*"
 django-rest-auth = "*"
 scrapy = "*"
@@ -15,6 +16,10 @@ scrapyd = "*"
 scrapy-splash = "*"
 python-scrapyd-api = "*"
 pillow = "*"
+=======
+uwsgi = "*"
+django-allauth = "*"
+>>>>>>> negar
 
 [dev-packages]
 
