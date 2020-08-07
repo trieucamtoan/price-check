@@ -21,4 +21,5 @@ RUN pip install -r ./requirements.txt
 
 CMD ./wait.sh db 5432 \\
     && ./wait.sh rabbitmq 5672 \\
-    && ./wait.sh backend 8000
+    && ./wait.sh backend 8000 \\
+    && celery -A backend worker -l info

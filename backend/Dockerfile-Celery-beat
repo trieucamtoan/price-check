@@ -22,4 +22,5 @@ RUN pip install -r ./requirements.txt
 CMD ./wait.sh db 5432 \\
     && ./wait.sh backend 8000 \\
     && ./wait.sh rabbitmq 5672 \\
-    && ./wait.sh scrapy 6800
+    && ./wait.sh scrapy 6800 \\
+    && celery -A backend beat -l info

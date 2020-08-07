@@ -10,12 +10,13 @@ import requests
 #     sender.add_periodic_task(10.0, test, name='add test task every 10')
 
 @app.task
-def update_price():
+def update_price(product_url=None):
     data = {
         'project': 'scraper',
-        'spider': 'pricespider'
+        'spider': 'pricespider',
+        'provided_url': product_url
     }
 
-    #response = requests.post('http://localhost:6800/schedule.json', data=data) #local test
-    response = requests.post('http://scrapy:6800/schedule.json', data=data) #production
+    response = requests.post('http://localhost:6800/schedule.json', data=data) #local test
+    # response = requests.post('http://scrapy:6800/schedule.json', data=data) #production
     print(response)

@@ -10,8 +10,9 @@ from django.db.models import Q
 from django.http import HttpResponse,JsonResponse
 from api.models import Product, Comment
 from .serializers import *
-import json
+import json, time
 from api.utils import *
+from api.tasks import update_price
 
 # from rest_framework.generics import (
 # ListAPIView ,
@@ -95,6 +96,10 @@ def product_url(request, product_id):
         serializer = ProductLinkPriceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(product=product)
+            update_price(serializer.data.get('product_url'))
+            check_update_price()
+            product_url= ProductLinkPrice.objects.get(product_url=serializer.data.get('product_url'))
+            serializer = ProductLinkPriceSerializer(product_url)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
@@ -102,7 +107,7 @@ def product_url(request, product_id):
 @api_view(['PUT', 'DELETE'])
 def product_url_detail(request, product_id, url_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
@@ -119,13 +124,17 @@ def product_url_detail(request, product_id, url_id):
         serializer = ProductLinkPriceSerializer(instance=product_url, data=request.data)
         if serializer.is_valid():
             serializer.save(product=product)
+            update_price(serializer.data.get('product_url'))
+            check_update_price()
+            product_url= ProductLinkPrice.objects.get(id=url_id)
+            serializer = ProductLinkPriceSerializer(product_url)
             return Response(serializer.data)
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','POST'])
 def product_comment_view(request, product_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
@@ -143,7 +152,7 @@ def product_comment_view(request, product_id):
 @api_view(['PUT', 'DELETE'])
 def product_comment_detail_view(request, product_id, comment_id):
     try:
-        product= Product.objects.get(product_id=product_id)
+        product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         error = {'message':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
