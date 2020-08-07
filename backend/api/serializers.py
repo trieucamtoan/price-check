@@ -1,10 +1,7 @@
 from rest_framework import serializers
-<<<<<<< HEAD
-from .models import Product, ProductLinkPrice, Comment
+from .models import *
 from rest_framework.validators import UniqueValidator
-=======
-from .models import Product, ProductLinkPrice, Comment,Wishlist,Wishlist_item
->>>>>>> negar
+from rest_auth.registration.serializers import RegisterSerializer
 
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -106,14 +103,17 @@ class ProductSerializer(serializers.ModelSerializer):
     #             ProductLinkPrice.objects.filter(product_url=link_price.product_url).delete()
     #     return instance
 
-class Wishlist_itemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Wishlist_item
-        fields = ['product_id']
+# class Wishlist_itemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Wishlist_item
+#         fields = ['product_id']
 
 class WishlistSerializer(serializers.ModelSerializer):
-    wishlist_items = Wishlist_itemSerializer(required=False, many=True)
+    # wishlist_items = Wishlist_itemSerializer(required=False, many=True)
+    product_id_list = serializers.ListField(child=serializers.IntegerField())
     class Meta:
         model = Wishlist
-        fields =['wishlist_items','username']
-        depth = 1 #returns the layers in the product
+        fields =['username', 'product_id_list']
+        extra_kwargs = {
+            'username': {'error_messages': {"blank": "Username cannot be blank", "null": "Username cannot be empty"}},
+        }
