@@ -62,7 +62,7 @@ def products_list_view(request):
         if serializer.is_valid(raise_exception=True):
             product = serializer.save()
             serializer = ProductSerializer(product, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         
 @api_view(['GET', 'DELETE', 'PUT'])
 def detail_product_view(request,product_id):
@@ -102,7 +102,7 @@ def product_url(request, product_id):
             check_update_price()
             product_url= ProductLinkPrice.objects.get(product_url=serializer.data.get('product_url'))
             serializer = ProductLinkPriceSerializer(product_url)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         
 @api_view(['PUT', 'DELETE'])
 def product_url_detail(request, product_id, url_id):
@@ -148,7 +148,7 @@ def product_comment_view(request, product_id):
         serializer = CommentSerializer(data=request.data, context={'product_id': product_id})
         if serializer.is_valid(raise_exception=True):
             serializer.save(product=product)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         
 
 @api_view(['PUT', 'DELETE'])
@@ -238,7 +238,7 @@ def wishlist_detail_view(request, product_id):
         print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         # wishlist_item = get_object_or_404(Wishlist_item, product_id=request.data.get('product_id'))
