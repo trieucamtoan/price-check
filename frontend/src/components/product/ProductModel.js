@@ -5,22 +5,7 @@ import SearchBar from './SearchBar';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router';
 
-// export const product = {
-//         product_name: '',
-//         product_type: '',
-//         product_description: '',
-//         product_image: null,
-//         product_link_price: [
-//         {
-//             product_url : '',
-//             product_price_curr : "0",
-//             product_price_prev: "0"
-//         }],
-//         comments: []
-// }
-
-
-
+//Product Model Template to instantiate the state
 export const product = {
     product_name: '',
     product_type: '',
@@ -34,6 +19,8 @@ export const product_full_info = {
     product_type: '',
     product_description: '',
     product_image: null,
+    product_lowest_price_curr: null,
+    product_lowest_price_prev: null,
     product_link_price : [],
     comments: []
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ProductCategory from '../product/ProductCategory';
+import ProductCategory from './ProductCategory';
 export default class Home extends Component {
     render(){
         return (

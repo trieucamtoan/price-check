@@ -6,12 +6,13 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router';
 import * as ProductModel from '../ProductModel';
 
+//This component loads component at /products/all
 class ProductsPage extends Component {
     constructor(props){
         super(props);
         this.state= { 
             empty : false,
-            products: [],
+            products: [], //all products in the DB
             errorMsg: '',
             deleteModal : null
         }
@@ -35,10 +36,6 @@ class ProductsPage extends Component {
         })
 
         console.log(this.state.products)
-    }
-
-    populateModal(){
-        // var deleteModal = <StaticModal id={patient.id}/>
     }
 
     populateManyProductCards() {

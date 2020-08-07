@@ -5,7 +5,7 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import Register from './components/user/Register';
 import Login from './components/user/Login';
 import Hello from "./components/hello";
-import Product from "./components/product/ProductCategory";
+import Product from "./components/home/ProductCategory";
 import Dashboard from "./components/user/Dashboard";
 import Logout from "./components/user/Logout";
 import Home from "./components/home/Home";
