@@ -1,9 +1,5 @@
-<<<<<<< HEAD
--i https://pypi.python.org/simple
-=======
 amqp==2.6.1
 appdirs==1.4.3
->>>>>>> e8faa6e3e0fdbc783c76639c7f83b76eeb5879b4
 asgiref==3.2.10
 attrs==19.3.0
 Automat==20.2.0
