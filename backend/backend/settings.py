@@ -182,10 +182,15 @@ REST_FRAMEWORK = {
          'rest_framework.authentication.TokenAuthentication',
 
     ),
-
+    'EXCEPTION_HANDLER': 'api.utils.custom_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
+
+# REST_AUTH_REGISTER_SERIALIZERS = {
+#     'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer'
+# }
+
 #none” to allow logins with an unverified e-mail address
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD='username'

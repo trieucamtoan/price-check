@@ -1,5 +1,9 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 def scramble_uploaded_filename(instance, filename):
     extension = filename.split(".")[-1]
@@ -48,3 +52,19 @@ class Comment(models.Model):
     text = models.TextField(blank=True, null=True)
     def __str__(self):
         return 'Comment {} by {}'.format(self.text, self.username)
+
+class Wishlist(models.Model):
+    #ForeignKey in django rest: fetch the Whole objects
+    #product =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    product_id_list = ArrayField(models.PositiveIntegerField(unique=True), blank=True, null=True)
+    username = models.CharField(max_length=150, blank=True,unique=True)
+    # def __str__(self):
+    #     return self.product_id
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Wishlist.objects.create(username=instance.username)
+
+# class Wishlist_item(models.Model):
+#     wishlist =  models.ForeignKey(Wishlist, on_delete=models.CASCADE, related_name='wishlist_items', null=True, blank=True)
+#     product_id = models.PositiveIntegerField(null=True,blank=True,unique=True)
