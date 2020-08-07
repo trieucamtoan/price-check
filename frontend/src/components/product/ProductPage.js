@@ -5,94 +5,100 @@ import Table from 'react-bootstrap/Table'
 import { withRouter } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import RequestServer from '../../requests/RequestServer';
-import ListGroup from 'react-bootstrap/ListGroup';
 import '../../App.css';
+import * as ProductModel from './ProductModel';
 
 //This Component is used for displaying list of available websites with prices according to a Product
 
 export default class ProductPage extends Component {
     constructor(props){
         super(props);
-        const product = this.props.history.location.state.product;
         this.state={
-            empty : false,
-            product: {
-                id: product.id,
-                name: product.name,
-                type: product.type,
-                description: product.description,
-                prices: product.prices
-            },
+            empty : true,
+            product: ProductModel.product,
             errorMsg: '',
             lowest_price : 0,
         }
     }
 
+    async getProduct(id) {
+        var token = localStorage.getItem('token');
+        var response = await RequestServer.getProduct(token, id)
+        return response
+    }
+
     componentDidMount() {
-        this.getProduct(this.state.product.id);
-        
+        //Get product info based on ID params
+        const response = this.getProduct(this.props.match.params.id)
+            .then(result => { 
+                if (result === null){
+                    throw "Error getting Product"
+                }
+                return result
+            })
+            .then(result => {
+                this.setState({
+                    empty: false,
+                    product: result
+                })
+                this.updateLowestPrice();
+            })
+            .catch((error) => {
+                this.setState({
+                    errorMsg: error,
+                    empty: true
+                })
+            })
     }
 
-    updateLowestPrice(product) {
-        //Initialize the first price to be the lowest
-        var current_lowest_price = product.prices[0].product_price;
-        //Loop through the product_link_price array to update the current lowest price
-        product.prices.forEach(function(obj){
-            if (parseFloat(obj.product_price) < parseFloat(current_lowest_price)){
-                current_lowest_price = obj.product_price
-            }
-        })
-        //Update the lowest price
-        var lowest_price = current_lowest_price;
-        console.log(lowest_price)
-        return lowest_price;
+    updateLowestPrice() {
+        var lowestPrice = ProductModel.updateLowestPrice(this.state.product.product_link_price);
+        this.setState({lowest_price: lowestPrice})
     }
 
-    populateData(response) {
-        this.setState({
-            product: {
-                id: response.id,
-                name: response.product_name,
-                type: response.product_type,
-                description: response.product_description,
-                comments: response.comments,
-                prices: response.product_link_price
-            },
-            lowest_price: this.updateLowestPrice(this.state.product)
-        });
-        this.populateUI();
+    shouldComponentUpdate() {
+        if (!this.state.empty){
+            return true
+        }
+        return false;
     }
 
-    populateList() {
-        //Populate list of websites and prices
-        
-        const list = this.state.product.prices.map(function(obj,key) {
-            return(
-                <tr key = {key} >
-                    {/* <ListGroup.Item action href = {obj.product_url}>Price : {obj.product_price}, URL: {obj.product_url} </ListGroup.Item> */}
-                    <td>{key}</td>
-                    <td><a href={obj.product_url}>{obj.product_url}</a></td>
-                    <td>{obj.product_price}</td>
-                </tr>
-            )
-        })
-
-        return list;
-    }
-
-    populateProductCard() {
+   populateAProductCard() {
         return (
             <ProductCard 
             product = {this.state.product} 
             lowest_price = {this.state.lowest_price}/>
-        )
+        ) 
     }
-    
+    populateManyLists() {
+        if (this.state.product.product_link_price === undefined){
+            return;
+        }
+        else {
+            //Populate list of websites and prices
+            const list = this.state.product.product_link_price.map(function(obj,key) {
+                return(
+                    <tr key = {key} >
+                        <td>{key}</td>
+                        <td><a href={obj.product_url}>{obj.product_url}</a></td>
+                        <td>{obj.product_price_curr}</td>
+                    </tr>
+                )
+            })
+            return list;
+        }
+}
 
-   populateUI() {
-       return (
-           <div>
-               {this.populateProductCard()}
+    showErrorMsg() {
+        return <p>{this.state.errorMsg}</p>
+    }
+
+    render(){
+        console.log("RENDER")
+        return (
+            <div>
+               <h2 className = "title">{this.state.product.product_name}</h2>
+               {this.populateAProductCard()}
                <br/>
                <h2 className = "title">List of Available Dealers</h2>
                <Table responsive="sm">
@@ -104,34 +110,9 @@ export default class ProductPage extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.populateList()}
+                    {this.populateManyLists()}
                 </tbody>
                 </Table>
-           </div>
-       )
-   }
-
-    async getProduct(id) {
-        var token = localStorage.getItem('token');
-        var response = await RequestServer.getProduct(token, id)
-        if (response === null) {
-            this.setState({
-                empty: true,
-                errorMsg: 'Error getting product'
-            })
-            console.log("RESPONSE IS NULL");
-
-        } else {
-            console.log("THE RESPONSE" , response);
-            this.populateData(response);
-        }
-    }
-
-    render(){
-        return (
-            <div>
-                <h2 className = "title">{this.state.product.name}</h2>
-                {this.populateUI()}
             </div>
         )
     }

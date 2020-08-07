@@ -12,18 +12,24 @@ import Home from "./components/home/Home";
 import GpuPage from "./components/product/GPU/GpuPage";
 import ProductsPage from "./components/product/AllProducts/ProductsPage";
 import ProductPage from "./components/product/ProductPage";
+import AddProduct from "./components/product/AddProduct";
+import UpdateProduct from "./components/product/UpdateProduct";
 
 const Routes = () => (
   <Switch>
     <Route exact path= '/' component={Home}/>
-    {/* <Route exact path={["/", "/hello"]} component={Hello} /> */}
     <Route exact path= '/product' component={Product}/>
     <Route exact path= '/login' component={Login}/>
     <Route exact path= '/register' component={Register}/>
     <Route exact path="/gpu" component={GpuPage}/>
-    <Route exact path="/product/all" component={ProductsPage}/>
-    <Route exact path="/product/:id" component={ProductPage}/>
-
+    
+    {/* Product Pages */}
+    <Route path="/product/all" component={ProductsPage}/>
+    <Route path="/product/new" component={AddProduct}/>
+    <Route path="/product/:id/update" component = {UpdateProduct}/>
+    <Route path="/product/:id" component={ProductPage}/>
+    
+    
     {/* Private Route */}
     <PrivateRoute path="/dashboard" component={Dashboard}/>
     <PrivateRoute path= '/profile' component={Profile}/>
