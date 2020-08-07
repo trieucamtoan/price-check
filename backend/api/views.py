@@ -66,7 +66,7 @@ def detail_product_view(request,product_id):
     try:
         product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         return Response(serializer.data)
@@ -77,7 +77,7 @@ def detail_product_view(request,product_id):
         serializer = ProductSerializer(instance=product, data=request.data, partial=True)
         if serializer.is_valid():
             saved_product = serializer.save()
-            return Response(serializer.data)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
@@ -85,7 +85,7 @@ def product_url(request, product_id):
     try:
         product= Product.objects.get(pk=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         product_urls = ProductLinkPrice.objects.all()
@@ -104,12 +104,12 @@ def product_url_detail(request, product_id, url_id):
     try:
         product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     try:
         product_url= ProductLinkPrice.objects.get(id=url_id)
     except ProductLinkPrice.DoesNotExist:
-        error = {'message':'Url not found'}
+        error = {'messages':'Url not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'DELETE':
@@ -119,7 +119,7 @@ def product_url_detail(request, product_id, url_id):
         serializer = ProductLinkPriceSerializer(instance=product_url, data=request.data)
         if serializer.is_valid():
             serializer.save(product=product)
-            return Response(serializer.data)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','POST'])
@@ -127,7 +127,7 @@ def product_comment_view(request, product_id):
     try:
         product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         comments = Comment.objects.filter(product=product)
@@ -145,19 +145,19 @@ def product_comment_detail_view(request, product_id, comment_id):
     try:
         product= Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        error = {'message':'Product not found'}
+        error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     try:
         comment = get_object_or_404(Comment, pk=comment_id, product=product)
     except Comment.DoesNotExist:
-        error = {'message':'Comment not found'}
+        error = {'messages':'Comment not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'PUT':
         serializer = CommentSerializer(instance=comment, data=request.data)
         if serializer.is_valid():
             saved_product = serializer.save()
-            return Response(serializer.data)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(custom_error_message(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         comment.delete()

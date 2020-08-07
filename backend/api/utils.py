@@ -1,7 +1,8 @@
 def custom_error_message(errors):
-    error = []
+    error = ""
     for key in errors:
-        a = str(key+': '+ errors.get(key)[0])
-        error.append(a)
+        a = str(errors.get(key)[0])
+        error = error.join(a) + " "
+    error = error.strip()
     message = {'messages': error}
     return message

@@ -33,13 +33,20 @@ class ProductLinkPriceSerializer(serializers.ModelSerializer):
         model = ProductLinkPrice
         fields = ('id', 'product_url', 'product_price_curr', 'product_price_prev',)
         extra_kwargs = {
-            'product_url': {'validators': [UniqueValidator(queryset=ProductLinkPrice.objects.all())]},
+            'product_url': {
+                'validators': [UniqueValidator(queryset=ProductLinkPrice.objects.all(), message="This url already exists")],
+                'error_messages': {"blank": "URL cannot be blank", "null": "URL cannot be empty"},
+            },
         }
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'username', 'text')
+        extra_kwargs = {
+            'username': {'error_messages': {"blank": "Username cannot be blank", "null": "Username cannot be empty"}},
+        }
+    
 
 class ProductSerializer(serializers.ModelSerializer):
     product_link_price = ProductLinkPriceSerializer(required=False, many=True)
@@ -50,6 +57,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_description', 'product_type', 'product_image', 'product_lowest_price_curr', 'product_lowest_price_prev', 'product_link_price', 'comments',]
+        extra_kwargs = {
+            'product_name': {'error_messages': {"blank": "Product Name cannot be blank", "null": "Product Name cannot be empty"}},
+            'product_image': {'error_messages': {"invalid_image": "The uploaded image is either corrupted or invalid"}}
+        }
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
         #Each ProductLinkPrice needs to be associated with the Product 
