@@ -65,7 +65,7 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
+            //console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -119,7 +119,7 @@ class RequestServer extends Component {
             })
             return response.data
         } catch (error) {
-            console.log("Error: ", error.response.data);
+            //console.log("Error: ", error.response.data);
             return null
         }
     }

@@ -60,6 +60,7 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-posgr
 - `npm install react-bootstrap bootstrap`
 - `npm install --save react-toastify`
 - `npm i react-addons-update`
+- `npm install react-icons --save`
 
 ## Running frontend
 - Open up another terminal in the project folder

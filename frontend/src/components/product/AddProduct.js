@@ -9,6 +9,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import * as ProductModel from './ProductModel';
+import { withRouter } from 'react-router';
+import MessageController from '../../responses/MessageController';
+import Button from 'react-bootstrap/Button';
 
 const styles = {
     'button': {
@@ -76,15 +79,16 @@ class AddProduct extends Component {
     }
 
     addResponseHandler(response) {
-        if (response.status === 201) {
+        //Check Message Response
+        var isMessageValid = MessageController.accept(response);
+        if (isMessageValid){
             // var errorMessage = [];
             // for (const [key, value] of Object.entries(response)) {
                 // console.log(`${key}: ${value}`);
             toast("Product Added: ");
             this.clearFields();
-        } 
+        }
         else {
-            alert("Bad Request")
             var errorArray = [];
             for (const [key, value] of Object.entries(response)) {
                 console.log(value)
@@ -118,7 +122,6 @@ class AddProduct extends Component {
 
     addHandler = async(event) => {
         event.preventDefault()
-        console.log("Adding Product....");
 
         //Check empty field
         var fieldEmpty = this.isFieldEmpty()
@@ -134,8 +137,9 @@ class AddProduct extends Component {
         this.addResponseHandler(response);
     }
 
-    showErrorMsg() {
-        return <p>{this.state.errorMsg}</p>
+    goBackHandler = () => {
+        this.props.history.push('/product/all');
+        window.location.reload()
     }
 
     render(){
@@ -201,10 +205,8 @@ class AddProduct extends Component {
                                 </Select>
                             </InputLabel>
 
-                            <div className='errorMsg'>
-                                {(this.state.error ? this.showErrorMsg() : '')}
-                            </div>
-
+                            {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
+                            
                             <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
 
                             <RaisedButton 
@@ -214,6 +216,15 @@ class AddProduct extends Component {
                                 onClick={(event) => this.addHandler(event)}
                             />
                         </form>
+                        <div align = "center">
+                            <Button 
+                                id = "check-stock-button"
+                                variant="link"
+                                onClick={(event) => this.goBackHandler(event)}
+                                >Go Back
+                            </Button>
+                        </div>
+                        
                     </div>
                 </MuiThemeProvider>
             </div>
@@ -222,4 +233,4 @@ class AddProduct extends Component {
     }
 }
 
-export default AddProduct;
+export default withRouter(AddProduct);

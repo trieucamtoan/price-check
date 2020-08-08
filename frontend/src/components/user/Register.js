@@ -59,7 +59,7 @@ export default class Register extends Component {
         if (this.state.username === "" || this.state.password1 === "" || this.state.password2 === "") {
             this.setState({
                 error: true,
-                errorMsg: "Field cannot be empty"
+                errorMsg: "Field(s) cannot be empty"
             }, () => {
             })
             return true;
@@ -88,7 +88,7 @@ export default class Register extends Component {
                 const message = errorMessage.split(/[',','.']+/).join('\n');
                 this.setState({
                     error: true,
-                    errorMsg: message
+                    errorMsg: errorMessage
                 })
             }
 
@@ -103,7 +103,6 @@ export default class Register extends Component {
 
     registerHandler = async(event) => {
         event.preventDefault()
-        console.log("Registering...");
 
         //Check password match
         var passwordMatch = this.checkPasswordMatch()

@@ -11,6 +11,7 @@ import Select from '@material-ui/core/Select';
 import { withRouter } from 'react-router';
 import Collapsible from './Collapsible';
 import * as ProductModel from './ProductModel';
+import MessageController from '../../responses/MessageController';
 
 const styles = {
     'button': {
@@ -53,6 +54,11 @@ class UpdateProduct extends Component {
             errorMsgURL: '',
             newURL : '',
             urlArray: [],
+            modalTitle: '',
+            modalBody: '',
+            showModal: false,
+            stayHere: true,
+            redirectUrl: ''
         }
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.updateHandler = this.updateHandler.bind(this)
@@ -60,9 +66,6 @@ class UpdateProduct extends Component {
 
     populateData(response) {
         var ProductList = response;
-        // response.forEach(product => {
-        //     ProductList.push(product)
-        // });
         console.log(this.state.product)
         console.log("ProductList", ProductList);
         this.setState({
@@ -75,9 +78,7 @@ class UpdateProduct extends Component {
 
     constructUrlObject(url) {
         return {
-            product_url : url,
-            product_price_curr : "0",
-            produce_price_prev : "0"
+            product_url : url
         }
     }
 
@@ -129,47 +130,6 @@ class UpdateProduct extends Component {
         }))
     }
 
-    // showAvailableProductUrl() {
-    //     this.getProductURL()
-    //         .then(result => {return result})
-    //         .then((result) => {
-    //             console.log("RESPONSE from showAvailableProductURL: ", result)
-    //             if (result['message'] === undefined && result.length !== 0) {
-    //                 console.log("im here")
-    //                 if (this.state.urlArray !== result){
-    //                     this.setState({
-    //                         urlArray: result
-    //                     })
-    //                 }
-    //             }
-    //         })
-
-    //     if (this.state.urlArray.length !== 0){
-    //         return this.state.urlArray.map(function(product, i){
-    //             return (
-    //                 <div>
-    //                     {product.product_url}
-    //                 </div>
-    //             )
-    //         })
-    //     }
-    //     else {
-    //         return "No URL Available";
-    //     }
-    // }
-        
-        // console.log("show Avaialble Product : ", this.state.product.product_link_price)
-        // if (this.state.product.product_link_price.length !== 0){
-        //     return this.state.product.product_link_price.map(function(product, i){
-        //         return (
-        //             <div>{product.product_url}</div>
-        //         )
-        //     })
-        // }
-        
-        
-    
-
     clearFields() {
         this.setState({
             error: false,
@@ -177,7 +137,6 @@ class UpdateProduct extends Component {
             errorMsgURL: ''
         }, () => {
             document.getElementById("update-form").reset()
-            document.getElementById("add-url-form").reset()
         })
     }
 
@@ -199,8 +158,10 @@ class UpdateProduct extends Component {
           }
     
           else if (response.status === 200 || response.status === 204){
-            toast("Product URL Updated");
             this.clearFields();
+            alert("Product updated successfully")
+            this.props.history.push('/product/' + this.state.product.id);
+            window.location.reload()
           }
           else {
             this.setState({
@@ -262,29 +223,16 @@ class UpdateProduct extends Component {
         }
         var token = localStorage.getItem('token');
 
-        // var product = this.state.product
-        // console.log('product', product)
-
         let product_link_price_copy = this.state.product.product_link_price.slice()
         var newUrlObject = this.constructUrlObject(this.state.newURL)
         product_link_price_copy.push(newUrlObject)
-        // console.log("product_link_price_copy",product_link_price_copy)
         this.setState(state => ({
             ...this.state.product, 
             product_link_price: product_link_price_copy
             }))
         var response = await RequestServer.updateProductURL(token, this.state.product.id, newUrlObject)
         this.updateResponseHandler(response);
-        //console.log("ADD URL HANDLER: ", this.state.product.product_link_price)
         
-    }
-
-    showErrorMsg() {
-        return <p>{this.state.errorMsg}</p>
-    }
-
-    showErrorMsgURL() {
-        return <p>{this.state.errorMsgURL}</p>
     }
 
     render(){
@@ -336,18 +284,9 @@ class UpdateProduct extends Component {
                                         }
                                 </Select>
                             </InputLabel>
-                            <br/> 
-                            {/* <div>
-                                <p>Available Product URL</p>
-                                <Collapsible url = {this.state.urlArray}/>
-                            </div> */}
                             
                             <br/>
-
-                            <div className='errorMsg'>
-                                {(this.state.error ? this.showErrorMsg() : '')}
-                            </div>
-
+                            {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
                             <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
 
                             <RaisedButton 
@@ -356,31 +295,6 @@ class UpdateProduct extends Component {
                                 style={styles.button}
                                 onClick={(event) => this.updateHandler(event)}
                             />
-                        </form>
-                        <hr/>
-
-                        <form id="add-url-form">   
-                            <h2 className = "title">Add Product URL</h2>
-                            
-                            <TextField
-                                id="product-url-field"
-                                inputStyle={styles.black}
-                                onChange={(event,newValue) => {
-                                    this.setState({newURL: newValue})
-                                }}
-                            />
-
-                            <RaisedButton 
-                                label="Add URL" 
-                                primary={true} 
-                                style={styles.button}
-                                onClick={(event) => this.addURLHandler(event)}/>
-                            <br/> 
-
-                            <div className='errorMsgUrl'>
-                                {(this.state.error ? this.showErrorMsgURL() : '')}
-                            </div>
-
                         </form>
                     </div>
                 </MuiThemeProvider>

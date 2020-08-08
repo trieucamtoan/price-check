@@ -47,7 +47,6 @@ export default class App extends Component {
       )
     }
     else {
-      console.log("I'm here")
       return (
         <DefaultNav/>
       )
