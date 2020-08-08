@@ -61,11 +61,11 @@ export default class WishlistPage extends Component {
         return (
             <div>
                 <br/>
-                <h2 class='title'>My Wishlist</h2>
+                <h2 className='title'>My Wishlist</h2>
                 <br/>
                 <p>{this.state.msg}</p>
                 {this.state.product.map((p) => <WishlistCard
-                    key={p.id} product_name = {p.product_name} product_image = {p.product_image} product_description = {p.product_description}
+                    key={p.id} id={p.id} product_name = {p.product_name} product_image = {p.product_image} product_description = {p.product_description}
                     product_price = {p.product_lowest_price_curr}/>)}
                 <br/>
             </div>

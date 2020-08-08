@@ -127,12 +127,12 @@ class RequestServer extends Component {
 
     async addWishlistProduct(token, id) {
         try {
-            var response = await axios.get(this.getServerLocation() + '/products/'+ id, {
+            var response = await axios.post(this.getServerLocation() + '/wishlist/'+ id, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("GET PRODUCT REQUEST SERVER")
+            console.log("Add Wishlist item REQUEST SERVER")
             return response.data
         } catch (error) {
             console.log("Error: ", error.response.data);
@@ -142,12 +142,12 @@ class RequestServer extends Component {
 
     async removeWishlistProduct(token, id) {
         try {
-            var response = await axios.get(this.getServerLocation() + '/products/'+ id, {
+            var response = await axios.delete(this.getServerLocation() + '/wishlist/'+ id, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("GET PRODUCT REQUEST SERVER")
+            console.log("Remove Wishlist item REQUEST SERVER")
             return response.data
         } catch (error) {
             console.log("Error: ", error.response.data);
