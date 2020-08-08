@@ -17,6 +17,7 @@ celery = "*"
 scrapyd-client = "*"
 python-scrapyd-api = "*"
 pillow = "*"
+bleach = "*"
 
 [dev-packages]
 

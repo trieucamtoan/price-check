@@ -15,7 +15,7 @@ class PricespiderSpider(scrapy.Spider):
             self.start_urls.append(provided_url)
 
     def start_requests(self):
-        if len(self.start_urls) < 0:
+        if len(self.start_urls) <= 0:
             self.get_url_from_db()
         for url in self.start_urls:
             if re.search("newegg", url) != None:

@@ -146,7 +146,8 @@ def product_comment_view(request, product_id):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data, context={'product_id': product_id})
+        data = {"username": request.user.username, "text": request.data.get('text')}
+        serializer = CommentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(product=product)
             return Response(status=status.HTTP_201_CREATED)
@@ -168,7 +169,8 @@ def product_comment_detail_view(request, product_id, comment_id):
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'PUT':
-        serializer = CommentSerializer(instance=comment, data=request.data)
+        data = {"username": request.user.username, "text": request.data.get('text')}
+        serializer = CommentSerializer(instance=comment, data=data)
         if serializer.is_valid(raise_exception=True):
             saved_product = serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -236,7 +238,6 @@ def wishlist_detail_view(request, product_id):
         data = {'product_id_list': product_id_list}
         
         serializer = WishlistSerializer(instance=item, data=data)
-        print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
