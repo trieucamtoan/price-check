@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField';
 import RequestServer from '../../requests/RequestServer';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import RemoveFromWishListModal from './RemoveFromWishlistModal';
 
 export default class WishlistCard extends Component {
     constructor(props){
@@ -40,6 +41,7 @@ export default class WishlistCard extends Component {
 
     render() {
         return (
+            <div>
             <Card style = {styles.card}>
             <Card.Header as="h5">
                 {this.props.product_name}
@@ -61,7 +63,7 @@ export default class WishlistCard extends Component {
             <Card.Body>
                 <Card.Img
                     variant="top"
-                    src= {this.props.product_image}
+                    src= {'http://localhost:8000' + this.props.product_image}
                     style = {styles.image} />
                 <Card.Text>
                     {this.props.product_description}
@@ -69,11 +71,15 @@ export default class WishlistCard extends Component {
 
             </Card.Body>
             </Card>
+            <br/>
+            </div>
         );
     }
 
 
 }
+
+//<RemoveFromWishListModal id = {this.props.product.id}/>
 
 const styles = {
     'card': {
