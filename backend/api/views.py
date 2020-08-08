@@ -226,7 +226,7 @@ def wishlist_detail_view(request, product_id):
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'POST':
         #serializer doing the adding to the wishList
-        if product_id in item.product_id_list:
+        if item.product_id_list is not None and product_id in item.product_id_list:
             error = {'messages':'Item already added to wishlist'}
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
         product_id_list = []
