@@ -34,8 +34,7 @@ export default class WishlistCard extends Component {
                     className="float-right"
                     >Check Stock
                 </Button>
-
-                <p className="float-right">Lowest Price: <span>{this.props.product_price}</span></p>
+                <p className="float-right" style={styles.pText}>Lowest Price: <span>{this.props.product_price}</span></p>
             </Card.Header>
             <Card.Body>
                 <Card.Img
@@ -63,6 +62,8 @@ const styles = {
     },
     'button': {
         paddingLeft : '20px',
+        paddingBottom: '0px',
+        paddingTop: '0px',
         visibility: true
     },
     'image': {
@@ -72,6 +73,9 @@ const styles = {
     },
     'black': {
         color: 'black'
+    },
+    'pText': {
+        margin: '0px'
     }
 };
 
