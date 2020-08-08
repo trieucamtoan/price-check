@@ -9,6 +9,7 @@ import MessageController from '../../../responses/MessageController';
 
 //This component loads component at /products/all
 class ProductsPage extends Component {
+    _isMounted = false; //Prevent setState on unmounted components
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +21,15 @@ class ProductsPage extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
+        
         this.getAllProducts();
+        
     }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
 
     populateData(response) {
 
@@ -46,16 +54,33 @@ class ProductsPage extends Component {
             )
         }
         else {
-            const productCards = this.state.products.map(function (product, i) {
+            const product_type = this.props.product_type
+            
+            //Filter the array
+            var productCards = this.state.products.filter(function(product) {
+                return (product_type === "ALL" || product_type === product.product_type)
+            })
+            
+            //Map and return ProductCard components
+            productCards = productCards.map(function(product, i){
                 //Check if the product has price URL available yet
-                if (product.product_link_price.length === 0) {
-                    return (<ProductCard key={i} product={product} lowest_price="0" />)
+                if (product.product_link_price.length !== 0) {
+                    //Return JSX element
+                    //var lowestPrice = ProductModel.updateLowestPrice(product.product_link_price)
+                    var lowestPrice = product.product_lowest_price_curr
+                    if ( lowestPrice === null){
+                        lowestPrice = "N/A"
+                    }
+                    return (<ProductCard key={i} product={product} lowest_price={lowestPrice} />)
                 }
-                //Return JSX element
-                var lowestPrice = ProductModel.updateLowestPrice(product.product_link_price)
-                return (<ProductCard key={i} product={product} lowest_price={lowestPrice} />)
+                else {
+                    return (<ProductCard key={i} product={product} lowest_price= "N/A" />)
+                }
+            })
+            console.log("Product card" ,productCards)
+            if (productCards.length === 0){
+                return <h2 className="title">No Product Found</h2>
             }
-            )
             return productCards
         }
     }
@@ -65,14 +90,15 @@ class ProductsPage extends Component {
         var response = await RequestServer.getAllProducts(token)
         //Call message controller 
         var message = MessageController.accept(response)
-
-        if (message === null || message === false) {
-            this.setState({
-                error: true
-            })
-        }
-        else {
-            this.populateData(response);
+        if (this._isMounted) {
+            if (message === null || message === false) {
+                this.setState({
+                    error: true
+                })
+            }
+            else {
+                this.populateData(response);
+            }
         }
     }
 
@@ -82,9 +108,10 @@ class ProductsPage extends Component {
     }
 
     render() {
+        console.log(this.props.product_type)
         return (
             <div>
-                <SearchBar title="All Products" />
+                <SearchBar title={this.props.title} />
                 <Button
                     variant="dark"
                     onClick={(event) => this.addButtonHandler(event)}

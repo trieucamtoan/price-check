@@ -63,6 +63,9 @@ export function updateLowestPrice(product_link_price) {
         //Initialize the first price to be the lowest
         console.log("PRODUCT ARRAY", product_link_price[0])
         var current_lowest_price = product_link_price[0].product_price_curr;
+        if (current_lowest_price === null){
+            current_lowest_price = "N/A"
+        }
         //Loop through the product_link_price array to update the current lowest price
         product_link_price.forEach(function(obj){
             if (parseFloat(obj.product_price_curr) < parseFloat(current_lowest_price)){
