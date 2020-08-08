@@ -39,9 +39,9 @@ def custom_exception_handler(exc, context):
             
             return Response(message, status=response.status_code)
     else:
-        # message = {'messages': 'Server error, try again later'}
-        # return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return response
+        message = {'messages': 'Server error, try again later'}
+        return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # return response
 
 # def custom_error_message(errors):
 #     error = ""
