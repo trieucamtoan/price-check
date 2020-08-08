@@ -49,7 +49,7 @@ class CommentSerializer(serializers.ModelSerializer):
         }
     def validate(self, attrs):
         for key in attrs:
-            if attrs[key] is not None:
+            if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
             print(attrs[key])
         return attrs
@@ -69,7 +69,7 @@ class ProductSerializer(serializers.ModelSerializer):
         }
     def validate(self, attrs):
         for key in attrs:
-            if attrs[key] is not None:
+            if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
             print(attrs[key])
         return attrs
@@ -130,7 +130,7 @@ class WishlistSerializer(serializers.ModelSerializer):
         }
     def validate(self, attrs):
         for key in attrs:
-            if attrs[key] is not None:
+            if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
             print(attrs[key])
         return attrs

@@ -238,7 +238,6 @@ def wishlist_detail_view(request, product_id):
         data = {'product_id_list': product_id_list}
         
         serializer = WishlistSerializer(instance=item, data=data)
-        print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
