@@ -24,7 +24,10 @@ def custom_exception_handler(exc, context):
             for key in response.data:
                 a = response.data.get(key)[0]
                 if(key in user_check_field):
-                    message.append(str(key).capitalize() + " is missing or invalid.")
+                    if (key == "password1" or key == "password2"):
+                        message.append("Invalid Password Combination.")
+                    else:
+                        message.append(str(key).capitalize() + " is invalid.")
                 else:
                     message.append(str(a))
             error = " ".join(message)
@@ -39,9 +42,9 @@ def custom_exception_handler(exc, context):
             
             return Response(message, status=response.status_code)
     else:
-        # message = {'messages': 'Server error, try again later'}
-        # return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return response
+        message = {'messages': 'Server error, try again later'}
+        return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # return response
 
 # def custom_error_message(errors):
 #     error = ""

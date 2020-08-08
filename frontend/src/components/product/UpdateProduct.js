@@ -11,6 +11,7 @@ import Select from '@material-ui/core/Select';
 import { withRouter } from 'react-router';
 import Collapsible from './Collapsible';
 import * as ProductModel from './ProductModel';
+import MessageController from '../../responses/MessageController';
 
 const styles = {
     'button': {
@@ -53,6 +54,11 @@ class UpdateProduct extends Component {
             errorMsgURL: '',
             newURL : '',
             urlArray: [],
+            modalTitle: '',
+            modalBody: '',
+            showModal: false,
+            stayHere: true,
+            redirectUrl: ''
         }
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.updateHandler = this.updateHandler.bind(this)
@@ -75,9 +81,7 @@ class UpdateProduct extends Component {
 
     constructUrlObject(url) {
         return {
-            product_url : url,
-            product_price_curr : "0",
-            produce_price_prev : "0"
+            product_url : url
         }
     }
 
@@ -199,8 +203,10 @@ class UpdateProduct extends Component {
           }
     
           else if (response.status === 200 || response.status === 204){
-            toast("Product URL Updated");
             this.clearFields();
+            alert("Product updated successfully")
+            this.props.history.push('/product/' + this.state.product.id);
+            window.location.reload()
           }
           else {
             this.setState({
@@ -287,6 +293,16 @@ class UpdateProduct extends Component {
         return <p>{this.state.errorMsgURL}</p>
     }
 
+    showModal() {
+        this.setState({
+            modalTitle: '',
+            modalBody: '',
+            showModal: true,
+            stayHere: true,
+            redirectUrl: ''
+        })
+    }
+
     render(){
         console.log("Rendering....")
         return (
@@ -343,11 +359,7 @@ class UpdateProduct extends Component {
                             </div> */}
                             
                             <br/>
-
-                            <div className='errorMsg'>
-                                {(this.state.error ? this.showErrorMsg() : '')}
-                            </div>
-
+                            {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
                             <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
 
                             <RaisedButton 
@@ -362,26 +374,27 @@ class UpdateProduct extends Component {
                         <form id="add-url-form">   
                             <h2 className = "title">Add Product URL</h2>
                             
-                            <TextField
+                            {/* <TextField
                                 id="product-url-field"
                                 inputStyle={styles.black}
                                 onChange={(event,newValue) => {
                                     this.setState({newURL: newValue})
                                 }}
-                            />
+                            /> */}
 
-                            <RaisedButton 
+                            {/* <RaisedButton 
                                 label="Add URL" 
                                 primary={true} 
                                 style={styles.button}
                                 onClick={(event) => this.addURLHandler(event)}/>
-                            <br/> 
+                            <br/>  */}
 
-                            <div className='errorMsgUrl'>
+                            {/* <div className='errorMsgUrl'>
                                 {(this.state.error ? this.showErrorMsgURL() : '')}
-                            </div>
-
+                            </div> */}
                         </form>
+
+                        
                     </div>
                 </MuiThemeProvider>
             </div>

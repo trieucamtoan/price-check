@@ -87,7 +87,7 @@ class DeleteProductModal extends Component {
               className = "float-right"
               onClick={() => this.handleShow()}
               >
-                Delete ID : {this.props.id}
+                Delete
               </Button>
         
               <Modal

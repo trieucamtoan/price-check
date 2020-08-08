@@ -79,7 +79,7 @@ export default class Login extends Component {
 render() {
     return (
       <div className = "page-container">
-        <h2 className = "title">Login Form</h2>
+        <h2 className = "title">Please Login</h2>
         <MuiThemeProvider>
             <div className = 'login-form' align = "center">
             <TextField
