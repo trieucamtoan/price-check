@@ -12,6 +12,8 @@ var styles = {
     },
     'button': {
         paddingLeft : '20px',
+        paddingBottom: '0px',
+        paddingTop: '0px',
         visibility: true
     },
     'image': {
@@ -28,6 +30,9 @@ var styles = {
     },
     'black': {
         color: 'black'
+    },
+    'pText': {
+        margin: '0px'
     }
 };
 
@@ -69,7 +74,7 @@ class ProductCard extends Component {
                     className="float-right"
                     >Check Stock
                 </Button>
-                <p className="float-right">Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
+                <p className="float-right" style={styles.pText}>Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
             </Card.Header>
             <Card.Body>
                 <Card.Img 
