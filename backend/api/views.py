@@ -8,11 +8,11 @@ from rest_framework import status
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse,JsonResponse
-from api.models import Product, Comment
+from .models import Product, Comment
 from .serializers import *
 import json, time
-from api.utils import *
-from api.tasks import update_price
+from .utils import *
+from .tasks import update_price
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
