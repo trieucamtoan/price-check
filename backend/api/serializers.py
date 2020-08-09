@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import *
 from rest_framework.validators import UniqueValidator
 from rest_auth.registration.serializers import RegisterSerializer
-
+import bleach
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
 # 	password2= serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -47,7 +47,12 @@ class CommentSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'username': {'error_messages': {"blank": "Username cannot be blank", "null": "Username cannot be empty"}},
         }
-    
+    def validate(self, attrs):
+        for key in attrs:
+            if attrs[key] is not None and type(attrs[key]) == str:
+                attrs[key] = bleach.clean(attrs[key])
+            
+        return attrs
 
 class ProductSerializer(serializers.ModelSerializer):
     product_link_price = ProductLinkPriceSerializer(required=False, many=True)
@@ -62,6 +67,12 @@ class ProductSerializer(serializers.ModelSerializer):
             'product_name': {'error_messages': {"blank": "Product Name cannot be blank", "null": "Product Name cannot be empty"}},
             'product_image': {'error_messages': {"invalid_image": "The uploaded image is either corrupted or invalid"}}
         }
+    def validate(self, attrs):
+        for key in attrs:
+            if attrs[key] is not None and type(attrs[key]) == str:
+                attrs[key] = bleach.clean(attrs[key])
+            
+        return attrs
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
         #Each ProductLinkPrice needs to be associated with the Product
@@ -117,3 +128,9 @@ class WishlistSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'username': {'error_messages': {"blank": "Username cannot be blank", "null": "Username cannot be empty"}},
         }
+    def validate(self, attrs):
+        for key in attrs:
+            if attrs[key] is not None and type(attrs[key]) == str:
+                attrs[key] = bleach.clean(attrs[key])
+            
+        return attrs

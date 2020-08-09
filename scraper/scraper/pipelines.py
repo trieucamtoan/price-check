@@ -48,14 +48,12 @@ class ScraperPipeline:
                 # Get the old curr price
                 # Update old prev with old curr
                 # Update curr with new price
-                price_SQL = "SELECT product_price_curr FROM api_productlinkprice WHERE product_url = \'{}\'".format(item['url'])
-                self.cur.execute(price_SQL)
+                self.cur.execute("SELECT product_price_curr FROM api_productlinkprice WHERE product_url = %(product_url)s", {"product_url": item['url']})
                 product_price_curr = self.cur.fetchone()[0]
                 if product_price_curr is not None:
-                    update_price_prev_SQL = "UPDATE api_productlinkprice SET product_price_prev = {} WHERE product_url = \'{}\'".format(product_price_curr, item['url'])
-                    self.cur.execute(update_price_prev_SQL)
-                update_price_curr_SQL = "UPDATE api_productlinkprice SET product_price_curr = {} WHERE product_url = \'{}\'".format(item['price'], item['url'])
-                self.cur.execute(update_price_curr_SQL)
+                    self.cur.execute("UPDATE api_productlinkprice SET product_price_prev = %(product_price_curr)s WHERE product_url = %(product_url)s", {"product_price_curr":product_price_curr, "product_url":item['url']})
+                    
+                self.cur.execute("UPDATE api_productlinkprice SET product_price_curr = %(product_price_curr)s WHERE product_url = %(product_url)s", {"product_price_curr":item['price'], "product_url":item['url']})
                 self.connection.commit()
             except (Exception, psycopg2.Error) as error :
                 print ("Error while fetching data from PostgreSQL", error)
