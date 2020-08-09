@@ -80,6 +80,15 @@ def detail_product_view(request,product_id):
         return Response(serializer.data)
     elif request.method == 'DELETE':
         product.delete()
+        wishlists = Wishlist.objects.all()
+        for wishlist in wishlists:
+            product_id_list = wishlist.product_id_list
+            if product_id_list is not None:
+                try:
+                    product_id_list.remove(product_id)
+                    wishlist.save()
+                except ValueError:
+                    pass
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
         serializer = ProductSerializer(instance=product, data=request.data, partial=True)

@@ -4,23 +4,25 @@ from scraper.items import ProductItem
 from scrapy_splash import SplashRequest
 from decimal import *
 
-# Custom execution script for rendering dynamic page on newegg
-lua_script_newegg = """
-    function main(splash, args)
-        assert(splash:go(args.url))
-        while not splash:select('.price-current') do
-            splash:wait(0.1)
-        end
-        return {
-            html = splash:html()
-        }
+lua_best_buy= """
+function main(splash, args)
+    assert(splash:go(args.url))
+    splash:set_custom_headers({
+       ["x-custom-header"] = "splash"
+    })
+    while not splash:select('#productDetails') do
+        splash:wait(0.1)
     end
+    return {
+        html = splash:html()
+    }
+end
 """
 
 class PricespiderSpider(scrapy.Spider):
     name = 'pricespider'
-    allowed_domains = ['newegg.ca','bestbuy.ca']
-    start_urls = []
+    allowed_domains = ['newegg','bestbuy']
+    start_urls = ["https://www.bestbuy.ca/en-ca/product/amd-ryzen-5-3400g-quad-core-4-core-3-70-ghz-processor-retail-pack/13940189"]
 
     def __init__(self, provided_url=None, *args, **kwargs):
         super(PricespiderSpider, self).__init__(*args, **kwargs) # <- important
@@ -28,13 +30,20 @@ class PricespiderSpider(scrapy.Spider):
             self.start_urls.append(provided_url)
 
     def start_requests(self):
-        if len(self.start_urls) < 0:
+        if len(self.start_urls) <= 0:
             self.get_url_from_db()
         for url in self.start_urls:
-            if re.search("newegg.ca", url) != None:
+            if re.search("newegg", url) != None:
+                # newegg.lua is a custom execution script for rendering dynamic page on newegg
                 yield SplashRequest(url=url, callback=self.newegg_parse, args={
-                    'lua_source': lua_script_newegg
+                    'lua_source': 'newegg.lua'
                 })
+            elif re.search("bestbuy", url) != None:
+                yield SplashRequest(url=url, callback=self.bestbuy_parse, args={
+                    'lua_source': lua_best_buy,
+                    'timeout': 360
+                })
+                # yield scrapy.Request(url=url, callback=self.bestbuy_parse)
             
     def newegg_parse(self, response):
         item = ProductItem()
@@ -48,6 +57,15 @@ class PricespiderSpider(scrapy.Spider):
                 price_cent = re.sub('[^0-9]', '', price_cent[0])
 
                 item['price'] = Decimal(price_dollar+'.'+price_cent)
+        yield item
+
+    def bestbuy_parse(self, response):
+        item = ProductItem()
+        item['url'] = response.url
+        item['price'] = None
+        if response.status == 200:
+            price_dollar = response.xpath("(//meta[@itemprop='price'])/@content").extract_first()
+            item['price'] = Decimal(price_dollar)
         yield item
 
     def get_url_from_db(self):
