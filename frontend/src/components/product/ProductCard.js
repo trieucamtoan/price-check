@@ -79,7 +79,7 @@ class ProductCard extends Component {
             <Card.Body>
                 <Card.Img 
                     variant="top" 
-                    src= {this.props.product.product_image}
+                    src= {'http://localhost:8000' + this.props.product.product_image}
                     style = {styles.image} />
                 <Card.Text>
                     {this.props.product.product_description}

@@ -4,8 +4,33 @@ import RequestServer from '../../requests/RequestServer';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import RemoveFromWishListModal from './RemoveFromWishlistModal';
+import { Route , withRouter} from 'react-router-dom';
 
-export default class WishlistCard extends Component {
+const styles = {
+    'card': {
+        marginTop: '5x',
+        marginBottom: '5px'
+    },
+    'button': {
+        paddingLeft : '20px',
+        paddingBottom: '0px',
+        paddingTop: '0px',
+        visibility: true
+    },
+    'image': {
+        width: '300px',
+        height: 'auto',
+        objectFit: 'contain',
+    },
+    'black': {
+        color: 'black'
+    },
+    'pText': {
+        margin: '0px'
+    }
+};
+
+class WishlistCard extends React.Component {
     constructor(props){
         super(props);
         this.state={
@@ -16,7 +41,10 @@ export default class WishlistCard extends Component {
     }
 
     buttonHandler = (e) => {
-        //DO stuff???
+        //const { history } = this.props;
+        //console.log("history", history)
+        this.props.history.push({pathname: '/product/' + this.props.id});
+        window.location.reload()
     }
 
 
@@ -51,31 +79,8 @@ export default class WishlistCard extends Component {
             </div>
         );
     }
-
-
 }
+export default withRouter(WishlistCard);
 
-const styles = {
-    'card': {
-        marginTop: '5x',
-        marginBottom: '5px'
-    },
-    'button': {
-        paddingLeft : '20px',
-        paddingBottom: '0px',
-        paddingTop: '0px',
-        visibility: true
-    },
-    'image': {
-        width: '300px',
-        height: 'auto',
-        objectFit: 'contain',
-    },
-    'black': {
-        color: 'black'
-    },
-    'pText': {
-        margin: '0px'
-    }
-};
+
 
