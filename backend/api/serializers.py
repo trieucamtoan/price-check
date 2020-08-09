@@ -51,7 +51,7 @@ class CommentSerializer(serializers.ModelSerializer):
         for key in attrs:
             if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
-            print(attrs[key])
+            
         return attrs
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -71,7 +71,7 @@ class ProductSerializer(serializers.ModelSerializer):
         for key in attrs:
             if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
-            print(attrs[key])
+            
         return attrs
         #First, create product instance, then product_link_price instance
         #Each dictionary of the list has keys called 'url' and 'price'
@@ -132,5 +132,5 @@ class WishlistSerializer(serializers.ModelSerializer):
         for key in attrs:
             if attrs[key] is not None and type(attrs[key]) == str:
                 attrs[key] = bleach.clean(attrs[key])
-            print(attrs[key])
+            
         return attrs
