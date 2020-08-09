@@ -127,7 +127,7 @@ class RequestServer extends Component {
 
     async addWishlistProduct(token, id) {
         try {
-            var response = await axios.post(this.getServerLocation() + '/wishlist/'+ id, {
+            var response = await axios.post(this.getServerLocation() + '/wishlist/'+ id, {}, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }

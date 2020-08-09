@@ -35,6 +35,27 @@ export default class AddToWishListModal extends Component {
     
     addHandler = async(event) => {
 
+        event.preventDefault()
+            console.log("Pressed add button...");
+
+            //Show the Modal Dialog
+            this.setState({
+               show: true
+            })
+            var token = localStorage.getItem('token');
+            var response = await RequestServer.addWishlistProduct(token, this.props.id)
+
+            if (response !== null) {
+                this.setState({
+                    show: false
+                })
+                alert("Product Added Successfully")
+                window.location.reload()
+            }
+            else {
+                alert("Failed to Add. Probably the product has already been added")
+
+            }
         // event.preventDefault()
         // console.log("Pressed deleted button...");
         

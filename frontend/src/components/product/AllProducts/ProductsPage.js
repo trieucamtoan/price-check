@@ -117,7 +117,8 @@ class ProductsPage extends Component {
                     onClick={(event) => this.addButtonHandler(event)}
                 >Add New Product
                 </Button>
-                <br />
+                <br/>
+                <br/>
                 {this.populateManyProductCards()}
                 <h2 className = "title">
                     {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
