@@ -134,8 +134,7 @@ class RequestServer extends Component {
             console.log("GET PRODUCT REQUEST SERVER")
             return response.data
         } catch (error) {
-            console.log("Error: ", error.response.data);
-            return null
+            return response
         }
     }
 
@@ -182,11 +181,11 @@ class RequestServer extends Component {
             return response
         }
     }
-
-    async updateProductURL(token, id, url){
+    //POST REQUEST
+    addProductURL(token, id, url){
         console.log("URL: ", url)
         try {
-            var response = await axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
+            var response = axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }
@@ -194,6 +193,22 @@ class RequestServer extends Component {
             return response.data
         } catch (error) {
             console.log("Error: ", error.response.data);
+            return error.response.data
+        }
+    }
+    //PUT REQUEST
+    async updateProductURLObject(token, id, urlId, urlObject){
+        console.log("URL Object: ", urlObject)
+        try {
+            var response = await axios.put(this.getServerLocation() + '/products/' + id + '/url/' + urlId, urlObject, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            console.log("Response... ", response)
             return error.response.data
         }
     }

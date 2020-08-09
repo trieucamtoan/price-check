@@ -22,7 +22,6 @@ class ProductsPage extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        
         this.getAllProducts();
         
     }
@@ -60,7 +59,7 @@ class ProductsPage extends Component {
             var productCards = this.state.products.filter(function(product) {
                 return (product_type === "ALL" || product_type === product.product_type)
             })
-            
+
             //Map and return ProductCard components
             productCards = productCards.map(function(product, i){
                 //Check if the product has price URL available yet

@@ -14,11 +14,12 @@ import ProductsPage from "./components/product/AllProducts/ProductsPage";
 import ProductPage from "./components/product/ProductPage";
 import AddProduct from "./components/product/AddProduct";
 import UpdateProduct from "./components/product/UpdateProduct";
+import NoMatchPage from './components/NoMatchPage';
 
 const Routes = () => (
   <Switch>
     <Route exact path= '/' component={Home}/>
-    <Route exact path= '/product' component={Product}/>
+    <Route exact path= '/product' component={Home}/>
     <Route exact path= '/login' component={Login}/>
     <Route exact path= '/register' component={Register}/>
     <PrivateRoute exact path="/gpu" component={GpuPage}/>
@@ -38,6 +39,8 @@ const Routes = () => (
     <PrivateRoute path= '/profile' component={Profile}/>
     <PrivateRoute path= '/wishlist' component={Wishlist}/>
     <PrivateRoute path= '/logout' component={Logout}/>
+
+    <Route component={NoMatchPage} />
   </Switch>
 )
 

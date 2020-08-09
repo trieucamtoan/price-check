@@ -8,51 +8,73 @@ import RequestServer from '../../requests/RequestServer';
 import '../../App.css';
 import * as ProductModel from './ProductModel';
 import AddURLModal from './AddURLModal';
-import { IoIosMore } from "react-icons/io";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Pagination from 'react-bootstrap/Pagination'
+import MessageController from '../../responses/MessageController';
+import NoMatchPage from '../NoMatchPage';
+import Modal from 'react-bootstrap/Modal';
+import InputGroup from 'react-bootstrap/InputGroup';
+
+import FormControl from 'react-bootstrap/FormControl';
+import Form from 'react-bootstrap/Form';
 import '../../App.css';
 
 //This Component is used for displaying list of available websites with prices according to a Product
+
 
 export default class ProductPage extends Component {
     constructor(props){
         super(props);
         this.state={
-            empty : true,
             product: ProductModel.product,
             errorMsg: '',
+            error: false,
+            errorNotFound: false,
             lowest_price : 0,
+            show: false,
+            actionSuccess : false,
+            modalTitle: '',
+            modalBody: '',
+            editUrlId : '',
+            editURL : '',
+            editPrice : '',
+            waitingMessage: ''
         }
+        this.editURLHandler = this.editURLHandler.bind(this)
     }
 
     async getProduct(id) {
         var token = localStorage.getItem('token');
         var response = await RequestServer.getProduct(token, id)
+        //Call message controller 
+        var message = MessageController.accept(response)
+        if (message === null || message === false) {
+            this.setState({
+                error: true,
+                errorNotFound: true,
+            })
+        }
         return response
     }
 
     componentDidMount() {
         //Get product info based on ID params
         const response = this.getProduct(this.props.match.params.id)
-            .then(result => { 
-                if (result === null){
-                    throw "Error getting Product"
-                }
-                return result
-            })
+            .then()
             .then(result => {
                 this.setState({
-                    empty: false,
+                    error: false,
                     product: result
                 })
                 this.updateLowestPrice();
             })
             .catch((error) => {
+                console.log("No product found")
                 this.setState({
                     errorMsg: error,
-                    empty: true
+                    error: true,
+                    errorNotFound: true,
                 })
             })
     }
@@ -63,91 +85,263 @@ export default class ProductPage extends Component {
     }
 
     shouldComponentUpdate() {
-        if (!this.state.empty){
+        if (!this.state.error || !this.state.errorNotFound){
             return true
         }
         return false;
     }
 
-   populateAProductCard() {
+    displayFeedBack() {
+        console.log("display feedback: error : ", this.state.error, " with msg : ", this.state.errorMsg)
         return (
-            <ProductCard 
-            product = {this.state.product} 
-            lowest_price = {this.state.lowest_price}/>
+            <div>
+                {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
+                <div>
+                    <p>{this.state.waitingMessage}</p>
+                </div>
+            </div>
         ) 
     }
-    populateManyLists() {
-        if (this.state.product.product_link_price === undefined){
+
+    displayModalBody(){
+        if (this.state.modalTitle === "Delete URL") {
+            return (<Modal.Body>
+                {this.state.modalBody}
+            </Modal.Body>)
+        }
+        else {
+            var body = 
+            <Form>
+                <Form.Group controlId="formGroupURL">
+                    <Form.Label>URL</Form.Label>
+                    <FormControl
+                    placeholder={this.state.editURL}
+                    aria-label={this.state.editURL}
+                    aria-describedby="basic-addon2"
+                    as="textarea" rows="3"
+                    onChange={(event) => {
+                        this.setState({editURL: event.target.value})
+                    }}
+                    />
+                </Form.Group>
+                <Form.Group controlId="formGroupPrice">
+                    <Form.Label>Price</Form.Label>
+                    <FormControl
+                    placeholder={this.state.editPrice}
+                    aria-label={this.state.editPrice}
+                    aria-describedby="basic-addon2"
+                    onChange={(event) => {
+                        this.setState({editPrice: event.target.value})
+                    }}
+                    />
+                </Form.Group>
+                {this.displayFeedBack()}
+            </Form>
+            return (
+                <Modal.Body>
+                    {body}   
+                </Modal.Body>
+            )
+        }
+        
+    }
+
+    updateURLHandler = async (event) => {
+        console.log("Updating...")
+        var token = localStorage.getItem('token')
+        //Change the waiting message
+        this.setState({
+            waitingMessage: "Update the URL. Please wait...",
+            errorMsg: errorMessage
+        })
+
+        var urlObject = ProductModel.product_url_info_update
+        urlObject.product_url = this.state.editURL
+        urlObject.product_price_curr = this.state.editPrice
+        console.log("Update handler: ", urlObject.product_url, urlObject.product_price_curr)
+        var response = await RequestServer.updateProductURLObject(token, this.state.product.id, this.state.editUrlId, urlObject)
+        
+        //Check Message Response
+        var isMessageValid = MessageController.accept(response);
+        if (isMessageValid === true){
+            // var errorMessage = [];
+            // for (const [key, value] of Object.entries(response)) {
+                // console.log(`${key}: ${value}`);
+            
+            alert("URL Updated")
+            window.location.reload()
+        }
+
+        else {
+            var errorMessage = "";
+            for (const [key, value] of Object.entries(response)) {
+                errorMessage = value;
+            }
+            this.setState({
+                error: true,
+                errorMsg: errorMessage,
+                waitingMessage: ""
+            })
+        }
+    }
+
+    editURLHandler = (event) => {
+        var token = localStorage.getItem('token')
+        var product_id = this.state.product.id
+        var url_id = event.currentTarget.id
+        console.log(event.currentTarget.id)
+        var url = event.currentTarget.getAttribute('value1');
+        console.log(url)
+        var getPrice = event.currentTarget.getAttribute('value2')
+        console.log(getPrice)
+        this.setState({
+            show: true,
+            actionSuccess : false,
+            modalTitle: 'Edit URL',
+            editUrlId: url_id,
+            editURL: url,
+            editPrice: getPrice
+        })
+    }
+
+    deleteURLHandler = (event) => {
+        var token = localStorage.getItem('token')
+        var product_id = this.state.product.id
+        var url_id = event.currentTarget.id
+        console.log(event.currentTarget.id)
+        this.setState({
+            show: true,
+            actionSuccess : false,
+            modalTitle: 'Delete URL',
+            modalBody: 'Are you sure to delete this URL?'
+        })
+        console.log("Deleting....")
+    }
+
+    handleShow() {
+        this.setState({
+          show: true
+        })
+          
+      }
+  
+  
+    handleClose() {
+        this.setState({
+        show: false
+        })        
+    }
+
+   populateAProductCard() {
+        if (this.state.errorNotFound === false){
+            return (
+                <ProductCard 
+                product = {this.state.product} 
+                lowest_price = {this.state.lowest_price}/>
+            ) 
+        }
+        else {
+            return (<NoMatchPage/>)
+        }
+    }
+    populateTable() {
+        if (this.state.product.product_link_price === undefined || this.state.errorNotFound === true){
             return;
         }
         else {
             var idV = this.state.product.id
             //Populate list of websites and prices
-            const list = this.state.product.product_link_price.map(function(obj,key) {
+            const list = this.state.product.product_link_price.map((obj,key) => {
                 return(
                     <tr key = {key} >
                         <td>{key}</td>
                         <td><a href={obj.product_url}>{obj.product_url}</a></td>
                         <td>{obj.product_price_curr}</td>
                         <td>
-                        {/* <Button variant="light"><IoIosMore/>
-                        </Button>  */}
                         <DropdownButton 
                             variant="light"
                             title="Action"
                             id="dropdown-basic-button">
-                            <Dropdown.Item>Edit</Dropdown.Item>
-                            <Dropdown.Item>Delete</Dropdown.Item>
+                            <Dropdown.Item
+                                id = {obj.id}
+                                value1 = {obj.product_url}
+                                value2 = {obj.product_price_curr}
+                                onClick={(event) => this.editURLHandler(event)}
+                            >Edit</Dropdown.Item>
+                            <Dropdown.Item
+                                id = {obj.id}
+                                // onClick={(event) => this.deleteURLHandler(event)}
+                            >Delete</Dropdown.Item>
                         </DropdownButton>
-
-                        
                         </td>
-
-
-                
                     </tr>
                 )
             })
-            return list;
+            return (
+                <div>
+                    <h2 className = "title">List of Available Dealers</h2>
+                    <AddURLModal id = {this.state.product.id}/>
+                    <Table responsive="sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>URL</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list}
+                        </tbody>
+                    </Table>
+
+                    <Pagination>
+                        <Pagination.First />
+                        <Pagination.Prev />
+                        <Pagination.Item active>{1}</Pagination.Item>
+                        <Pagination.Last />
+                    </Pagination>
+
+                    <h2 className = "title">Comments</h2>
+                    {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
+                </div>
+            )
         }
 }
-
-    showErrorMsg() {
-        return <p>{this.state.errorMsg}</p>
-    }
-
     render(){
-        console.log("RENDER")
         return (
             <div>
                <h2 className = "title">{this.state.product.product_name}</h2>
                {this.populateAProductCard()}
                <br/>
-               <h2 className = "title">List of Available Dealers</h2>
-               <AddURLModal id = {this.state.product.id}/>
-               <Table responsive="sm">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>URL</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.populateManyLists()}
-                </tbody>
-                </Table>
+               {this.populateTable()}
+               {/* <EditURLModal show = {this.state.show} actionSuccess = {this.state.actionSuccess} /> */}
 
-                <Pagination>
-                    <Pagination.First />
-                    <Pagination.Prev />
-                    <Pagination.Item active>{1}</Pagination.Item>
-                    <Pagination.Last />
-                </Pagination>
+               <Modal
+                show={this.state.show}
+                onHide={() => this.handleClose()}
+                backdrop="static"
+                keyboard={false}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>{this.state.modalTitle}</Modal.Title>
+                </Modal.Header>
+                {this.displayModalBody()}
+                <Modal.Footer>
+                  <Button 
+                  variant="secondary" 
+                  onClick={() => this.handleClose()}>
+                    Close
+                  </Button>
+                  <Button 
+                  variant="primary"
+                  onClick={(event) => this.updateURLHandler(event)}
+                  >
+                  Update
+                  </Button>
+                </Modal.Footer>
+              </Modal>
 
-                <h2 className = "title">Comments</h2>
-                
             </div>
         )
     }
