@@ -8,14 +8,17 @@ class ProductCategoryCard extends Component {
     buttonHandler = (e) => {
         const { history } = this.props;
         if (this.props.product.product_type === 'GPU'){
-            history.push('/gpu');
+            //history.push('/gpu');
+            history.push('/product/gpu');
             window.location.reload()
         }
         else if (this.props.product.product_type === 'CPU'){
-            alert("This page will be available soon")
+            history.push('/product/cpu');
+            window.location.reload()
         }
         else if (this.props.product.product_type === 'RAM'){
-            alert("This page will be available soon")
+            history.push('/product/ram');
+            window.location.reload()
         }
         else {
             console.log("error navigating");

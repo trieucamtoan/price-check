@@ -24,7 +24,10 @@ const Routes = () => (
     <PrivateRoute exact path="/gpu" component={GpuPage}/>
     
     {/* Product Pages */}
-    <PrivateRoute path="/product/all" component={ProductsPage}/>
+    <PrivateRoute path="/product/all" component={() => <ProductsPage title = {"All Products"} product_type = "ALL"/>}/>
+    <PrivateRoute path="/product/cpu" component={() => <ProductsPage title = {"CPU Products"} product_type = "CPU"/>}/>
+    <PrivateRoute path="/product/gpu" component={() => <ProductsPage title = {"GPU Products"} product_type = "GPU"/>}/>
+    <PrivateRoute path="/product/ram" component={() => <ProductsPage title = {"RAM Products"} product_type = "RAM"/>}/>
     <PrivateRoute path="/product/new" component={AddProduct}/>
     <PrivateRoute path="/product/:id/update" component = {UpdateProduct}/>
     <PrivateRoute path="/product/:id" component={ProductPage}/>
