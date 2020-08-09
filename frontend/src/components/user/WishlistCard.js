@@ -26,7 +26,8 @@ const styles = {
         color: 'black'
     },
     'pText': {
-        margin: '0px'
+        margin: '0px',
+        marginLeft: '20px'
     }
 };
 
@@ -53,7 +54,10 @@ class WishlistCard extends React.Component {
             <div>
             <Card style = {styles.card}>
             <Card.Header as="h5">
+                <div className="float-left">
                 {this.props.product_name}
+                </div>
+                <div className="float-right">
                 <Button
                     id = "check-stock-button"
                     variant="link"
@@ -62,7 +66,11 @@ class WishlistCard extends React.Component {
                     className="float-right"
                     >Check Stock
                 </Button>
-                <p className="float-right" style={styles.pText}>Lowest Price: <span>{this.props.product_price}</span></p>
+                <p className="float-right" style={styles.pText}>
+                    Lowest Price: <span>{this.props.product_lowest_price_prev} CAD   </span>
+                    |   Current Price: <span>{this.props.product_lowest_price_curr} CAD</span>
+                </p>
+                </div>
             </Card.Header>
             <Card.Body>
                 <Card.Img

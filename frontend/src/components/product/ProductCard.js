@@ -32,7 +32,8 @@ var styles = {
         color: 'black'
     },
     'pText': {
-        margin: '0px'
+        margin: '0px',
+        marginLeft: '20px'
     }
 };
 
@@ -65,8 +66,11 @@ class ProductCard extends Component {
         return (
             <Card style = {styles.card}>
             <Card.Header as="h5">
+                <div className="float-left">
                 {this.props.product.product_name}
-                <Button 
+                </div>
+                <div className="float-right">
+                <Button
                     id = "check-stock-button"
                     variant="link"
                     onClick={(event) => this.buttonHandler(event)}
@@ -75,6 +79,9 @@ class ProductCard extends Component {
                     >Check Stock
                 </Button>
                 <p className="float-right" style={styles.pText}>Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
+                </div>
+
+
             </Card.Header>
             <Card.Body>
                 <Card.Img 

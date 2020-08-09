@@ -66,7 +66,7 @@ export default class WishlistPage extends Component {
                 <h4 style={{textAlign: 'center'}}>{this.state.msg}</h4>
                 {this.state.product.map((p) => <WishlistCard
                     key={p.id} id={p.id} product_name = {p.product_name} product_image = {p.product_image} product_description = {p.product_description}
-                    product_price = {p.product_lowest_price_curr}/>)}
+                    product_lowest_price_prev = {p.product_lowest_price_prev} product_lowest_price_curr = {p.product_lowest_price_curr}/>)}
                 <br/>
             </div>
         )
