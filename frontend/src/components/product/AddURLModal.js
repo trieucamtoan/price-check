@@ -198,8 +198,8 @@ class AddURLModal extends Component {
                 <Modal.Body>
                     <InputGroup className="mb-3">
                         <FormControl
-                        placeholder="Enter a newegg.ca URL here..."
-                        aria-label="Enter a newegg.ca URL here..."
+                        placeholder="Enter a newegg.ca or bestbuy.ca URL here..."
+                        aria-label="Enter a newegg.ca or bestbuy.ca URL here..."
                         aria-describedby="basic-addon2"
                         onChange={(event) => {
                             this.setState({newURL: event.target.value})
