@@ -52,6 +52,8 @@ from rest_framework.views import APIView
 #         return Response(data)
 
 @api_view(['GET','POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def products_list_view(request):
     if request.method == 'GET':
         products = Product.objects.all()
@@ -65,6 +67,8 @@ def products_list_view(request):
             return Response(status=status.HTTP_201_CREATED)
         
 @api_view(['GET', 'DELETE', 'PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def detail_product_view(request,product_id):
     try:
         product= Product.objects.get(id=product_id)
@@ -76,6 +80,15 @@ def detail_product_view(request,product_id):
         return Response(serializer.data)
     elif request.method == 'DELETE':
         product.delete()
+        wishlists = Wishlist.objects.all()
+        for wishlist in wishlists:
+            product_id_list = wishlist.product_id_list
+            if product_id_list is not None:
+                try:
+                    product_id_list.remove(product_id)
+                    wishlist.save()
+                except ValueError:
+                    pass
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
         serializer = ProductSerializer(instance=product, data=request.data, partial=True)
@@ -85,6 +98,8 @@ def detail_product_view(request,product_id):
         
 
 @api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def product_url(request, product_id):
     try:
         product= Product.objects.get(pk=product_id)
@@ -106,6 +121,8 @@ def product_url(request, product_id):
             return Response(status=status.HTTP_201_CREATED)
         
 @api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def product_url_detail(request, product_id, url_id):
     try:
         product= Product.objects.get(id=product_id)
@@ -130,7 +147,6 @@ def product_url_detail(request, product_id, url_id):
             product_url= ProductLinkPrice.objects.get(id=url_id)
             serializer = ProductLinkPriceSerializer(product_url)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
 
 @api_view(['GET','POST'])
 @authentication_classes([TokenAuthentication])
@@ -163,11 +179,13 @@ def product_comment_detail_view(request, product_id, comment_id):
         error = {'messages':'Product not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
     try:
-        comment = get_object_or_404(Comment, pk=comment_id, product=product)
+        comment = Comment.objects.get(id=comment_id)
     except Comment.DoesNotExist:
         error = {'messages':'Comment not found'}
         return Response(error, status=status.HTTP_404_NOT_FOUND)
-    
+    if comment.username.strip() != request.user.username.strip():
+        error = {'messages':'Cannot modify other people\'s comment'}
+        return Response(error, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'PUT':
         data = {"username": request.user.username, "text": request.data.get('text')}
         serializer = CommentSerializer(instance=comment, data=data)

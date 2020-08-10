@@ -23,6 +23,8 @@ class PricespiderSpider(scrapy.Spider):
                 yield SplashRequest(url=url, callback=self.newegg_parse, args={
                     'lua_source': 'newegg.lua'
                 })
+            elif re.search("bestbuy", url) != None:
+                yield scrapy.Request(url=url, callback=self.bestbuy_parse)
             
     def newegg_parse(self, response):
         item = ProductItem()
@@ -36,6 +38,16 @@ class PricespiderSpider(scrapy.Spider):
                 price_cent = re.sub('[^0-9]', '', price_cent[0])
 
                 item['price'] = Decimal(price_dollar+'.'+price_cent)
+        yield item
+
+    def bestbuy_parse(self, response):
+        item = ProductItem()
+        item['url'] = response.url
+        item['price'] = None
+        if response.status == 200:
+            price_dollar = response.xpath("(//meta[@itemprop='price'])/@content").extract_first()
+            if price_dollar is not None:
+                item['price'] = Decimal(price_dollar)
         yield item
 
     def get_url_from_db(self):

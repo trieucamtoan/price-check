@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import DeleteProductModal from './DeleteProductModal';
 import AddToWishListModal from './AddToWishListModal';
+import CommentProductModal from './CommentProductModal';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 //horizontal card used for displaying individual product
 
 var styles = {
@@ -91,15 +94,25 @@ class ProductCard extends Component {
                 <Card.Text>
                     {this.props.product.product_description}
                 </Card.Text>
-                <Button
-                    variant="outline-primary"
-                    onClick={(event) => this.updateHandler(event)}
-                    className = "float-right"
-                >
-                    Update Product
-                </Button>
-                <DeleteProductModal id = {this.props.product.id}/>
-                <AddToWishListModal id = {this.props.product.id}/>
+                
+
+                <DropdownButton 
+                    align = "right"
+                    variant="light"
+                    title="Action"
+                    id="dropdown-basic-button">  
+                    
+                    <CommentProductModal id = {this.props.product.id}/>
+
+                    <Button
+                            variant = "link"
+                            onClick={(event) => this.updateHandler(event)}
+                        >
+                            Update Info
+                    </Button>
+                    <DeleteProductModal id = {this.props.product.id}/>
+                    <AddToWishListModal id = {this.props.product.id}/>
+                </DropdownButton>
             </Card.Body>
             </Card>
         );

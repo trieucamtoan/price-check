@@ -138,8 +138,10 @@ class AddProduct extends Component {
     }
 
     goBackHandler = () => {
-        this.props.history.push('/product/all');
-        window.location.reload()
+        console.log(this.props)
+        this.props.history.goBack();
+        // this.props.history.push('/product/all');
+        // window.location.reload()
     }
 
     render(){

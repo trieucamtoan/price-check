@@ -18,6 +18,7 @@ services:
             - rabbitmq
         networks: 
             - nginx_network
+        restart: always
     
     db:
         image: "postgres:latest"
@@ -27,6 +28,7 @@ services:
             POSTGRES_DB: testdb
         networks: 
             - nginx_network
+        restart: always
             
     frontend:
         build:
@@ -40,6 +42,7 @@ services:
             - nginx_network
         depends_on: 
             - backend
+        restart: always
     
     rabbitmq:
         image: "rabbitmq"
@@ -48,6 +51,7 @@ services:
             - nginx_network
         ports: 
             - 5672:5672
+        restart: always
     
     celery:
         build:
@@ -62,6 +66,7 @@ services:
             - scrapy
         networks: 
             - nginx_network
+        restart: always
 
     celery-beat:
         build:
@@ -77,6 +82,7 @@ services:
             - celery
         networks: 
             - nginx_network
+        restart: always
 
     splash:
         image: "scrapinghub/splash"
@@ -91,6 +97,8 @@ services:
         networks: 
             - nginx_network
         restart: always
+        environment: 
+            max-timeout: 360
     
     scrapy:
         build:
@@ -107,6 +115,7 @@ services:
             - splash
         networks: 
             - nginx_network
+        restart: always
 
     
 volumes:

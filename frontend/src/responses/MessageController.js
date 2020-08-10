@@ -13,10 +13,10 @@ class MessageController extends Component {
     accept(message) {
         //Determine message type
         console.log("Message Controller Return Message : ", message)
-        if (message === null){
+        if (message === null || message === undefined){
+            console.log("Returning in here")
             return false
         }
-
         //Handle PUT request with empty response
         else if (message.status === 201 || message.status === 204){
             return true
