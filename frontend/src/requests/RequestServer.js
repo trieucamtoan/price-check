@@ -49,7 +49,6 @@ class RequestServer extends Component {
             }
             
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -63,7 +62,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            //console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -84,7 +82,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -103,7 +100,7 @@ class RequestServer extends Component {
            })
            return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
+            // console.log("Error: ", error.response.data);
            return null
         }
     }
@@ -117,7 +114,6 @@ class RequestServer extends Component {
             })
             return response.data
         } catch (error) {
-            //console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -129,7 +125,6 @@ class RequestServer extends Component {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("GET PRODUCT REQUEST SERVER")
             return response.data
         } catch (error) {
             return response
@@ -155,7 +150,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return error.response.data
         }
     }
@@ -173,12 +167,8 @@ class RequestServer extends Component {
             form_data.append('product_name', obj.product_name);
             form_data.append('product_description', obj.product_description);
             form_data.append('product_type', obj.product_type);
-            console.log('hello')
-            console.log("obj: ", obj)
             if (typeof obj.product_image === "string"){
                 //convert it into File Object
-                console.log('hi')
-                console.log(obj.product_image)
                 this.srcToImg(obj.product_image, obj.product_name)
                 .then(function(file){
                     form_data.append('product_image', file);
@@ -197,7 +187,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return response
         }
     }
@@ -209,7 +198,6 @@ class RequestServer extends Component {
                     'Authorization' : `Token ${token}`
                 }
             })
-            console.log("RESPONSE:", response , ".")
             return response
         } catch (error) {
             console.log("Error: ", error.response.data);
@@ -218,7 +206,6 @@ class RequestServer extends Component {
     }
     //POST REQUEST
     async addProductURL(token, id, url){
-        console.log("URL: ", url)
         try {
             var response = await axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
                 headers: {
@@ -233,7 +220,6 @@ class RequestServer extends Component {
     }
     //PUT REQUEST
     async updateProductURLObject(token, id, urlId, urlObject){
-        console.log("URL Object: ", urlObject)
         try {
             var response = await axios.put(this.getServerLocation() + '/products/' + id + '/url/' + urlId, urlObject, {
                 headers: {
@@ -258,8 +244,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
-            console.log("Response... ", response)
             return error.response.data
         }
     }
@@ -273,7 +257,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return response
         }
     }
@@ -287,7 +270,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return response
         }
     }
@@ -301,7 +283,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return response
         }
     }
@@ -315,7 +296,6 @@ class RequestServer extends Component {
             })
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return response
         }
     }
