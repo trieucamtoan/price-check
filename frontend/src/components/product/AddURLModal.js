@@ -99,7 +99,7 @@ class AddURLModal extends Component {
                     waitingMessage: "Retrieving the price automatically..."
                 })
             })
-            var response = await RequestServer.updateProductURL(token, this.props.id, newUrlObject)
+            var response = await RequestServer.addProductURL(token, this.props.id, newUrlObject)
             this.updateResponseHandler(response);
             //console.log("ADD URL HANDLER: ", this.state.product.product_link_price)
         }

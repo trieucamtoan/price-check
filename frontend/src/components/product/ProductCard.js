@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import DeleteProductModal from './DeleteProductModal';
 import AddToWishListModal from './AddToWishListModal';
+import CommentProductModal from './CommentProductModal';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 //horizontal card used for displaying individual product
 
 var styles = {
@@ -12,6 +15,8 @@ var styles = {
     },
     'button': {
         paddingLeft : '20px',
+        paddingBottom: '0px',
+        paddingTop: '0px',
         visibility: true
     },
     'image': {
@@ -28,6 +33,10 @@ var styles = {
     },
     'black': {
         color: 'black'
+    },
+    'pText': {
+        margin: '0px',
+        marginLeft: '20px'
     }
 };
 
@@ -60,8 +69,11 @@ class ProductCard extends Component {
         return (
             <Card style = {styles.card}>
             <Card.Header as="h5">
+                <div className="float-left">
                 {this.props.product.product_name}
-                <Button 
+                </div>
+                <div className="float-right">
+                <Button
                     id = "check-stock-button"
                     variant="link"
                     onClick={(event) => this.buttonHandler(event)}
@@ -69,25 +81,38 @@ class ProductCard extends Component {
                     className="float-right"
                     >Check Stock
                 </Button>
-                <p className="float-right">Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
+                <p className="float-right" style={styles.pText}>Lowest Price: <span>{this.props.lowest_price} CAD</span></p>
+                </div>
+
+
             </Card.Header>
             <Card.Body>
                 <Card.Img 
                     variant="top" 
-                    src= {this.props.product.product_image}
+                    src= {'http://localhost:8000' + this.props.product.product_image}
                     style = {styles.image} />
                 <Card.Text>
                     {this.props.product.product_description}
                 </Card.Text>
-                <Button
-                    variant="outline-primary"
-                    onClick={(event) => this.updateHandler(event)}
-                    className = "float-right"
-                >
-                    Update Product
-                </Button>
-                <DeleteProductModal id = {this.props.product.id}/>
-                <AddToWishListModal id = {this.props.product.id}/>
+                
+
+                <DropdownButton 
+                    align = "right"
+                    variant="light"
+                    title="Action"
+                    id="dropdown-basic-button">  
+                    
+                    <CommentProductModal id = {this.props.product.id}/>
+
+                    <Button
+                            variant = "link"
+                            onClick={(event) => this.updateHandler(event)}
+                        >
+                            Update Info
+                    </Button>
+                    <DeleteProductModal id = {this.props.product.id}/>
+                    <AddToWishListModal id = {this.props.product.id}/>
+                </DropdownButton>
             </Card.Body>
             </Card>
         );

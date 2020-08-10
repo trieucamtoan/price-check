@@ -31,7 +31,12 @@ export const product_url_info = {
     produce_price_prev : "0"
 }
 
-export const comments = {
+export const product_url_info_update = {
+    product_url : '',
+    product_price_curr : "0"
+}
+
+export const comment = {
     username : '',
     text : ''
 }
@@ -56,12 +61,12 @@ export const cpu =
 
 
 export function updateLowestPrice(product_link_price) {
-    if (product_link_price.length === undefined){
+    if (product_link_price.length === 0){
         return "0"
     }
     else {
         //Initialize the first price to be the lowest
-        console.log("PRODUCT ARRAY", product_link_price[0])
+        console.log("PRODUCT ARRAY", product_link_price)
         var current_lowest_price = product_link_price[0].product_price_curr;
         if (current_lowest_price === null){
             current_lowest_price = "N/A"

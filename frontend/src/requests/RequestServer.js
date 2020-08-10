@@ -110,6 +110,51 @@ class RequestServer extends Component {
         }
     }
 
+    async getWishlist(token) {
+        try {
+            var response = await axios.get(this.getServerLocation() + '/wishlist/', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("GET WISHLIST REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async addWishlistProduct(token, id) {
+        try {
+            var response = await axios.post(this.getServerLocation() + '/wishlist/'+ id, {}, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("Add Wishlist item REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async removeWishlistProduct(token, id) {
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/wishlist/'+ id, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("Remove Wishlist item REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
     async getAllProducts(token) {
         try {
             var response = await axios.get(this.getServerLocation() + '/products/', {
@@ -134,8 +179,7 @@ class RequestServer extends Component {
             console.log("GET PRODUCT REQUEST SERVER")
             return response.data
         } catch (error) {
-            console.log("Error: ", error.response.data);
-            return null
+            return response
         }
     }
 
@@ -182,8 +226,8 @@ class RequestServer extends Component {
             return response
         }
     }
-
-    async updateProductURL(token, id, url){
+    //POST REQUEST
+    async addProductURL(token, id, url){
         console.log("URL: ", url)
         try {
             var response = await axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
@@ -197,10 +241,84 @@ class RequestServer extends Component {
             return error.response.data
         }
     }
+    //PUT REQUEST
+    async updateProductURLObject(token, id, urlId, urlObject){
+        console.log("URL Object: ", urlObject)
+        try {
+            var response = await axios.put(this.getServerLocation() + '/products/' + id + '/url/' + urlId, urlObject, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            console.log("Response... ", response)
+            return error.response.data
+        }
+    }
+
+    //DELETE REQUEST
+    async deleteProductURLObject(token, id, urlId){
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/products/' + id + '/url/' + urlId, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            console.log("Response... ", response)
+            return error.response.data
+        }
+    }
 
     async getProductURL(token, id){
         try {
             var response = await axios.get(this.getServerLocation() + '/products/' + id + '/url', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async getProductComments(token,id){
+        try {
+            var response = await axios.get(this.getServerLocation() + '/products/' + id + '/comments', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async addProductComment(token,id, commentObject){
+        try {
+            var response = await axios.post(this.getServerLocation() + '/products/' + id + '/comments', commentObject, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async deleteProductComment(token,id, commentId){
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/products/' + id + '/comments/' + commentId, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }

@@ -2,17 +2,18 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import RequestServer from '../../requests/RequestServer';
+import { withRouter } from 'react-router';
 
-export default class AddToWishListModal extends Component {
+class EditURLModal extends Component {
     constructor(props){
-        super(props);
+        super(props)
         this.state = {
-            show: false,
-            addSuccess: false,
-            title : ''
+            show: props.show, 
+            deleteSuccess: props.deleteSuccess
         }
     }
-    addResponseHandler(response) {
+    
+    deleteResponseHandler(response) {
     //   console.log((response.status === 204))
     //   if (response.status === 404 || response.status === 400) {
     //     var errorMessage = [];
@@ -33,31 +34,10 @@ export default class AddToWishListModal extends Component {
     //   }
     }
     
-    addHandler = async(event) => {
+    deleteHandler = async(event) => {
 
         event.preventDefault()
-            console.log("Pressed add button...");
-
-            //Show the Modal Dialog
-            this.setState({
-               show: true
-            })
-            var token = localStorage.getItem('token');
-            var response = await RequestServer.addWishlistProduct(token, this.props.id)
-
-            if (response !== null) {
-                this.setState({
-                    show: false
-                })
-                alert("Product Added Successfully")
-                window.location.reload()
-            }
-            else {
-                alert("Failed to Add. Probably the product has already been added")
-
-            }
-        // event.preventDefault()
-        // console.log("Pressed deleted button...");
+        console.log("Pressed edit button...");
         
         // //Show the Modal Dialog
         // this.setState({
@@ -66,12 +46,13 @@ export default class AddToWishListModal extends Component {
         // var token = localStorage.getItem('token');
         // var response = await RequestServer.deleteProduct(token, this.props.id)
 
-        // var result = this.addResponseHandler(response);
+        // var result = this.deleteResponseHandler(response);
         // if (result){
         //   this.setState({
         //     show: false
         //   })
         //   alert("Product Deleted Successfully")
+        //   this.props.history.push('/product/all');
         //   window.location.reload()
         // }
         // else {
@@ -86,23 +67,47 @@ export default class AddToWishListModal extends Component {
         
     }
 
+
     handleClose() {
-      //Let the modal close shall we?
-      this.setState({
-        show: false
-      }) 
+    //   if (this.state.error === true){
+    //     //Stop the modal from closing
+    //   }
+    //   else {
+        //Let the modal close shall we?
+        this.setState({
+          show: false
+        })
+    //   }
+        
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps.show !== this.props.show) {
+            this.setState({
+                show: this.props.show,
+                deleteSuccess: this.props.deleteSuccess
+            })
+        }
+    }
+
+    componentDidMount() {
+        console.log("render Edit URL Modal with value: this.state.show = ", this.state.show)
+        
     }
 
     render() {
+        console.log("Rendering URL Modal with props show: " , this.props.show, ", deleteSuccess: ", this.props.deleteSuccess)
+        console.log("Rendering URL Modal with state show: " , this.state.show, ", deleteSuccess: ", this.state.deleteSuccess)
+
         return (
             <div>
-              <Button 
-              variant = "link"
+              {/* <Button 
+              variant="outline-danger"
+              className = "float-right"
               onClick={() => this.handleShow()}
               >
-                Add To WishList
-              </Button>
-        
+                Delete
+              </Button> */}
               <Modal
                 show={this.state.show}
                 onHide={() => this.handleClose()}
@@ -113,7 +118,7 @@ export default class AddToWishListModal extends Component {
                   <Modal.Title>Confirm Your Action</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  Are you sure to add to Wish List?
+                  Are you sure to delete the product?
                 </Modal.Body>
                 <Modal.Footer>
                   <Button 
@@ -123,9 +128,9 @@ export default class AddToWishListModal extends Component {
                   </Button>
                   <Button 
                   variant="outline-danger"
-                  onClick={(event) => this.addHandler(event)}
+                  onClick={(event) => this.deleteHandler(event)}
                   >
-                  Add
+                  Delete
                   </Button>
                 </Modal.Footer>
               </Modal>
@@ -133,4 +138,6 @@ export default class AddToWishListModal extends Component {
         )
     } 
   }
+
+export default withRouter(EditURLModal);
   
