@@ -34,7 +34,9 @@ export default class AddToWishListModal extends Component {
     }
     
     addHandler = async(event) => {
-
+        this.setState({
+          show: false
+        }) 
         // event.preventDefault()
         // console.log("Pressed deleted button...");
         
@@ -66,24 +68,17 @@ export default class AddToWishListModal extends Component {
     }
 
     handleClose() {
-      if (this.state.error === true){
-        //Stop the modal from closing
-      }
-      else {
-        //Let the modal close shall we?
-        this.setState({
-          show: false
-        })
-      }
-        
+      //Let the modal close shall we?
+      this.setState({
+        show: false
+      }) 
     }
 
     render() {
         return (
             <div>
               <Button 
-              variant="light"
-              className = "float-right"
+              variant = "link"
               onClick={() => this.handleShow()}
               >
                 Add To WishList

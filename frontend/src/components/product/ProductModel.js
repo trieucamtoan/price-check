@@ -36,7 +36,7 @@ export const product_url_info_update = {
     product_price_curr : "0"
 }
 
-export const comments = {
+export const comment = {
     username : '',
     text : ''
 }

@@ -182,10 +182,10 @@ class RequestServer extends Component {
         }
     }
     //POST REQUEST
-    addProductURL(token, id, url){
+    async addProductURL(token, id, url){
         console.log("URL: ", url)
         try {
-            var response = axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
+            var response = await axios.post(this.getServerLocation() + '/products/' + id + '/url', url, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }
@@ -213,9 +213,67 @@ class RequestServer extends Component {
         }
     }
 
+    //DELETE REQUEST
+    async deleteProductURLObject(token, id, urlId){
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/products/' + id + '/url/' + urlId, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            console.log("Response... ", response)
+            return error.response.data
+        }
+    }
+
     async getProductURL(token, id){
         try {
             var response = await axios.get(this.getServerLocation() + '/products/' + id + '/url', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async getProductComments(token,id){
+        try {
+            var response = await axios.get(this.getServerLocation() + '/products/' + id + '/comments', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async addProductComment(token,id, commentObject){
+        try {
+            var response = await axios.post(this.getServerLocation() + '/products/' + id + '/comments', commentObject, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return response
+        }
+    }
+
+    async deleteProductComment(token,id, commentId){
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/products/' + id + '/comments/' + commentId, {
                 headers: {
                     'Authorization' : `Token ${token}`
                 }

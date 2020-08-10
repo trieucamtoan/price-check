@@ -39,7 +39,8 @@ export default class ProductPage extends Component {
             editUrlId : '',
             editURL : '',
             editPrice : '',
-            waitingMessage: ''
+            waitingMessage: '',
+            buttonMessage: ''
         }
         this.editURLHandler = this.editURLHandler.bind(this)
     }
@@ -147,41 +148,80 @@ export default class ProductPage extends Component {
     }
 
     updateURLHandler = async (event) => {
-        console.log("Updating...")
-        var token = localStorage.getItem('token')
-        //Change the waiting message
-        this.setState({
-            waitingMessage: "Update the URL. Please wait...",
-            errorMsg: errorMessage
-        })
-
-        var urlObject = ProductModel.product_url_info_update
-        urlObject.product_url = this.state.editURL
-        urlObject.product_price_curr = this.state.editPrice
-        console.log("Update handler: ", urlObject.product_url, urlObject.product_price_curr)
-        var response = await RequestServer.updateProductURLObject(token, this.state.product.id, this.state.editUrlId, urlObject)
-        
-        //Check Message Response
-        var isMessageValid = MessageController.accept(response);
-        if (isMessageValid === true){
-            // var errorMessage = [];
-            // for (const [key, value] of Object.entries(response)) {
-                // console.log(`${key}: ${value}`);
-            
-            alert("URL Updated")
-            window.location.reload()
-        }
-
-        else {
-            var errorMessage = "";
-            for (const [key, value] of Object.entries(response)) {
-                errorMessage = value;
-            }
+        if (this.state.buttonMessage === "Update"){
+            console.log("Updating...")
+            var token = localStorage.getItem('token')
+            //Change the waiting message
             this.setState({
-                error: true,
-                errorMsg: errorMessage,
-                waitingMessage: ""
+                waitingMessage: "Update the URL. Please wait...",
+                errorMsg: ""
             })
+
+            var urlObject = ProductModel.product_url_info_update
+            urlObject.product_url = this.state.editURL
+            urlObject.product_price_curr = this.state.editPrice
+            console.log("Update handler: ", urlObject.product_url, urlObject.product_price_curr)
+            var response = await RequestServer.updateProductURLObject(token, this.state.product.id, this.state.editUrlId, urlObject)
+            
+            //Check Message Response
+            var isMessageValid = MessageController.accept(response);
+            if (isMessageValid === true){
+                // var errorMessage = [];
+                // for (const [key, value] of Object.entries(response)) {
+                    // console.log(`${key}: ${value}`);
+                
+                alert("URL Updated")
+                window.location.reload()
+            }
+
+            else {
+                var errorMessage = "";
+                for (const [key, value] of Object.entries(response)) {
+                    errorMessage = value;
+                }
+                this.setState({
+                    error: true,
+                    errorMsg: errorMessage,
+                    waitingMessage: ""
+                })
+            }
+        }
+        else if (this.state.buttonMessage === "Delete"){
+            console.log("Deleting...")
+            var token = localStorage.getItem('token')
+            //Change the waiting message
+            this.setState({
+                waitingMessage: "Deleting the URL. Please wait...",
+                errorMsg: ""
+            })
+
+            var response = await RequestServer.deleteProductURLObject(token, this.state.product.id, this.state.editUrlId)
+            
+            //Check Message Response
+            var isMessageValid = MessageController.accept(response);
+            if (isMessageValid === true){
+                // var errorMessage = [];
+                // for (const [key, value] of Object.entries(response)) {
+                    // console.log(`${key}: ${value}`);
+                
+                alert("URL Deleted")
+                window.location.reload()
+            }
+
+            else {
+                var errorMessage = "";
+                for (const [key, value] of Object.entries(response)) {
+                    errorMessage = value;
+                }
+                this.setState({
+                    error: true,
+                    errorMsg: errorMessage,
+                    waitingMessage: ""
+                })
+            }
+        }
+        else {
+            console.log("error navigating")
         }
     }
 
@@ -200,7 +240,8 @@ export default class ProductPage extends Component {
             modalTitle: 'Edit URL',
             editUrlId: url_id,
             editURL: url,
-            editPrice: getPrice
+            editPrice: getPrice,
+            buttonMessage: "Update"
         })
     }
 
@@ -213,7 +254,9 @@ export default class ProductPage extends Component {
             show: true,
             actionSuccess : false,
             modalTitle: 'Delete URL',
-            modalBody: 'Are you sure to delete this URL?'
+            modalBody: 'Are you sure to delete this URL?',
+            buttonMessage: "Delete",
+            editUrlId : url_id
         })
         console.log("Deleting....")
     }
@@ -234,10 +277,12 @@ export default class ProductPage extends Component {
 
    populateAProductCard() {
         if (this.state.errorNotFound === false){
-            return (
-                <ProductCard 
-                product = {this.state.product} 
-                lowest_price = {this.state.lowest_price}/>
+            return (<div>
+                        <h2 className = "title">{this.state.product.product_name}</h2>
+                        <ProductCard 
+                            product = {this.state.product} 
+                            lowest_price = {this.state.lowest_price}/>
+                    </div>
             ) 
         }
         else {
@@ -245,7 +290,7 @@ export default class ProductPage extends Component {
         }
     }
     populateTable() {
-        if (this.state.product.product_link_price === undefined || this.state.errorNotFound === true){
+        if (this.state.product === undefined || this.state.product.product_link_price === undefined || this.state.errorNotFound === true){
             return;
         }
         else {
@@ -270,7 +315,7 @@ export default class ProductPage extends Component {
                             >Edit</Dropdown.Item>
                             <Dropdown.Item
                                 id = {obj.id}
-                                // onClick={(event) => this.deleteURLHandler(event)}
+                                onClick={(event) => this.deleteURLHandler(event)}
                             >Delete</Dropdown.Item>
                         </DropdownButton>
                         </td>
@@ -294,16 +339,6 @@ export default class ProductPage extends Component {
                             {list}
                         </tbody>
                     </Table>
-
-                    <Pagination>
-                        <Pagination.First />
-                        <Pagination.Prev />
-                        <Pagination.Item active>{1}</Pagination.Item>
-                        <Pagination.Last />
-                    </Pagination>
-
-                    <h2 className = "title">Comments</h2>
-                    {MessageController.displayErrorMessage(this.state.error, this.state.errorMsg)}
                 </div>
             )
         }
@@ -311,7 +346,6 @@ export default class ProductPage extends Component {
     render(){
         return (
             <div>
-               <h2 className = "title">{this.state.product.product_name}</h2>
                {this.populateAProductCard()}
                <br/>
                {this.populateTable()}
@@ -337,7 +371,7 @@ export default class ProductPage extends Component {
                   variant="primary"
                   onClick={(event) => this.updateURLHandler(event)}
                   >
-                  Update
+                  {this.state.buttonMessage}
                   </Button>
                 </Modal.Footer>
               </Modal>

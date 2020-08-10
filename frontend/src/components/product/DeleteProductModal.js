@@ -83,8 +83,7 @@ class DeleteProductModal extends Component {
         return (
             <div>
               <Button 
-              variant="outline-danger"
-              className = "float-right"
+              variant = "link"
               onClick={() => this.handleShow()}
               >
                 Delete

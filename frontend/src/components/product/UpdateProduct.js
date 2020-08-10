@@ -12,6 +12,8 @@ import { withRouter } from 'react-router';
 import Collapsible from './Collapsible';
 import * as ProductModel from './ProductModel';
 import MessageController from '../../responses/MessageController';
+import Button from 'react-bootstrap/Button';
+
 
 const styles = {
     'button': {
@@ -62,6 +64,13 @@ class UpdateProduct extends Component {
         }
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.updateHandler = this.updateHandler.bind(this)
+    }
+
+    goBackHandler = () => {
+        console.log(this.props)
+        this.props.history.goBack();
+        // this.props.history.push('/product/all');
+        // window.location.reload()
     }
 
     populateData(response) {
@@ -296,6 +305,13 @@ class UpdateProduct extends Component {
                                 onClick={(event) => this.updateHandler(event)}
                             />
                         </form>
+                        <div align = "center">
+                            <Button 
+                                variant="link"
+                                onClick={(event) => this.goBackHandler(event)}
+                                >Go Back
+                            </Button>
+                        </div>
                     </div>
                 </MuiThemeProvider>
             </div>

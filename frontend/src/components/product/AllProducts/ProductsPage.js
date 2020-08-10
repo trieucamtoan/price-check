@@ -70,7 +70,7 @@ class ProductsPage extends Component {
                     if ( lowestPrice === null){
                         lowestPrice = "N/A"
                     }
-                    return (<ProductCard key={i} product={product} lowest_price={lowestPrice} />)
+                    return (<ProductCard key={i} product={product} lowest_price={lowestPrice}/>)
                 }
                 else {
                     return (<ProductCard key={i} product={product} lowest_price= "N/A" />)
@@ -80,7 +80,7 @@ class ProductsPage extends Component {
             if (productCards.length === 0){
                 return <h2 className="title">No Product Found</h2>
             }
-            return productCards
+            return <div>{productCards}</div>
         }
     }
 
@@ -111,11 +111,15 @@ class ProductsPage extends Component {
         return (
             <div>
                 <SearchBar title={this.props.title} />
+                <div align = "right">
                 <Button
                     variant="dark"
                     onClick={(event) => this.addButtonHandler(event)}
-                >Add New Product
+                >
+                    Add Product
                 </Button>
+                </div>
+            
                 <br />
                 {this.populateManyProductCards()}
                 <h2 className = "title">

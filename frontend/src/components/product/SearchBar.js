@@ -9,7 +9,7 @@ export default class SearchBar extends Component {
                 <br/>
                 <h2 className = "title">{this.props.title}</h2>
                 <br/>
-                <InputGroup className="mb-3">
+                {/* <InputGroup className="mb-3">
                     <FormControl
                     placeholder="Enter product name here"
                     aria-label="product-label"
@@ -18,7 +18,7 @@ export default class SearchBar extends Component {
                 <InputGroup.Prepend>
                     <Button variant="outline-secondary">Search</Button>
                 </InputGroup.Prepend>
-                </InputGroup>
+                </InputGroup> */}
             </div>
         )
     }
