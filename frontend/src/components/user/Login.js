@@ -30,7 +30,7 @@ export default class Login extends Component {
 
     navigate(token) {
         this.props.history.push(
-            '/dashboard',
+            '/',
             { token: token }
         )
         window.location.reload()
