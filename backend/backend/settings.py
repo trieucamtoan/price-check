@@ -112,8 +112,8 @@ DATABASES = {
         'NAME': 'testdb',
         'USER': 'testuser',
         'PASSWORD': '123',
-        'HOST': 'localhost', #use this line if running project locally
-        # 'HOST': 'db', #use this line if using docker-compose
+        # 'HOST': 'localhost', #use this line if running project locally
+        'HOST': 'db', #use this line if using docker-compose
         'PORT': '5432',
     }
 }
@@ -121,17 +121,17 @@ DATABASES = {
 from celery.schedules import crontab
 
 #Celery settings
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/' # local test
-CELERY_RESULT_BACKEND = 'rpc://guest:guest@localhost:5672/' # local test
-# CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/' # production mode
-# CELERY_RESULT_BACKEND = 'rpc://guest:guest@rabbitmq:5672/' # production mode
+# CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/' # local test
+# CELERY_RESULT_BACKEND = 'rpc://guest:guest@localhost:5672/' # local test
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/' # production mode
+CELERY_RESULT_BACKEND = 'rpc://guest:guest@rabbitmq:5672/' # production mode
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'update_price': {
         'task': 'api.tasks.update_price',
-        'schedule': crontab(minute="*/15", hour="*/1")
+        'schedule': crontab(minute="*/30", hour="*/1")
     }
 }
 
