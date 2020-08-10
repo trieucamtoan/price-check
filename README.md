@@ -75,6 +75,7 @@ Need to modify these file accordingly (uncomment and comment the correct line)be
 - In /scraper/scraper/pricespider.py, change hostname
 - In /backend/backend/settings.py, change CELERY_BROKER_URL and CELERY_RESULT_BACKEND
 - In /backend/backend/settings.py, change HOST
+- In /backend/backend/settings.py, change DEBUG
 - In /backend/api/tasks.py, change response
 - In /backend/api/utils.py, change response
 
