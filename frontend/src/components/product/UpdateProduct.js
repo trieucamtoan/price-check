@@ -152,7 +152,14 @@ class UpdateProduct extends Component {
 
     updateResponseHandler(response) {
         console.log("RES" , response)
-        if (response.status === 404 || response.status === 400) {
+        
+        if (this.updateResponseHandler){
+            this.clearFields();
+            alert("Product updated successfully")
+            this.props.history.push('/product/' + this.state.product.id);
+            window.location.reload()
+        }
+        else {
             var errorMessage = [];
             for (const [key, value] of Object.entries(response)) {
                 // console.log(`${key}: ${value}`);
@@ -164,20 +171,20 @@ class UpdateProduct extends Component {
                 error: true,
                 errorMsg: errorMessage
             }) 
-          }
+        }
+        // if (response.status === 404 || response.status === 400) {
+            
+        //   }
     
-          else if (response.status === 200 || response.status === 204){
-            this.clearFields();
-            alert("Product updated successfully")
-            this.props.history.push('/product/' + this.state.product.id);
-            window.location.reload()
-          }
-          else {
-            this.setState({
-                error: true,
-                errorMsgURL: "URL must be unique or URL is already exists in the DB"
-            }) 
-          }
+        //   else if (response.status === 200 || response.status === 204){
+            
+        //   }
+        //   else {
+        //     this.setState({
+        //         error: true,
+        //         errorMsgURL: "URL must be unique or URL is already exists in the DB"
+        //     }) 
+        //   }
     }
 
     isFieldEmpty() {
@@ -215,7 +222,8 @@ class UpdateProduct extends Component {
         
         console.log("new Product: " , newProduct)
         var response = await RequestServer.updateProduct(token,this.state.product.id, newProduct)
-        this.updateResponseHandler(response);
+        var message = MessageController.accept(response)
+        this.updateResponseHandler(message);
     }
 
     addURLHandler = async(event) => {
@@ -242,6 +250,17 @@ class UpdateProduct extends Component {
         var response = await RequestServer.updateProductURL(token, this.state.product.id, newUrlObject)
         this.updateResponseHandler(response);
         
+    }
+
+    addImageHandler = (event) => {
+        var file = event.currentTarget.files[0]
+        console.log(file)
+        this.setState(prevState => ({
+            product: {
+                ...prevState.product,
+                product_image: file
+            }
+        }))
     }
 
     render(){
@@ -279,6 +298,17 @@ class UpdateProduct extends Component {
                                 }))}
                             />
                             <br/> 
+                            <br/>
+
+                            <TextField name = "Picture" >
+                                <input 
+                                    type="file" 
+                                    name="file" 
+                                    onChange={(event) => this.addImageHandler(event)}
+                                    accept="image/gif, image/jpeg, image/png"
+                                    />
+                            </TextField>    
+
                             <br/> 
                             <InputLabel id="inputLabel">Product Type         
                                 <Select

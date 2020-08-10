@@ -7,6 +7,7 @@ import AddToWishListModal from './AddToWishListModal';
 import CommentProductModal from './CommentProductModal';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import RequestServer from '../../requests/RequestServer'
 //horizontal card used for displaying individual product
 
 var styles = {
@@ -66,6 +67,8 @@ class ProductCard extends Component {
     }
     
     render() {
+        const serverLocation = RequestServer.getServerLocation();
+        console.log(serverLocation)
         return (
             <Card style = {styles.card}>
             <Card.Header as="h5">
@@ -89,7 +92,8 @@ class ProductCard extends Component {
             <Card.Body>
                 <Card.Img 
                     variant="top" 
-                    src= {'http://localhost:8000' + this.props.product.product_image}
+                    src= {serverLocation + this.props.product.product_image}
+                    alt = {this.props.product.product_name}
                     style = {styles.image} />
                 <Card.Text>
                     {this.props.product.product_description}

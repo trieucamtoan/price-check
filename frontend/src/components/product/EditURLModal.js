@@ -69,16 +69,9 @@ class EditURLModal extends Component {
 
 
     handleClose() {
-    //   if (this.state.error === true){
-    //     //Stop the modal from closing
-    //   }
-    //   else {
-        //Let the modal close shall we?
         this.setState({
           show: false
-        })
-    //   }
-        
+        })        
     }
 
     componentDidUpdate(prevProps, prevState){

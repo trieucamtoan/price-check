@@ -76,7 +76,11 @@ export default class Register extends Component {
                 if (key === 'key'){
                     toast("User Added");
                     registeredSuccess = true;
+                    alert("Registered successfully")
                     this.clearFields();
+                    this.props.history.push(
+                        '/login'
+                    )
                     return true;
                 }
                 else {

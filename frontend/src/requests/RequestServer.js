@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
 class RequestServer extends Component {
@@ -12,12 +12,11 @@ class RequestServer extends Component {
             var response = await axios.post(this.getServerLocation() + '/registration/', user)
             return response.data //Changed to response.data
         } catch (err) {
-            console.log("Error: ", err.response.data);
             // const error = err.response.data;
             // for (const [key, value] of Object.entries(error)) {
             //     console.log(`${key}: ${value}`);
             // }   
-            return err.response.data
+            return null
         }
     }
 
@@ -31,7 +30,6 @@ class RequestServer extends Component {
             var response = await axios.post(this.getServerLocation() + '/login/', userObj)
             return response
         } catch (error) {
-            console.log("Error: ", error.response.data);
             return null
         }
     }
@@ -185,8 +183,18 @@ class RequestServer extends Component {
 
     async addProduct(token, obj) {
         try {
-            var response = await axios.post(this.getServerLocation() + '/products/', obj, {
+            let form_data = new FormData();
+            form_data.append('product_name', obj.product_name);
+            form_data.append('product_description', obj.product_description);
+            form_data.append('product_type', obj.product_type);
+            if (obj.product_image !== null){
+                form_data.append('product_image', obj.product_image);
+            }
+            
+
+            var response = await axios.post(this.getServerLocation() + '/products/', form_data, {
                 headers: {
+                    'Content-type': 'multipart/form-data',
                     'Authorization' : `Token ${token}`
                 }
             })
@@ -197,11 +205,38 @@ class RequestServer extends Component {
         }
     }
 
+    srcToImg(src, fileName){
+        return (fetch(src)
+            .then(function(res){return res.arrayBuffer();})
+            .then(function(buf){return new File([buf], fileName, {type:"image/png"})})
+        );
+    }
+
     async updateProduct(token, id, obj) {
         try {
-            console.log("OBJ : ",obj)
-            var response = await axios.put(this.getServerLocation() + '/products/' + id , obj, {
+            let form_data = new FormData();
+            form_data.append('product_name', obj.product_name);
+            form_data.append('product_description', obj.product_description);
+            form_data.append('product_type', obj.product_type);
+            console.log('hello')
+            console.log("obj: ", obj)
+            if (typeof obj.product_image === "string"){
+                //convert it into File Object
+                console.log('hi')
+                console.log(obj.product_image)
+                this.srcToImg(obj.product_image, obj.product_name)
+                .then(function(file){
+                    form_data.append('product_image', file);
+                })
+            }
+            else if (obj.product_image !== null){
+                //It's already a file object
+                form_data.append('product_image', obj.product_image);
+            }
+            
+            var response = await axios.put(this.getServerLocation() + '/products/' + id , form_data, {
                 headers: {
+                    'Content-type': 'multipart/form-data',
                     'Authorization' : `Token ${token}`
                 }
             })

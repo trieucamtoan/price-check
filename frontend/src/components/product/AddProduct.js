@@ -12,6 +12,8 @@ import * as ProductModel from './ProductModel';
 import { withRouter } from 'react-router';
 import MessageController from '../../responses/MessageController';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Input from '@material-ui/core/Input';
 
 const styles = {
     'button': {
@@ -144,6 +146,17 @@ class AddProduct extends Component {
         // window.location.reload()
     }
 
+    addImageHandler = (event) => {
+        var file = event.currentTarget.files[0]
+        console.log(file)
+        this.setState(prevState => ({
+            product: {
+                ...prevState.product,
+                product_image: file
+            }
+        }))
+    }
+
     render(){
         return (
             <div>
@@ -189,6 +202,20 @@ class AddProduct extends Component {
                                     }
                                 }))}
                             /> */}
+                            <br/>
+                            
+                            <TextField name = "Picture" >
+                                <input 
+                                    type="file" 
+                                    name="file" 
+                                    onChange={(event) => this.addImageHandler(event)}
+                                    accept="image/gif, image/jpeg, image/png"
+                                    />
+                            </TextField>
+                                
+                                {/* 
+                            </TextField> */}
+                            
                             <br/> 
 
                             <br/>
