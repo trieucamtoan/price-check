@@ -1,1 +1,40 @@
-[{"model": "api.product", "pk": 2, "fields": {"product_name": "intel i9", "product_description": "Intel Core i9-9900K Coffee Lake 8-Core, 16-Thread, 3.6 GHz (5.0 GHz Turbo) LGA 1151 (300 Series) 95W BX80684I99900K Desktop Processor Intel UHD Graphics 630", "product_type": "CPU", "product_image": "c17e1ab2-c6e5-4ad9-8af0-65ba7887ff39.png"}}, {"model": "api.productlinkprice", "pk": 3, "fields": {"product": 2, "product_url": "https://www.newegg.ca/core-i9-9th-gen-intel-core-i9-9900k/p/N82E16819117957?Item=N82E16819117957", "product_price_curr": "600.00", "product_price_prev": "700.00"}}]
+[
+    {
+        "model": "api.product", 
+        "pk": 2, 
+        "fields": 
+            {   "product_name": "Intel i9-9900K", 
+                "product_description": "Intel Core i9-9900K Coffee Lake 8-Core, 16-Thread, 3.6 GHz (5.0 GHz Turbo) LGA 1151 (300 Series) 95W BX80684I99900K Desktop Processor Intel UHD Graphics 630", 
+                "product_type": "CPU"
+            }
+    }, 
+    {   
+        "model": "api.productlinkprice", 
+        "pk": 3, 
+        "fields": 
+            {
+                "product": 2, 
+                "product_url": "https://www.newegg.ca/core-i9-9th-gen-intel-core-i9-9900k/p/N82E16819117957?Item=N82E16819117957", 
+                "product_price_curr": "600.00", 
+                "product_price_prev": "700.00"}
+    },
+    {
+        "model": "api.product", 
+        "pk": 4, 
+        "fields": 
+            {   "product_name": "RTX 2080 Ti", 
+                "product_description": "NVIDIA’s newest flagship graphics card is a revolution in gaming realism and performance.", 
+                "product_type": "GPU"
+            }
+    }, 
+    {   
+        "model": "api.productlinkprice", 
+        "pk": 5, 
+        "fields": 
+            {
+                "product": 4, 
+                "product_url": "https://www.newegg.ca/zotac-rtx-2080-ti-zt-t20810h-10p/p/N82E16814500450?Description=rtx%202080%20ti&cm_re=rtx_2080%20ti-_-9SIADDZB577971-_-Product", 
+                "product_price_curr": "600.00", 
+                "product_price_prev": "700.00"}
+    }
+]

@@ -67,8 +67,8 @@ class WishlistCard extends React.Component {
                     >Check Stock
                 </Button>
                 <p className="float-right" style={styles.pText}>
-                    Lowest Price: <span>{this.props.product_lowest_price_prev} CAD   </span>
-                    |   Current Price: <span>{this.props.product_lowest_price_curr} CAD</span>
+                    Previous Lowest Price: <span>{this.props.product_lowest_price_prev} CAD   </span>
+                    |   Current Lowest Price: <span>{this.props.product_lowest_price_curr} CAD</span>
                 </p>
                 </div>
             </Card.Header>
