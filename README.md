@@ -5,11 +5,24 @@
 - Retrieve product info, user info, comment info for every product and the wishlist info
 - Add/Edit/Update/Delete Product 
 - Add/Edit/Update/Delete URL of the product
-- Update Product info
 - The lowest price of the product is shown
-- Web scraping on lowest price (although it takes 10-20 seconds to update the price)
+- Web scraping on lowest price (although it takes 10-15 seconds to update the price and it will update the price again for every 30 minutes)
+
+
 ## Not-working features
 - Adding/Update product image (It was working locally but we had to remove it when deploying on Docker because of write permission issue)
+- Push notification through web UI and email to notice user when the price is dropped
+
+## Other useful notes
+- When signing up, user will have full privillege to the system since we did not implement admin, moderator and user role
+- User is able to update the price manually but the price will be overwritten if the scraper finds out the actual price.
+- Users can only delete their own comments but not someone else.
+- The backend is protected against SQL Injection, XSS and CSRF attack. 
+- The UI is responsive to various screen.
+
+## Accessible URL
+- Navigate to localhost:3000 to see the website.
+- localhost:3000/product/all to see all the products
 
 # Command for Running locally
 ## Prerequisite
