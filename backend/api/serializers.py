@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from rest_framework.validators import UniqueValidator
 from rest_auth.registration.serializers import RegisterSerializer
+from rest_auth.serializers import UserDetailsSerializer
 import bleach
 # class RegistrationSerializer(serializers.ModelSerializer):
 #
@@ -134,3 +135,17 @@ class WishlistSerializer(serializers.ModelSerializer):
                 attrs[key] = bleach.clean(attrs[key])
             
         return attrs
+
+# Custom serializer based on rest_auth.serializers.UserDetailsSerializer
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        olduser = User.objects.get(pk=instance.id)
+        wishlist = Wishlist.objects.get(username=olduser.username)
+        wishlist.username = instance.username
+        wishlist.save()
+        instance.save()
+        return instance

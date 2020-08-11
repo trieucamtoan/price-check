@@ -187,6 +187,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+REST_AUTH_SERIALIZERS = {
+    # Changed
+    'USER_DETAILS_SERIALIZER': 'api.serializers.CustomUserDetailsSerializer',
+}
+
 # REST_AUTH_REGISTER_SERIALIZERS = {
 #     'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer'
 # }
