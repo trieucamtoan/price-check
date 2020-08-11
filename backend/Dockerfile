@@ -9,7 +9,6 @@ WORKDIR /backend
 
 # Bundle the source
 COPY . ./
-USER root
 RUN chmod +x ./wait.sh
 
 # # install psycopg2 dependencies
