@@ -3,8 +3,35 @@ import TextField from 'material-ui/TextField';
 import RequestServer from '../../requests/RequestServer';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import RemoveFromWishListModal from './RemoveFromWishlistModal';
+import { Route , withRouter} from 'react-router-dom';
 
-export default class WishlistCard extends Component {
+const styles = {
+    'card': {
+        marginTop: '5x',
+        marginBottom: '5px'
+    },
+    'button': {
+        paddingLeft : '20px',
+        paddingBottom: '0px',
+        paddingTop: '0px',
+        visibility: true
+    },
+    'image': {
+        width: '300px',
+        height: 'auto',
+        objectFit: 'contain',
+    },
+    'black': {
+        color: 'black'
+    },
+    'pText': {
+        margin: '0px',
+        marginLeft: '20px'
+    }
+};
+
+class WishlistCard extends React.Component {
     constructor(props){
         super(props);
         this.state={
@@ -14,86 +41,54 @@ export default class WishlistCard extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getUserName();
-    }
-
-    async getUserName() {
-        var token = localStorage.getItem('token');
-        console.log("Token: " , token);
-        if (token !== null){
-            var response = await RequestServer.getUsername(token)
-            console.log(response);
-            if (response !== null){
-                this.setState({username: response.data.username});
-                this.setState({content: 'Wishlist page WIP'});
-            }
-            else {
-                this.setState({title: 'Unauthorized Access'})
-            }
-        }
-        else {
-            this.setState({title: 'Unauthorized Access'})
-        }
+    buttonHandler = (e) => {
+        //const { history } = this.props;
+        //console.log("history", history)
+        this.props.history.push({pathname: '/product/' + this.props.id});
+        window.location.reload()
     }
 
 
     render() {
         return (
+            <div>
             <Card style = {styles.card}>
             <Card.Header as="h5">
+                <div className="float-left">
                 {this.props.product_name}
+                </div>
+                <div className="float-right">
                 <Button
-                    variant="primary"
-                    style={styles.buttonRed}
-                    className="float-right"
-                    >Remove Item
-                </Button>
-                <Button
-                    variant="primary"
-                    style={styles.buttonBlue}
+                    id = "check-stock-button"
+                    variant="link"
+                    onClick={(event) => this.buttonHandler(event)}
+                    style={styles.button}
                     className="float-right"
                     >Check Stock
                 </Button>
-
-                <p className="float-right">Lowest Price: <span>{this.props.product_price}</span></p>
+                <p className="float-right" style={styles.pText}>
+                    Lowest Price: <span>{this.props.product_lowest_price_prev} CAD   </span>
+                    |   Current Price: <span>{this.props.product_lowest_price_curr} CAD</span>
+                </p>
+                </div>
             </Card.Header>
             <Card.Body>
                 <Card.Img
                     variant="top"
-                    src= {this.props.product_image}
+                    src= {'http://localhost:8000' + this.props.product_image}
                     style = {styles.image} />
                 <Card.Text>
                     {this.props.product_description}
                 </Card.Text>
-
+            <RemoveFromWishListModal id = {this.props.id}/>
             </Card.Body>
             </Card>
+            <br/>
+            </div>
         );
     }
-
-
 }
+export default withRouter(WishlistCard);
 
-const styles = {
-    'card': {
-        marginTop: '5x',
-        marginBottom: '5px'
-    },
-    'buttonBlue': {
-        marginLeft : '20px'
-    },
-    'buttonRed': {
-        marginLeft : '20px',
-        backgroundColor: 'red'
-    },
-    'image': {
-        width: '300px',
-        height: 'auto',
-        objectFit: 'contain',
-    },
-    'black': {
-        color: 'black'
-    }
-};
+
 

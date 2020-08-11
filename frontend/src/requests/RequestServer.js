@@ -108,6 +108,51 @@ class RequestServer extends Component {
         }
     }
 
+    async getWishlist(token) {
+        try {
+            var response = await axios.get(this.getServerLocation() + '/wishlist/', {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("GET WISHLIST REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async addWishlistProduct(token, id) {
+        try {
+            var response = await axios.post(this.getServerLocation() + '/wishlist/'+ id, {}, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("Add Wishlist item REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
+    async removeWishlistProduct(token, id) {
+        try {
+            var response = await axios.delete(this.getServerLocation() + '/wishlist/'+ id, {
+                headers: {
+                    'Authorization' : `Token ${token}`
+                }
+            })
+            console.log("Remove Wishlist item REQUEST SERVER")
+            return response.data
+        } catch (error) {
+            console.log("Error: ", error.response.data);
+            return null
+        }
+    }
+
     async getAllProducts(token) {
         try {
             var response = await axios.get(this.getServerLocation() + '/products/', {
