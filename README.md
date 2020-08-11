@@ -19,6 +19,7 @@
 - Users can only delete their own comments but not someone else.
 - The backend is protected against SQL Injection, XSS and CSRF attack. 
 - The UI is responsive to various screen.
+- Every requests except for register and login requests will require token key which provided from the server.
 
 ## Accessible URL
 - Navigate to localhost:3000 to see the website.
@@ -109,17 +110,3 @@ Need to modify these file accordingly (uncomment and comment the correct line)be
 - Run command: `docker-compose build && docker-compose up`
 - Navigate to http://localhost:3000 to see the frontend
 - When finish using the app, run command : `docker-compose down && docker system prune -f` to destroy the docker image
-
-# Project Checkpoint
-Completed Features:
-- User can login, logout, register using the web UI. 
-- User can update information such as username, password.
-- User can see privated pages which are visible after login.
-- User can only fetch their own information with provided token from the server.
-
-WIP: 
-- Search Engine from Product Page
-- Product Model from the backend, Product Page (currently populated with static content)
-- Wishlist feature 
-- Product comment section
-- Email notification
