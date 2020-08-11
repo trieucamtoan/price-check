@@ -5,9 +5,9 @@
 - Retrieve product info, user info, comment info for every product and the wishlist info
 - Add/Edit/Update/Delete Product 
 - Add/Edit/Update/Delete URL of the product
-- Update Product info
 - The lowest price of the product is shown
 - Web scraping on lowest price (although it takes 10-20 seconds to update the price)
+
 ## Not-working features
 - Adding/Update product image (It was working locally but we had to remove it when deploying on Docker because of write permission issue)
 
