@@ -68,6 +68,10 @@ class WishlistCard extends React.Component {
                 </div>
             </Card.Header>
             <Card.Body>
+                {/* <Card.Img
+                    variant="top"
+                    src= {'http://localhost:8000' + this.props.product_image}
+                    style = {styles.image} /> */}
                 <Card.Text>
                     {this.props.product_description}
                 </Card.Text>
